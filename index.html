@@ -19,12 +19,12 @@
   --future:#e5edf9;
   --off:#f1f5f9;
   --radius:18px;
+  --cat-Sport:#34d399;
   --cat-Nutrition:#f97316;
-  --cat-Hygiène:#38bdf8;
-  --cat-Exercice:#34d399;
-  --cat-Sommeil:#a855f7;
-  --cat-Social:#f59e0b;
-  --cat-Autre:#f472b6;
+  --cat-Repos:#a855f7;
+  --cat-Relationnel:#f59e0b;
+  --cat-Éducation:#38bdf8;
+  --cat-Loisirs:#f472b6;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -134,6 +134,7 @@ footer{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter
     <div class="head-wrap">
       <div class="h-title"><span aria-hidden="true">👥</span>Routine Buddy</div>
       <div class="h-grow"></div>
+      <button class="icon-btn" id="quickAdd">+ Nouvelle activité</button>
     </div>
   </header>
 
@@ -203,6 +204,10 @@ footer{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter
         </div>
       </div>
       <div class="field">
+        <label for="f_cat">Rubrique</label>
+        <select id="f_cat"></select>
+      </div>
+      <div class="field">
         <label for="f_importance">Priorité</label>
         <select id="f_importance">
           <option value="must">Obligatoire</option>
@@ -249,7 +254,7 @@ const todayISO = ()=> fmtDate(Date.now())
 const uid = ()=> Math.random().toString(36).slice(2,9)
 const WEEKDAY_SHORT = ['Lu','Ma','Me','Je','Ve','Sa','Di']
 const WEEKDAY_ORDER = [1,2,3,4,5,6,0]
-const STORE_KEY='ROUTINE_BUDDY_V2'
+const STORE_KEY='ROUTINE_BUDDY_V3'
 const currentWeekStart = weekStart(todayISO())
 const EMOJIS=[
   {char:'🍎', tags:['pomme','fruit','nutrition','vitamine']},
@@ -263,6 +268,7 @@ const EMOJIS=[
   {char:'🪥', tags:['brossage','dents','hygiène']},
   {char:'🧴', tags:['soin','visage','hygiène']},
   {char:'🧼', tags:['savon','hygiène']},
+  {char:'🤸', tags:['échauffement','sport','mobilité']},
   {char:'🏃', tags:['course','sport','exercice']},
   {char:'🚶', tags:['marche','balade']},
   {char:'💪', tags:['muscu','force','sport']},
@@ -284,6 +290,14 @@ const EMOJIS=[
   {char:'📝', tags:['journal','écriture']},
   {char:'🗂️', tags:['administratif','paperasse']},
   {char:'🌳', tags:['nature','balade']},
+  {char:'🌬️', tags:['respiration','calme','repos']},
+  {char:'🍽️', tags:['repas','relationnel','déjeuner']},
+  {char:'💻', tags:['cours','apprentissage','éducation']},
+  {char:'🗣️', tags:['langue','oral','éducation']},
+  {char:'🎨', tags:['dessin','loisir','créativité']},
+  {char:'🎸', tags:['musique','instrument','loisir']},
+  {char:'🎲', tags:['jeu','loisir','soirée']},
+  {char:'📺', tags:['série','détente','loisir']},
   {char:'🎯', tags:['objectif','focus']},
   {char:'🧺', tags:['linge','ménage']},
   {char:'🐟', tags:['poisson','repas']},
@@ -313,6 +327,7 @@ const els={
   category: document.getElementById('category'),
   navHome: document.getElementById('navHome'),
   navHistory: document.getElementById('navHistory'),
+  quickAdd: document.getElementById('quickAdd'),
   historyPrev: document.getElementById('historyPrev'),
   historyNext: document.getElementById('historyNext'),
   historyLabel: document.getElementById('historyLabel'),
@@ -327,6 +342,7 @@ const els={
   dialogTitle: document.getElementById('dialogTitle'),
   f_title: document.getElementById('f_title'),
   f_emoji: document.getElementById('f_emoji'),
+  f_cat: document.getElementById('f_cat'),
   f_importance: document.getElementById('f_importance'),
   f_recur: document.getElementById('f_recur'),
   specificWrap: document.getElementById('specificWrap'),
@@ -349,6 +365,7 @@ els.navHome.addEventListener('click', ()=>{ updateView('home') })
 els.navHistory.addEventListener('click', ()=>{ updateView('history') })
 els.backBtn.addEventListener('click', ()=>{ updateView('home'); state.ui.currentCat=null; save() })
 els.addBtn.addEventListener('click', ()=> openTaskDialog('create'))
+els.quickAdd.addEventListener('click', ()=> openTaskDialog('create'))
 els.closeDialog.addEventListener('click', ()=> els.taskDialog.close())
 els.f_recur.addEventListener('change', onRecurChange)
 els.historyPrev.addEventListener('click', ()=>{ changeHistoryWeek(-1) })
@@ -369,6 +386,7 @@ function updateView(view){
   els.category.classList.toggle('active', view==='category')
   els.navHome.classList.toggle('active', view==='home')
   els.navHistory.classList.toggle('active', view==='history')
+  if(els.quickAdd){ els.quickAdd.style.display = view==='home' ? 'inline-flex' : 'none' }
   if(view==='home'){ renderSummary(); renderHome() }
   if(view==='history'){ renderHistory() }
   if(view==='category' && state.ui.currentCat){ renderCategory(state.ui.currentCat, state.ui.categoryWeekStart) }
@@ -588,6 +606,20 @@ function updateEmojiResults(){
   })
 }
 
+function populateCategorySelect(selected){
+  if(!els.f_cat) return
+  const cats = CATS()
+  els.f_cat.innerHTML = cats.map(c=>`<option value="${c.id}">${escapeHtml(categoryLabel(c.id))}</option>`).join('')
+  if(selected && !cats.some(c=>c.id===selected)){
+    const opt=document.createElement('option')
+    opt.value=selected
+    opt.textContent=categoryLabel(selected)
+    els.f_cat.appendChild(opt)
+  }
+  if(selected){ els.f_cat.value=selected }
+  if(!els.f_cat.value && els.f_cat.options.length>0){ els.f_cat.value = els.f_cat.options[0].value }
+}
+
 function openCategory(cat, week){
   state.ui.categoryWeekStart = week
   state.ui.currentCat = cat
@@ -601,9 +633,16 @@ function openTaskDialog(mode, task){
   els.deleteTask.style.display = mode==='edit' ? 'inline-flex' : 'none'
   els.dialogTitle.textContent = mode==='edit' ? 'Modifier l'activité' : 'Nouvelle activité'
   state.ui.editTaskId = mode==='edit' ? task.id : null
+  const cats = CATS()
+  let selectedCat = mode==='edit' && task ? task.cat : state.ui.currentCat
+  if(!selectedCat || !cats.some(c=>c.id===selectedCat)){
+    selectedCat = cats[0]?.id || ''
+  }
+  populateCategorySelect(selectedCat)
   if(mode==='edit' && task){
     els.f_title.value = task.title
     els.f_emoji.value = task.emoji || ''
+    els.f_cat.value = task.cat
     els.f_importance.value = task.importance
     if(task.recur.type==='daily'){ els.f_recur.value='daily' }
     else if(task.recur.type==='specific'){ els.f_recur.value='specific' }
@@ -614,6 +653,7 @@ function openTaskDialog(mode, task){
   }else{
     els.f_title.value=''
     els.f_emoji.value=''
+    els.f_cat.value = selectedCat || ''
     els.f_importance.value='must'
     els.f_recur.value='daily'
     els.f_weekday.value='1'
@@ -628,8 +668,10 @@ function submitTask(e){
   const title = els.f_title.value.trim()
   if(!title) return
   const emoji = els.f_emoji.value.trim() || '🎯'
+  const cat = els.f_cat.value
   const importance = els.f_importance.value
   const freq = els.f_recur.value
+  if(!cat){ alert('Choisis une rubrique'); return }
   let recur
   if(freq==='daily') recur = {type:'daily'}
   if(freq==='specific'){
@@ -644,11 +686,11 @@ function submitTask(e){
     if(task){
       task.title=title
       task.emoji=emoji
+      task.cat=cat
       task.importance=importance
       task.recur=recur
     }
   }else{
-    const cat = state.ui.currentCat || CATS()[0].id
     state.tasks.push({id:uid(), cat, title, emoji, importance, recur, createdAt:nowWeek})
   }
   save()
@@ -749,12 +791,12 @@ function escapeHtml(s){ return s.replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;"
 
 function CATS(){
   return [
+    {id:'Sport', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Sport').trim()},
     {id:'Nutrition', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Nutrition').trim()},
-    {id:'Hygiène', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Hygiène').trim()},
-    {id:'Exercice', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Exercice').trim()},
-    {id:'Sommeil', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Sommeil').trim()},
-    {id:'Social', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Social').trim()},
-    {id:'Autre', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Autre').trim()},
+    {id:'Repos', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Repos').trim()},
+    {id:'Relationnel', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Relationnel').trim()},
+    {id:'Éducation', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Éducation').trim()},
+    {id:'Loisirs', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Loisirs').trim()},
   ]
 }
 
@@ -765,41 +807,41 @@ function seed(){
   const today = todayISO()
   const mk=(cat,title,emoji,importance,recur)=>({id:uid(),cat,title,emoji,importance,recur,createdAt:today})
   const S=[]
+  S.push(mk('Sport','Échauffement 5 min','🤸','nice',{type:'daily'}))
+  S.push(mk('Sport','Cardio 20 min','🏃','must',{type:'specific',days:[1,3,5]}))
+  S.push(mk('Sport','Renforcement 15 min','💪','must',{type:'specific',days:[2,4]}))
+  S.push(mk('Sport','Étirements fin de séance','🧘','nice',{type:'daily'}))
+  S.push(mk('Sport','Sortie vélo','🚲','nice',{type:'specific',days:[6]}))
+
   S.push(mk('Nutrition','Petit-déj. protéiné','🍳','must',{type:'daily'}))
-  S.push(mk('Nutrition','2 fruits','🍎','nice',{type:'daily'}))
+  S.push(mk('Nutrition','2 fruits frais','🍎','nice',{type:'daily'}))
   S.push(mk('Nutrition','Hydratation 1,5L','💧','must',{type:'daily'}))
+  S.push(mk('Nutrition','Repas vert','🥗','nice',{type:'specific',days:[1,4]}))
   S.push(mk('Nutrition','Poisson','🐟','nice',{type:'specific',days:[5]}))
-  S.push(mk('Nutrition','Légumineuses','🫘','nice',{type:'specific',days:[2,5]}))
 
-  S.push(mk('Hygiène','Brossage matin','🪥','must',{type:'daily'}))
-  S.push(mk('Hygiène','Brossage soir','🪥','must',{type:'daily'}))
-  S.push(mk('Hygiène','Douche tiède','🚿','nice',{type:'daily'}))
-  S.push(mk('Hygiène','Changer serviette','🧺','nice',{type:'weekly',weekday:0}))
-  S.push(mk('Hygiène','Nettoyer visage','🧴','nice',{type:'specific',days:[1,3,5]}))
+  S.push(mk('Repos','Coucher avant 23h','🛏️','must',{type:'daily'}))
+  S.push(mk('Repos','Écran off 1h avant','📵','nice',{type:'daily'}))
+  S.push(mk('Repos','Sieste 20 min','😴','nice',{type:'specific',days:[1,4]}))
+  S.push(mk('Repos','Respiration calme','🌬️','nice',{type:'specific',days:[2,5]}))
+  S.push(mk('Repos','Aération chambre','🪟','nice',{type:'daily'}))
 
-  S.push(mk('Exercice','Marche 30 min','🚶','nice',{type:'daily'}))
-  S.push(mk('Exercice','Renfo 15 min','💪','must',{type:'specific',days:[1,3,5]}))
-  S.push(mk('Exercice','Étirements','🧘','nice',{type:'daily'}))
-  S.push(mk('Exercice','Vélo','🚲','nice',{type:'specific',days:[6]}))
-  S.push(mk('Exercice','Bachata practice','💃','must',{type:'specific',days:[3]}))
+  S.push(mk('Relationnel','Message à un proche','💬','nice',{type:'specific',days:[2,4]}))
+  S.push(mk('Relationnel','Appel famille','📞','must',{type:'weekly',weekday:0}))
+  S.push(mk('Relationnel','Déjeuner partagé','🍽️','nice',{type:'specific',days:[3]}))
+  S.push(mk('Relationnel','Compliment sincère','🤝','nice',{type:'daily'}))
+  S.push(mk('Relationnel','Sortie sociale','🕺','must',{type:'specific',days:[5]}))
 
-  S.push(mk('Sommeil','Coucher < 23h','🛏️','must',{type:'daily'}))
-  S.push(mk('Sommeil','Écran off 1h avant','📵','nice',{type:'daily'}))
-  S.push(mk('Sommeil','Sieste 20 min','😴','nice',{type:'specific',days:[1,4]}))
-  S.push(mk('Sommeil','Aération chambre','🪟','nice',{type:'daily'}))
-  S.push(mk('Sommeil','Rituel zen','🕯️','nice',{type:'specific',days:[5]}))
+  S.push(mk('Éducation','Lecture 15 min','📚','nice',{type:'daily'}))
+  S.push(mk('Éducation','Cours en ligne','💻','must',{type:'specific',days:[1,3]}))
+  S.push(mk('Éducation','Révision vocabulaire','🗂️','nice',{type:'specific',days:[2,5]}))
+  S.push(mk('Éducation','Pratique langue','🗣️','nice',{type:'specific',days:[4]}))
+  S.push(mk('Éducation','Journal d\'apprentissage','📝','nice',{type:'weekly',weekday:6}))
 
-  S.push(mk('Social','Message à un ami','💬','nice',{type:'specific',days:[2,4]}))
-  S.push(mk('Social','Café/Thé avec quelqu’un','☕','nice',{type:'specific',days:[2]}))
-  S.push(mk('Social','Danse sociale','🕺','must',{type:'specific',days:[5]}))
-  S.push(mk('Social','Appel famille','📞','must',{type:'weekly',weekday:0}))
-  S.push(mk('Social','Compliment sincère','🤝','nice',{type:'daily'}))
-
-  S.push(mk('Autre','Lecture 10 min','📚','nice',{type:'daily'}))
-  S.push(mk('Autre','Journal 3 lignes','📝','nice',{type:'daily'}))
-  S.push(mk('Autre','Tâche admin','🗂️','must',{type:'weekly',weekday:2}))
-  S.push(mk('Autre','Sortie nature','🌳','nice',{type:'specific',days:[6]}))
-  S.push(mk('Autre','Méditation 5 min','🧘‍♂️','nice',{type:'daily'}))
+  S.push(mk('Loisirs','Session dessin','🎨','nice',{type:'specific',days:[6]}))
+  S.push(mk('Loisirs','Jouer musique','🎸','nice',{type:'specific',days:[2,5]}))
+  S.push(mk('Loisirs','Soirée jeu','🎲','nice',{type:'specific',days:[5]}))
+  S.push(mk('Loisirs','Sortie nature','🌳','nice',{type:'specific',days:[6]}))
+  S.push(mk('Loisirs','Moment série','📺','nice',{type:'daily'}))
 
   return {tasks:S, done:{}, ui:{currentView:'home', historyWeekStart:currentWeekStart, categoryWeekStart:currentWeekStart, currentCat:null}}
 }
