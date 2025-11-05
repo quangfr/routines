@@ -21,7 +21,7 @@
   --bad:#dc2626;
   --future:#e5edf9;
   --off:#f1f5f9;
-  --radius:18px;
+  --radius:14px;
   --cat-Fitness:#34d399;
   --cat-Nutrition:#f97316;
   --cat-Rest:#a855f7;
@@ -31,32 +31,27 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 "Inter", system-ui,-apple-system,"Segoe UI",sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 "Inter", system-ui,-apple-system,"Segoe UI",sans-serif}
 button{font:inherit;color:inherit}
 .app{min-height:100svh;display:flex;flex-direction:column;}
 header{position:sticky;top:0;z-index:4;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.head-wrap{display:flex;align-items:center;gap:12px;padding:12px 16px;max-width:960px;margin:0 auto;width:100%}
-.h-title{font-weight:700;font-size:18px;display:flex;align-items:center;gap:8px}
+.head-wrap{display:flex;align-items:center;gap:10px;padding:8px 14px;max-width:960px;margin:0 auto;width:100%}
+.h-title{font-weight:700;font-size:17px;display:flex;align-items:center;gap:6px}
 .h-grow{flex:1}
-.icon-btn{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:8px 12px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:all .15s ease}
+.icon-btn{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:6px 10px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;transition:all .15s ease;font-size:14px;line-height:1}
 .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
 .icon-btn:active{transform:translateY(1px)}
-.icon-btn.icon-only{width:44px;height:44px;justify-content:center;padding:0;font-size:20px}
-.view-toggle{display:inline-flex;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:var(--panel)}
-.toggle-btn{padding:8px 14px;border:none;background:transparent;font:inherit;color:var(--muted);cursor:pointer;transition:all .15s ease}
-.toggle-btn.active{background:var(--accent);color:#fff}
-.toggle-btn:not(.active):hover{color:var(--accent)}
-.history-controls{position:sticky;top:60px;z-index:3;padding:8px 16px;background:rgba(244,247,251,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.history-controls .history-nav{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:12px}
-.history-week{flex:1;text-align:center;font-weight:600;color:var(--muted)}
+.icon-btn.icon-only{width:36px;height:36px;justify-content:center;padding:0;font-size:18px}
+.history-controls{position:sticky;top:48px;z-index:3;padding:6px 12px;background:rgba(244,247,251,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.history-controls .history-nav{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.history-week{flex:1;text-align:center;font-weight:600;color:var(--muted);font-size:14px}
 
-main{flex:1;display:grid;grid-template-rows:auto 1fr;gap:12px;padding:12px}
+main{flex:1;display:grid;grid-template-rows:auto 1fr;gap:10px;padding:10px}
 main>section{max-width:960px;width:100%;margin:0 auto}
-.summary{display:flex;flex-direction:column;gap:12px;border:1px solid var(--border);border-radius:var(--radius);padding:16px;background:var(--panel);box-shadow:0 12px 32px rgba(15,23,42,.08)}
-.summary-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.week-label{font-weight:600;font-size:18px}
-.status-pills{display:flex;gap:8px;flex-wrap:wrap}
-.pill{font-size:14px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:var(--off);display:flex;gap:6px;align-items:center;font-weight:500}
+.summary{border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;background:var(--panel);box-shadow:0 10px 24px rgba(15,23,42,.06)}
+.summary-line{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:14px}
+.week-label{font-weight:600;font-size:15px}
+.summary-metric{display:flex;align-items:center;gap:4px;font-weight:500;white-space:nowrap}
 .week-cell{width:36px;height:36px;border-radius:12px;border:1px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;font-weight:600;gap:2px;cursor:default}
 .week-cell.status-green{background:rgba(22,163,74,.12);color:#047857;border-color:rgba(22,163,74,.25)}
 .week-cell.status-yellow{background:rgba(234,179,8,.18);color:#92400e;border-color:rgba(234,179,8,.28)}
@@ -66,7 +61,7 @@ main>section{max-width:960px;width:100%;margin:0 auto}
 
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:960px;margin:0 auto;width:100%;align-content:start}
 .history-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:960px;margin:0 auto;width:100%;align-content:start}
-.section-title{margin:16px 0 12px;font-size:18px;font-weight:700}
+.section-title{margin:10px 0 10px;font-size:16px;font-weight:700}
 .grid>*,.history-grid>*{min-height:170px}
 @media (max-width:900px){
   .grid,.history-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -74,31 +69,34 @@ main>section{max-width:960px;width:100%;margin:0 auto}
 @media (max-width:620px){
   .grid,.history-grid{grid-template-columns:minmax(0,1fr)}
 }
-.card{background:var(--panel);border:2px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;min-height:150px;box-shadow:0 12px 24px rgba(15,23,42,.06);cursor:pointer;transition:transform .15s ease, box-shadow .15s ease}
-.card:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(15,23,42,.08)}
-.card-head{display:flex;align-items:center;gap:10px}
-.card-head .cat-emoji{font-size:22px}
-.card h3{margin:0;font-size:18px;font-weight:700}
-.status{margin-left:auto;border-radius:10px;padding:4px 10px;font-size:13px;border:1px solid var(--border);background:var(--off);font-weight:600}
-.count{font-size:14px;color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;gap:10px;min-height:140px;box-shadow:0 8px 18px rgba(15,23,42,.06);cursor:pointer;transition:transform .15s ease, box-shadow .15s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(15,23,42,.08)}
+.card-head{display:flex;align-items:center;gap:8px}
+.card h3{margin:0;font-size:16px;font-weight:700;flex:1}
+.status{border-radius:8px;padding:2px 8px;font-size:13px;border:1px solid var(--border);background:var(--off);font-weight:600}
+.count{font-size:13px;color:var(--muted);font-weight:600}
+.card-head .count{text-align:right}
 .cell-row{display:flex;gap:4px}
 .cell-row .week-cell{flex:1;min-width:0;cursor:default;height:34px}
 
 .view{display:none}
 .view.active{display:block}
-.cat-head{display:flex;align-items:center;gap:12px;margin:6px 0 14px}
-.back{padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer}
+.cat-head{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.back{padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-size:14px}
 .add{margin-left:auto}
-.cat-head h2{margin:0;font-size:22px}
-.cat-week{margin-left:auto;font-weight:600;color:var(--muted)}
-.task{position:relative;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 24px rgba(15,23,42,.04)}
+.cat-head h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
+.cat-week{margin-left:auto;font-weight:600;color:var(--muted);font-size:13px}
+.task{position:relative;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 10px 10px 14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 8px 18px rgba(15,23,42,.04);border-left:3px solid transparent}
+.task[data-importance="must"]{border-left-color:var(--bad)}
+.task[data-importance="should"]{border-left-color:var(--warn)}
 .task + .task{margin-top:12px}
-.task-header{display:flex;align-items:center;gap:12px}
-.task .em{font-size:28px}
-.task .title{font-weight:600;font-size:18px}
-.task .badges{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:13px}
-.task-actions{display:flex;gap:8px;align-items:center;margin-left:auto}
-.task-actions button{padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:var(--off);cursor:pointer}
+.task-header{display:flex;align-items:center;gap:10px}
+.task .em{font-size:22px}
+.task-info{flex:1;min-width:0}
+.task .title{font-weight:600;font-size:15px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.task .title .freq{font-size:16px}
+.task-actions{display:flex;gap:6px;align-items:center;margin-left:auto}
+.task-actions button{padding:4px 6px;border-radius:8px;border:1px solid var(--border);background:var(--off);cursor:pointer;font-size:14px;line-height:1}
 .week-grid{display:flex;gap:6px;flex-wrap:wrap}
 .week-cell button{all:unset}
 .task-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
@@ -108,34 +106,33 @@ main>section{max-width:960px;width:100%;margin:0 auto}
 .task-week .week-cell.disabled{opacity:.45;cursor:not-allowed}
 
 .history-nav{display:flex;gap:12px}
-.history-nav button{padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:var(--panel);cursor:pointer}
+.history-nav button{padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:14px}
 
 /* Dialog */
-dialog{border:none;border-radius:18px;padding:0;background:var(--panel);color:var(--text);width:min(92vw,460px);box-shadow:0 28px 60px rgba(15,23,42,.24)}
-.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);font-weight:700;font-size:18px}
-.modal-body{padding:18px;display:grid;gap:16px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:16px}
+.modal-body{padding:16px;display:grid;gap:14px}
 .field{display:grid;gap:6px}
-.field label{font-weight:600;font-size:14px;color:#475569}
-.modal-body input,.modal-body select,.modal-body textarea{background:var(--off);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;font:inherit}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;padding:16px 18px;border-top:1px solid var(--border)}
-.modal-actions button{padding:8px 16px;border-radius:12px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-weight:600}
+.field label{font-weight:600;font-size:13px;color:#475569}
+.modal-body input,.modal-body select,.modal-body textarea{background:var(--off);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:10px;font:inherit;font-size:14px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;padding:14px 16px;border-top:1px solid var(--border)}
+.modal-actions button{padding:6px 14px;border-radius:10px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-weight:600;font-size:14px}
 .modal-actions .primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .modal-actions .danger{color:var(--bad);border-color:rgba(220,38,38,.3)}
 
-.emoji-picker{display:grid;gap:10px;border:1px solid var(--border);border-radius:14px;padding:10px;background:var(--off)}
-.emoji-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(40px,1fr));gap:6px;max-height:140px;overflow:auto}
-.emoji-results button{background:var(--panel);border:1px solid var(--border);border-radius:10px;height:40px;display:grid;place-items:center;font-size:24px;cursor:pointer}
+.emoji-picker{display:grid;gap:8px;border:1px solid var(--border);border-radius:12px;padding:8px;background:var(--off)}
+.emoji-results{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:44px;gap:6px;max-height:240px;overflow:auto;padding-right:2px}
+.emoji-results button{background:var(--panel);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;font-size:22px;cursor:pointer;height:44px}
 .emoji-results button:hover{border-color:var(--accent)}
 .weekday-picker{display:flex;flex-wrap:wrap;gap:8px}
-.weekday-picker label{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:12px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:14px}
+.weekday-picker label{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:13px}
 .weekday-picker input{accent-color:var(--accent)}
 
 @media (max-width:520px){
   .week-cell{width:34px;height:34px}
-  .summary{padding:14px}
-  .card{padding:14px}
+  .summary{padding:10px}
+  .card{padding:10px}
   .task-week .week-cell{height:34px}
-  .history-controls{top:56px}
+  .history-controls{top:44px}
 }
 </style>
 </head>
@@ -145,10 +142,7 @@ dialog{border:none;border-radius:18px;padding:0;background:var(--panel);color:va
     <div class="head-wrap">
       <div class="h-title"><span aria-hidden="true">👥</span>Routine Buddy</div>
       <div class="h-grow"></div>
-      <div class="view-toggle" role="group" aria-label="Change view">
-        <button type="button" class="toggle-btn active" id="toggleNow">Now</button>
-        <button type="button" class="toggle-btn" id="toggleHistory">History</button>
-      </div>
+      <button type="button" class="icon-btn" id="toggleView" aria-label="Switch view">History</button>
       <button class="icon-btn icon-only" id="quickAdd" aria-label="Add activity">➕</button>
     </div>
   </header>
@@ -163,15 +157,12 @@ dialog{border:none;border-radius:18px;padding:0;background:var(--panel);color:va
 
   <main>
     <section class="summary" id="summary">
-      <div class="summary-head">
-        <div class="week-label" id="summaryWeekLabel"></div>
-        <div class="status-pills">
-          <span class="pill">🟩 <span id="pillGreen">0</span></span>
-          <span class="pill">🟨 <span id="pillYellow">0</span></span>
-          <span class="pill">🟥 <span id="pillRed">0</span></span>
-        </div>
+      <div class="summary-line">
+        <span class="week-label" id="summaryWeekLabel"></span>
+        <span class="summary-metric">🟩 On track <span id="pillGreen">0</span></span>
+        <span class="summary-metric">🟨 Keep up <span id="pillYellow">0</span></span>
+        <span class="summary-metric">🟥 Catch up <span id="pillRed">0</span></span>
       </div>
-      <p class="count" style="margin:0" id="summaryLegend">Weekly indicators highlight how many routines are on track.</p>
     </section>
 
     <section id="home" class="view active">
@@ -218,8 +209,8 @@ dialog{border:none;border-radius:18px;padding:0;background:var(--panel);color:va
       <div class="field">
         <label for="f_importance">Priority</label>
         <select id="f_importance">
-          <option value="must">Must do</option>
-          <option value="nice">Nice to have</option>
+          <option value="must">🟥 Must (must have)</option>
+          <option value="should">🟨 Should (nice to have)</option>
         </select>
       </div>
       <div class="field">
@@ -227,8 +218,12 @@ dialog{border:none;border-radius:18px;padding:0;background:var(--panel);color:va
         <select id="f_recur">
           <option value="daily">Daily</option>
           <option value="specific">Specific day(s)</option>
-          <option value="weekly">1+ times / week</option>
+          <option value="weekly">Weekly target</option>
         </select>
+      </div>
+      <div class="field" id="weeklyWrap" style="display:none">
+        <label for="f_weeklyTimes">Times per week</label>
+        <input type="number" id="f_weeklyTimes" min="1" max="6" value="1" />
       </div>
       <div class="field" id="specificWrap" style="display:none">
         <label>Days of the week</label>
@@ -471,25 +466,30 @@ state.ui.categorySource = state.ui.categorySource || 'home'
 state.ui.editTaskId = null
 if(Array.isArray(state.tasks)){
   for(const task of state.tasks){
+    if(task.importance==='nice'){ task.importance='should' }
+    if(task.importance!=='must' && task.importance!=='should'){ task.importance='should' }
     if(task?.recur?.type==='weekly' && Object.prototype.hasOwnProperty.call(task.recur,'weekday')){
       delete task.recur.weekday
+    }
+    if(task?.recur?.type==='weekly'){
+      if(typeof task.recur.times!=='number' || task.recur.times<1){ task.recur.times=1 }
+      task.recur.times = Math.min(6, Math.max(1, Math.round(task.recur.times)))
     }
   }
 }
 save()
 
 const els={
+  summary: document.getElementById('summary'),
   summaryWeekLabel: document.getElementById('summaryWeekLabel'),
   pillGreen: document.getElementById('pillGreen'),
   pillYellow: document.getElementById('pillYellow'),
   pillRed: document.getElementById('pillRed'),
-  summaryLegend: document.getElementById('summaryLegend'),
   catGrid: document.getElementById('catGrid'),
   home: document.getElementById('home'),
   history: document.getElementById('history'),
   category: document.getElementById('category'),
-  toggleNow: document.getElementById('toggleNow'),
-  toggleHistory: document.getElementById('toggleHistory'),
+  toggleView: document.getElementById('toggleView'),
   historyControls: document.getElementById('historyControls'),
   historyWeekLabel: document.getElementById('historyWeekLabel'),
   quickAdd: document.getElementById('quickAdd'),
@@ -509,6 +509,8 @@ const els={
   f_cat: document.getElementById('f_cat'),
   f_importance: document.getElementById('f_importance'),
   f_recur: document.getElementById('f_recur'),
+  weeklyWrap: document.getElementById('weeklyWrap'),
+  f_weeklyTimes: document.getElementById('f_weeklyTimes'),
   specificWrap: document.getElementById('specificWrap'),
   specificDays: document.getElementById('specificDays'),
   emojiSearch: document.getElementById('emojiSearch'),
@@ -523,8 +525,10 @@ renderHistory()
 if(state.ui.currentView==='category' && state.ui.currentCat){ openCategory(state.ui.currentCat, state.ui.categoryWeekStart, state.ui.categorySource) }
 updateView(state.ui.currentView)
 
-els.toggleNow.addEventListener('click', ()=>{ updateView('home') })
-els.toggleHistory.addEventListener('click', ()=>{ updateView('history') })
+els.toggleView.addEventListener('click', ()=>{
+  const target = state.ui.currentView==='history' ? 'home' : 'history'
+  updateView(target)
+})
 els.backBtn.addEventListener('click', ()=>{
   const target = state.ui.categorySource==='history' ? 'history' : 'home'
   updateView(target)
@@ -549,22 +553,18 @@ onRecurChange()
 function updateView(view){
   state.ui.currentView=view
   save()
-  const fromHistory = view==='category' && state.ui.categorySource==='history'
-  const homeLike = view==='home' || (view==='category' && !fromHistory)
-  const historyActive = view==='history' || fromHistory
+  const isHistory = view==='history'
   els.home.classList.toggle('active', view==='home')
   els.history.classList.toggle('active', view==='history')
   els.category.classList.toggle('active', view==='category')
-  if(els.toggleNow){
-    els.toggleNow.classList.toggle('active', homeLike)
-    els.toggleNow.setAttribute('aria-pressed', homeLike ? 'true' : 'false')
-  }
-  if(els.toggleHistory){
-    els.toggleHistory.classList.toggle('active', historyActive)
-    els.toggleHistory.setAttribute('aria-pressed', historyActive ? 'true' : 'false')
+  if(els.toggleView){
+    const label = isHistory ? 'Now' : 'History'
+    els.toggleView.textContent = label
+    els.toggleView.setAttribute('aria-pressed', isHistory ? 'true' : 'false')
   }
   if(els.historyControls){ els.historyControls.hidden = view!=='history' }
   if(els.quickAdd){ els.quickAdd.style.display = view==='home' ? 'inline-flex' : 'none' }
+  if(els.summary){ els.summary.style.display = view==='home' ? 'block' : 'none' }
   if(view==='home'){ renderSummary(); renderHome() }
   if(view==='history'){ renderHistory() }
   if(view==='category' && state.ui.currentCat){ renderCategory(state.ui.currentCat, state.ui.categoryWeekStart) }
@@ -624,16 +624,17 @@ function renderHome(){
     const tasks = state.tasks.filter(t=>t.cat===c.id)
     if(tasks.length===0) continue
     const statuses = days.map(day=> dayStatus(day, tasks, limit))
+    const statusLabelText = statusLabel(statusFromDays(statuses))
+    const countText = countsForCategory(tasks, days, limit)
     const card=document.createElement('div')
     card.className='card'
     card.dataset.cat=c.id
     card.innerHTML=`
       <div class="card-head">
-        <span class="cat-emoji" aria-hidden="true">${escapeHtml(categoryEmoji(c.id))}</span>
+        <span class="status">${statusLabelText}</span>
         <h3>${escapeHtml(categoryLabel(c.id))}</h3>
-        <span class="status">${statusLabel(statusFromDays(statuses))}</span>
+        <span class="count">${countText}</span>
       </div>
-      <div class="count">${countsForCategory(tasks, days, limit)}</div>
       <div class="cell-row">${statuses.map((s,idx)=>`<div class="week-cell status-${s}"><span>${WEEKDAY_SHORT[idx]}</span></div>`).join('')}</div>
     `
     card.addEventListener('click', ()=> openCategory(c.id, week, 'home'))
@@ -648,8 +649,10 @@ function countsForCategory(tasks, days, limit){
   for(const task of tasks){
     if(task.recur.type==='weekly'){
       if(relevantDays.length===0) continue
-      totalOcc+=1
-      if(relevantDays.some(day=> isDone(task, day))){ doneOcc+=1 }
+      const times = task.recur.times || 1
+      const doneCount = relevantDays.filter(day=> isDone(task, day)).length
+      totalOcc+=times
+      doneOcc+=Math.min(doneCount, times)
     }else{
       for(const day of relevantDays){
         if(isDue(task, day)){
@@ -659,8 +662,8 @@ function countsForCategory(tasks, days, limit){
       }
     }
   }
-  if(totalOcc===0) return 'No tasks due'
-  return `${doneOcc}/${totalOcc} completions`
+  if(totalOcc===0) return '—'
+  return `${doneOcc}/${totalOcc}`
 }
 
 function renderHistory(){
@@ -673,15 +676,16 @@ function renderHistory(){
     const tasks = state.tasks.filter(t=>t.cat===c.id)
     if(tasks.length===0) continue
     const statuses = days.map(day=> dayStatus(day, tasks, limit))
+    const statusLabelText = statusLabel(statusFromDays(statuses))
+    const countText = countsForCategory(tasks, days, limit)
     const card=document.createElement('div')
     card.className='card'
     card.innerHTML=`
       <div class="card-head">
-        <span class="cat-emoji" aria-hidden="true">${escapeHtml(categoryEmoji(c.id))}</span>
+        <span class="status">${statusLabelText}</span>
         <h3>${escapeHtml(categoryLabel(c.id))}</h3>
-        <span class="status">${statusLabel(statusFromDays(statuses))}</span>
+        <span class="count">${countText}</span>
       </div>
-      <div class="count">${countsForCategory(tasks, days, limit)}</div>
       <div class="cell-row">${statuses.map((s,idx)=>`<div class="week-cell status-${s}"><span>${WEEKDAY_SHORT[idx]}</span></div>`).join('')}</div>
     `
     card.addEventListener('click', ()=> openCategory(c.id, week, 'history'))
@@ -709,13 +713,13 @@ function renderCategory(cat, week){
   for(const task of tasks){
     const row=document.createElement('div')
     row.className='task'
-    const badges = [`${task.importance==='must'?'Must do':'Nice to have'}`, recurLabel(task.recur)]
+    row.dataset.importance = task.importance
+    const freqMark = frequencyEmoji(task.recur)
     row.innerHTML=`
       <div class="task-header">
         <span class="em">${escapeHtml(task.emoji||'🎯')}</span>
-        <div>
-          <div class="title">${escapeHtml(task.title)}</div>
-          <div class="badges">${badges.map(b=>`<span>${escapeHtml(b)}</span>`).join('')}</div>
+        <div class="task-info">
+          <div class="title">${escapeHtml(task.title)}${freqMark?` <span class="freq" aria-hidden="true">${freqMark}</span>`:''}</div>
         </div>
         <div class="task-actions">
           <button type="button" data-act="edit" aria-label="Edit activity">✏️</button>
@@ -765,6 +769,7 @@ function changeHistoryWeek(delta){
 function onRecurChange(){
   const v = els.f_recur.value
   els.specificWrap.style.display = v==='specific' ? 'block' : 'none'
+  els.weeklyWrap.style.display = v==='weekly' ? 'block' : 'none'
 }
 
 function initSpecificDayPicker(){
@@ -779,7 +784,7 @@ function initSpecificDayPicker(){
 
 function updateEmojiResults(){
   const q = els.emojiSearch.value.trim().toLowerCase()
-  const list = q? EMOJIS.filter(e=> e.tags.some(t=>t.includes(q))): EMOJIS.slice(0,30)
+  const list = q? EMOJIS.filter(e=> e.tags.some(t=>t.includes(q))): EMOJIS
   els.emojiResults.innerHTML=''
   list.forEach(e=>{
     const btn=document.createElement('button')
@@ -832,6 +837,7 @@ function openTaskDialog(mode, task){
     if(task.recur.type==='daily'){ els.f_recur.value='daily' }
     else if(task.recur.type==='specific'){ els.f_recur.value='specific' }
     else { els.f_recur.value='weekly' }
+    els.f_weeklyTimes.value = task.recur.type==='weekly' ? task.recur.times || 1 : 1
     onRecurChange()
     const boxes=[...els.specificDays.querySelectorAll('input')]
     boxes.forEach(box=>{ box.checked = task.recur.type==='specific' ? task.recur.days.includes(+box.value) : false })
@@ -841,6 +847,7 @@ function openTaskDialog(mode, task){
     els.f_cat.value = selectedCat || ''
     els.f_importance.value='must'
     els.f_recur.value='daily'
+    els.f_weeklyTimes.value=1
     onRecurChange()
     els.specificDays.querySelectorAll('input').forEach(input=> input.checked=false)
   }
@@ -863,7 +870,13 @@ function submitTask(e){
     if(days.length===0){ alert('Select at least one day'); return }
     recur = {type:'specific', days}
   }
-  if(freq==='weekly'){ recur = {type:'weekly'} }
+  if(freq==='weekly'){
+    let times = parseInt(els.f_weeklyTimes.value,10)
+    if(Number.isNaN(times)){ times = 1 }
+    times = Math.min(6, Math.max(1, times))
+    els.f_weeklyTimes.value = times
+    recur = {type:'weekly', times}
+  }
   const nowWeek = todayISO()
   if(state.ui.editTaskId){
     const task = state.tasks.find(t=>t.id===state.ui.editTaskId)
@@ -894,12 +907,18 @@ function deleteCurrentTask(){
 }
 
 function taskWeeklyStatus(task, days, limit){
-  if(task.recur.type==='weekly' && task.recur.weekday==null){
-    const pastDays = days.filter(day=> !isFuture(day, limit))
-    if(pastDays.length===0) return null
-    if(pastDays.some(day=> isDone(task, day))) return 'green'
-    const hasFuture = days.some(day=> isFuture(day, limit))
-    if(hasFuture) return 'yellow'
+  if(task.recur.type==='weekly'){
+    const relevantDays = days.filter(day=> !isFuture(day, limit))
+    if(relevantDays.length===0) return null
+    const doneCount = relevantDays.filter(day=> isDone(task, day)).length
+    const weekEnd = addDays(days[0],6)
+    const isOngoing = compareDate(limit, weekEnd)<0
+    if(isOngoing){
+      if(doneCount>0) return 'green'
+      return task.importance==='must' ? 'red' : 'yellow'
+    }
+    const target = task.recur.times || 1
+    if(doneCount>=target) return 'green'
     return task.importance==='must' ? 'red' : 'yellow'
   }
   const dueDays = days.filter(day=> !isFuture(day, limit) && isDue(task, day))
@@ -917,7 +936,7 @@ function dayStatus(day, tasks, limit){
   if(missing.length===0) return 'green'
   const hasMust = missing.some(t=>{
     if(t.importance!=='must') return false
-    if(t.recur.type==='weekly' && t.recur.weekday==null){
+    if(t.recur.type==='weekly'){
       const weekEnd = addDays(weekStart(day),6)
       if(compareDate(limit, weekEnd)<0) return false
     }
@@ -930,18 +949,45 @@ function dayStatusForTask(task, day, limit){
   if(isFuture(day, limit)) return 'future'
   if(!isDue(task, day)) return 'off'
   if(isDone(task, day)) return 'green'
-  if(task.recur.type==='weekly' && task.recur.weekday==null){
-    const weekEnd = addDays(weekStart(day),6)
-    if(compareDate(limit, weekEnd)<0) return 'yellow'
+  if(task.recur.type==='weekly'){
+    const start = weekStart(day)
+    const weekEnd = addDays(start,6)
+    const span = weekDays(start)
+    const doneSoFar = span.filter(d=> !isFuture(d, limit) && isDone(task, d)).length
+    const target = task.recur.times || 1
+    const isOngoing = compareDate(limit, weekEnd)<0
+    if(isOngoing){
+      if(doneSoFar>0) return 'yellow'
+      return task.importance==='must' ? 'red' : 'yellow'
+    }
+    if(doneSoFar<target){
+      return task.importance==='must' ? 'red' : 'yellow'
+    }
+    return 'off'
   }
   return task.importance==='must' ? 'red':'yellow'
 }
 
 function statusLabel(status){
   if(status==='green') return '🟩 On track'
-  if(status==='yellow') return '🟨 Needs attention'
+  if(status==='yellow') return '🟨 Keep up'
   if(status==='red') return '🟥 Catch up'
   return '⬜ Upcoming'
+}
+
+function frequencyEmoji(recur){
+  const map={1:'1️⃣',2:'2️⃣',3:'3️⃣',4:'4️⃣',5:'5️⃣',6:'6️⃣',7:'7️⃣'}
+  if(!recur) return ''
+  if(recur.type==='daily') return '7️⃣'
+  if(recur.type==='weekly'){
+    const times = Math.min(7, Math.max(1, recur.times||1))
+    return map[times] || ''
+  }
+  if(recur.type==='specific'){
+    const count = Array.isArray(recur.days) ? Math.min(7, Math.max(1, recur.days.length)) : 0
+    return map[count] || ''
+  }
+  return ''
 }
 
 function statusFromDays(days){
@@ -959,13 +1005,13 @@ function isDue(task, ymd){
   const w = d.getDay()
   if(task.recur.type==='daily') return true
   if(task.recur.type==='weekly'){
-    if(task.recur.weekday!=null){ return w === task.recur.weekday }
     const start = weekStart(ymd)
     const span = weekDays(start)
     const idx = span.indexOf(ymd)
     if(idx<0) return false
-    const doneBefore = span.slice(0, idx).some(day=> isDone(task, day))
-    return !doneBefore
+    const times = task.recur.times || 1
+    const doneBefore = span.slice(0, idx).filter(day=> isDone(task, day)).length
+    return doneBefore < times
   }
   if(task.recur.type==='specific') return task.recur.days.includes(w)
   if(task.recur.type==='everyX'){ // fallback legacy
@@ -986,16 +1032,6 @@ function toggleDone(task, ymd){
     state.done[ymd][task.id] = true
   }
   save()
-}
-
-function recurLabel(r){
-  if(r.type==='daily') return 'Daily'
-  if(r.type==='weekly') return '1+ times / week'
-  if(r.type==='specific'){
-    return 'Days: '+ r.days.map(d=> WEEKDAY_SHORT[(d+6)%7]).join(', ')
-  }
-  if(r.type==='everyX') return `Every ${r.interval} days`
-  return ''
 }
 
 function categoryLabel(id){
@@ -1040,41 +1076,41 @@ function seed(){
   const today = todayISO()
   const mk=(cat,title,emoji,importance,recur)=>({id:uid(),cat,title,emoji,importance,recur,createdAt:today})
   const S=[]
-  S.push(mk('Fitness','5 min warm-up','🤸','nice',{type:'daily'}))
+  S.push(mk('Fitness','5 min warm-up','🤸','should',{type:'daily'}))
   S.push(mk('Fitness','20 min cardio','🏃','must',{type:'specific',days:[1,3,5]}))
   S.push(mk('Fitness','15 min strength','💪','must',{type:'specific',days:[2,4]}))
-  S.push(mk('Fitness','Post-session stretches','🧘','nice',{type:'daily'}))
-  S.push(mk('Fitness','Bike ride','🚲','nice',{type:'specific',days:[6]}))
+  S.push(mk('Fitness','Post-session stretches','🧘','should',{type:'daily'}))
+  S.push(mk('Fitness','Bike ride','🚲','should',{type:'specific',days:[6]}))
 
   S.push(mk('Nutrition','Protein breakfast','🍳','must',{type:'daily'}))
-  S.push(mk('Nutrition','2 fresh fruits','🍎','nice',{type:'daily'}))
+  S.push(mk('Nutrition','2 fresh fruits','🍎','should',{type:'daily'}))
   S.push(mk('Nutrition','Drink 1.5L water','💧','must',{type:'daily'}))
-  S.push(mk('Nutrition','Veggie meal','🥗','nice',{type:'specific',days:[1,4]}))
-  S.push(mk('Nutrition','Fish meal','🐟','nice',{type:'specific',days:[5]}))
+  S.push(mk('Nutrition','Veggie meal','🥗','should',{type:'specific',days:[1,4]}))
+  S.push(mk('Nutrition','Fish meal','🐟','should',{type:'specific',days:[5]}))
 
   S.push(mk('Rest','In bed before 11pm','🛏️','must',{type:'daily'}))
-  S.push(mk('Rest','Screen off 1h before bed','📵','nice',{type:'daily'}))
-  S.push(mk('Rest','20 min nap','😴','nice',{type:'specific',days:[1,4]}))
-  S.push(mk('Rest','Calm breathing','🌬️','nice',{type:'specific',days:[2,5]}))
-  S.push(mk('Rest','Air out bedroom','🪟','nice',{type:'daily'}))
+  S.push(mk('Rest','Screen off 1h before bed','📵','should',{type:'daily'}))
+  S.push(mk('Rest','20 min nap','😴','should',{type:'specific',days:[1,4]}))
+  S.push(mk('Rest','Calm breathing','🌬️','should',{type:'specific',days:[2,5]}))
+  S.push(mk('Rest','Air out bedroom','🪟','should',{type:'daily'}))
 
-  S.push(mk('Connection','Message a loved one','💬','nice',{type:'specific',days:[2,4]}))
-  S.push(mk('Connection','Call family','📞','must',{type:'weekly'}))
-  S.push(mk('Connection','Shared lunch','🍽️','nice',{type:'specific',days:[3]}))
-  S.push(mk('Connection','Give a sincere compliment','🤝','nice',{type:'daily'}))
+  S.push(mk('Connection','Message a loved one','💬','should',{type:'specific',days:[2,4]}))
+  S.push(mk('Connection','Call family','📞','must',{type:'weekly',times:1}))
+  S.push(mk('Connection','Shared lunch','🍽️','should',{type:'specific',days:[3]}))
+  S.push(mk('Connection','Give a sincere compliment','🤝','should',{type:'daily'}))
   S.push(mk('Connection','Social outing','🕺','must',{type:'specific',days:[5]}))
 
-  S.push(mk('Learning','Read for 15 min','📚','nice',{type:'daily'}))
+  S.push(mk('Learning','Read for 15 min','📚','should',{type:'daily'}))
   S.push(mk('Learning','Online course','💻','must',{type:'specific',days:[1,3]}))
-  S.push(mk('Learning','Review vocabulary','🗂️','nice',{type:'specific',days:[2,5]}))
-  S.push(mk('Learning','Practice language','🗣️','nice',{type:'specific',days:[4]}))
-  S.push(mk('Learning','Learning journal','📝','nice',{type:'weekly'}))
+  S.push(mk('Learning','Review vocabulary','🗂️','should',{type:'specific',days:[2,5]}))
+  S.push(mk('Learning','Practice language','🗣️','should',{type:'specific',days:[4]}))
+  S.push(mk('Learning','Learning journal','📝','should',{type:'weekly',times:1}))
 
-  S.push(mk('Leisure','Drawing session','🎨','nice',{type:'specific',days:[6]}))
-  S.push(mk('Leisure','Play music','🎸','nice',{type:'specific',days:[2,5]}))
-  S.push(mk('Leisure','Game night','🎲','nice',{type:'specific',days:[5]}))
-  S.push(mk('Leisure','Nature outing','🌳','nice',{type:'specific',days:[6]}))
-  S.push(mk('Leisure','Watch a show','📺','nice',{type:'daily'}))
+  S.push(mk('Leisure','Drawing session','🎨','should',{type:'specific',days:[6]}))
+  S.push(mk('Leisure','Play music','🎸','should',{type:'specific',days:[2,5]}))
+  S.push(mk('Leisure','Game night','🎲','should',{type:'specific',days:[5]}))
+  S.push(mk('Leisure','Nature outing','🌳','should',{type:'specific',days:[6]}))
+  S.push(mk('Leisure','Watch a show','📺','should',{type:'daily'}))
 
   return {tasks:S, done:{}, ui:{currentView:'home', historyWeekStart:currentWeekStart, categoryWeekStart:currentWeekStart, currentCat:null}}
 }
