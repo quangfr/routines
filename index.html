@@ -6,76 +6,125 @@
 <title>Routine Buddy · Prototype</title>
 <style>
 :root{
-  --bg:#0b0f14; --panel:#0f1620; --muted:#9fb0c0; --text:#e9f1f7; --ok:#2ecc71; --warn:#f1c40f; --bad:#ff5a5f;
-  --cat-Nutrition:#FFB703; --cat-Hygiène:#8ECAE6; --cat-Exercice:#2A9D8F; --cat-Sommeil:#4A4E69; --cat-Social:#F4A261; --cat-Autre:#9B5DE5;
+  color-scheme:light;
+  --bg:#f4f7fb;
+  --panel:#ffffff;
+  --muted:#5b708b;
+  --text:#1a2433;
+  --border:#d9e2ef;
+  --accent:#2563eb;
+  --ok:#16a34a;
+  --warn:#eab308;
+  --bad:#dc2626;
+  --future:#e5edf9;
+  --off:#f1f5f9;
   --radius:18px;
+  --cat-Nutrition:#f97316;
+  --cat-Hygiène:#38bdf8;
+  --cat-Exercice:#34d399;
+  --cat-Sommeil:#a855f7;
+  --cat-Social:#f59e0b;
+  --cat-Autre:#f472b6;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:linear-gradient(180deg,#091019,#0b0f14 60%);color:var(--text);font:16px/1.3 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 "Inter", system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font:inherit;color:inherit}
 .app{min-height:100svh;display:flex;flex-direction:column;}
-header{position:sticky;top:0;z-index:4;background:rgba(15,22,32,.9);backdrop-filter:blur(8px);border-bottom:1px solid #182230}
-.head-wrap{display:flex;align-items:center;gap:12px;padding:10px 12px;}
-.h-title{font-weight:700;letter-spacing:.3px}
+header{position:sticky;top:0;z-index:4;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.head-wrap{display:flex;align-items:center;gap:12px;padding:12px 16px;max-width:960px;margin:0 auto;width:100%}
+.h-title{font-weight:700;font-size:18px;display:flex;align-items:center;gap:8px}
 .h-grow{flex:1}
-.date-row{display:flex;gap:8px;align-items:center}
-.date-row input[type=date]{appearance:none;background:#101827;border:1px solid #223046;color:var(--text);padding:8px 10px;border-radius:12px}
-.icon-btn{background:#101827;border:1px solid #223046;color:var(--text);border-radius:12px;padding:8px 10px;display:inline-flex;align-items:center;gap:8px}
+.icon-btn{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:8px 12px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:all .15s ease}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
 .icon-btn:active{transform:translateY(1px)}
 
-main{flex:1;display:grid;grid-template-rows:auto 1fr;gap:10px;padding:10px;}
-.summary{display:flex;align-items:center;gap:10px;border:1px solid #1a2636;border-radius:var(--radius);padding:10px;background:linear-gradient(180deg,#0f1620,#0c131c)}
-.pill{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid #223046;background:#0e1520;color:var(--muted)}
-.progress{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;position:relative;background:
-  conic-gradient(var(--ok) calc(var(--p)*1%), #243244 0);
-}
-.progress::after{content:"";position:absolute;inset:6px;background:#0c131c;border-radius:50%;border:1px solid #1a2636}
-.progress span{position:relative;font-weight:700;font-size:14px}
+main{flex:1;display:grid;grid-template-rows:auto 1fr;gap:12px;padding:12px}
+main>section{max-width:960px;width:100%;margin:0 auto}
+.summary{display:flex;flex-direction:column;gap:12px;border:1px solid var(--border);border-radius:var(--radius);padding:16px;background:var(--panel);box-shadow:0 12px 32px rgba(15,23,42,.08)}
+.summary-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.week-label{font-weight:600;font-size:18px}
+.status-pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-size:14px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:var(--off);display:flex;gap:6px;align-items:center;font-weight:500}
+.week-cells{display:flex;gap:6px;flex-wrap:wrap}
+.week-cell{width:44px;height:44px;border-radius:12px;border:1px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;font-weight:600;gap:2px;cursor:default}
+.week-cell .dot{font-size:18px}
+.week-cell.status-green{background:rgba(22,163,74,.12);color:#047857;border-color:rgba(22,163,74,.25)}
+.week-cell.status-yellow{background:rgba(234,179,8,.18);color:#92400e;border-color:rgba(234,179,8,.28)}
+.week-cell.status-red{background:rgba(220,38,38,.14);color:#b91c1c;border-color:rgba(220,38,38,.3)}
+.week-cell.status-future{background:var(--future);color:#64748b;border:1px dashed rgba(148,163,184,.6)}
+.week-cell.status-off{background:var(--off);color:#94a3b8;border:1px dashed rgba(148,163,184,.35)}
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.card{background:linear-gradient(180deg,#0f1723,#0b121c);border:1px solid #1a2636;border-radius:var(--radius);padding:10px;display:flex;flex-direction:column;gap:10px;min-height:130px;}
-.card-head{display:flex;align-items:center;gap:8px}
-.card-head .dot{width:10px;height:10px;border-radius:50%}
-.card h3{margin:0;font-size:16px;font-weight:700}
-.status{margin-left:auto;border-radius:10px;padding:4px 8px;font-size:12px;border:1px solid #223046;color:#cfd9e3;background:#101827}
-.count{font-size:13px;color:var(--muted)}
-.emoji-row{display:flex;flex-wrap:wrap;gap:6px}
-.emoji{font-size:20px;filter:saturate(1.2)}
-.card{border-width:2px}
-.card[data-status="red"]{border-color:var(--bad)}
-.card[data-status="yellow"]{border-color:var(--warn)}
-.card[data-status="green"]{border-color:var(--ok)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.card{background:var(--panel);border:2px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;min-height:150px;box-shadow:0 12px 24px rgba(15,23,42,.06);cursor:pointer;transition:transform .15s ease, box-shadow .15s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(15,23,42,.08)}
+.card-head{display:flex;align-items:center;gap:10px}
+.card-head .dot{width:12px;height:12px;border-radius:50%}
+.card h3{margin:0;font-size:18px;font-weight:700}
+.status{margin-left:auto;border-radius:10px;padding:4px 10px;font-size:13px;border:1px solid var(--border);background:var(--off);font-weight:600}
+.count{font-size:14px;color:var(--muted)}
+.cell-row{display:flex;gap:6px}
+.cell-row .week-cell{flex:1;min-width:0;cursor:default}
 
-/* Category view */
 .view{display:none}
 .view.active{display:block}
-.cat-head{display:flex;align-items:center;gap:8px;margin:6px 0 10px}
-.back{padding:8px 10px;border-radius:12px;border:1px solid #223046;background:#101827;color:var(--text)}
+.cat-head{display:flex;align-items:center;gap:12px;margin:6px 0 14px}
+.back{padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer}
 .add{margin-left:auto}
-.task{position:relative;background:#0f1723;border:1px solid #1a2636;border-radius:14px;padding:10px;display:flex;align-items:center;gap:10px;touch-action:pan-y}
-.task + .task{margin-top:10px}
-.task .em{font-size:22px}
-.task .title{font-weight:600}
-.badge{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid #2a3a52;color:#b9c6d6;background:#0c141f}
-.line{margin-left:auto;display:flex;gap:6px;align-items:center}
-.task.done{opacity:.6;text-decoration:line-through}
-.swipe-hint{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,rgba(46,204,113,.2),transparent 50%);pointer-events:none;opacity:0;transition:opacity .2s}
-.task.swiping .swipe-hint{opacity:1}
+.cat-head h2{margin:0;font-size:22px}
+.cat-week{margin-left:auto;font-weight:600;color:var(--muted)}
+.task{position:relative;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 24px rgba(15,23,42,.04)}
+.task + .task{margin-top:12px}
+.task-header{display:flex;align-items:center;gap:12px}
+.task .em{font-size:28px}
+.task .title{font-weight:600;font-size:18px}
+.task .badges{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.task-actions{display:flex;gap:8px;align-items:center;margin-left:auto}
+.task-actions button{padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:var(--off);cursor:pointer}
+.week-grid{display:flex;gap:6px;flex-wrap:wrap}
+.week-cell button{all:unset}
+.task-week{display:flex;gap:6px;flex-wrap:wrap}
+.task-week .week-cell{width:42px;height:46px}
+.task-week .week-cell.clickable{cursor:pointer}
+.task-week .week-cell.clickable:focus-visible{outline:2px solid var(--accent)}
+.task-week .week-cell.disabled{opacity:.45;cursor:not-allowed}
+
+.history-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.history-head h2{margin:0;font-size:20px}
+.history-nav{display:flex;gap:8px;margin-left:auto}
+.history-nav button{padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:var(--panel);cursor:pointer}
+.history-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 
 /* Dialog */
-dialog{border:none;border-radius:16px;padding:0;background:#0f1723;color:var(--text);width:min(92vw,420px)}
-.modal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #1a2636}
-.modal-body{padding:12px 14px;display:grid;gap:10px}
-.modal-body input, .modal-body select{background:#101827;border:1px solid #223046;color:var(--text);padding:10px;border-radius:12px}
-.modal-actions{display:flex;gap:8px;justify-content:flex-end;padding:12px 14px;border-top:1px solid #1a2636}
+dialog{border:none;border-radius:18px;padding:0;background:var(--panel);color:var(--text);width:min(92vw,460px);box-shadow:0 28px 60px rgba(15,23,42,.24)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);font-weight:700;font-size:18px}
+.modal-body{padding:18px;display:grid;gap:16px}
+.field{display:grid;gap:6px}
+.field label{font-weight:600;font-size:14px;color:#475569}
+.modal-body input,.modal-body select,.modal-body textarea{background:var(--off);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;font:inherit}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;padding:16px 18px;border-top:1px solid var(--border)}
+.modal-actions button{padding:8px 16px;border-radius:12px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-weight:600}
+.modal-actions .primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.modal-actions .danger{color:var(--bad);border-color:rgba(220,38,38,.3)}
 
-footer{position:sticky;bottom:0;background:rgba(15,22,32,.9);backdrop-filter:blur(8px);border-top:1px solid #182230}
-.nav{display:flex;gap:8px;padding:8px}
-.nav button{flex:1;border-radius:12px;border:1px solid #223046;background:#101827;color:var(--text);padding:10px;font-weight:600}
+.emoji-picker{display:grid;gap:10px;border:1px solid var(--border);border-radius:14px;padding:10px;background:var(--off)}
+.emoji-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(40px,1fr));gap:6px;max-height:140px;overflow:auto}
+.emoji-results button{background:var(--panel);border:1px solid var(--border);border-radius:10px;height:40px;display:grid;place-items:center;font-size:24px;cursor:pointer}
+.emoji-results button:hover{border-color:var(--accent)}
+.weekday-picker{display:flex;flex-wrap:wrap;gap:8px}
+.weekday-picker label{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:12px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:14px}
+.weekday-picker input{accent-color:var(--accent)}
 
-/* Small devices */
-@media (max-width:420px){
-  .grid{grid-template-columns:1fr 1fr}
+footer{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-top:1px solid var(--border)}
+.nav{display:flex;gap:10px;padding:10px;max-width:960px;margin:0 auto;width:100%}
+.nav button{flex:1;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);padding:12px;font-weight:600;cursor:pointer}
+.nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+@media (max-width:520px){
+  .week-cell{width:42px;height:42px}
+  .summary{padding:14px}
+  .card{padding:14px}
+  .task-week .week-cell{width:40px;height:44px}
 }
 </style>
 </head>
@@ -83,38 +132,46 @@ footer{position:sticky;bottom:0;background:rgba(15,22,32,.9);backdrop-filter:blu
 <div class="app" id="app">
   <header>
     <div class="head-wrap">
-      <div class="h-title">🏷️ Routine Buddy</div>
+      <div class="h-title"><span aria-hidden="true">👥</span>Routine Buddy</div>
       <div class="h-grow"></div>
-      <div class="date-row">
-        <span class="pill" id="todayLabel">Aujourd'hui</span>
-        <input id="dayPicker" type="date" />
-      </div>
-      <button class="icon-btn" id="resetDay" title="Revenir à aujourd'hui">↺</button>
     </div>
   </header>
 
   <main>
     <section class="summary" id="summary">
-      <div class="progress" id="progress" style="--p:0"><span id="pct">0%</span></div>
-      <div>
-        <div style="font-weight:700">Progression du jour</div>
-        <div class="count" id="sumLine">0/0 tâches faites</div>
-        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">
-          <span class="pill">🟥 Obligatoires restantes</span>
-          <span class="pill">🟨 Conseillées restantes</span>
-          <span class="pill">🟩 Tout fait = vert</span>
+      <div class="summary-head">
+        <div class="week-label" id="summaryWeekLabel"></div>
+        <div class="status-pills">
+          <span class="pill">🟩 <span id="pillGreen">0</span></span>
+          <span class="pill">🟨 <span id="pillYellow">0</span></span>
+          <span class="pill">🟥 <span id="pillRed">0</span></span>
         </div>
       </div>
+      <div class="week-cells" id="summaryCells"></div>
+      <p class="count" style="margin:0" id="summaryLegend">Une semaine verte signifie que chaque tâche due a été accomplie.</p>
     </section>
 
     <section id="home" class="view active">
       <div class="grid" id="catGrid"></div>
     </section>
 
+    <section id="history" class="view">
+      <div class="history-head">
+        <h2>Historique hebdomadaire</h2>
+        <div class="history-nav">
+          <button class="icon-btn" id="historyPrev">← Semaine précédente</button>
+          <button class="icon-btn" id="historyNext">Semaine suivante →</button>
+        </div>
+      </div>
+      <div class="count" id="historyLabel"></div>
+      <div class="history-grid" id="historyGrid"></div>
+    </section>
+
     <section id="category" class="view">
       <div class="cat-head">
         <button class="back" id="backBtn">← Accueil</button>
-        <h2 id="catTitle" style="margin:0"></h2>
+        <h2 id="catTitle"></h2>
+        <div class="cat-week" id="catWeek"></div>
         <button class="icon-btn add" id="addBtn">+ Ajouter</button>
       </div>
       <div id="taskList"></div>
@@ -123,248 +180,543 @@ footer{position:sticky;bottom:0;background:rgba(15,22,32,.9);backdrop-filter:blu
 
   <footer>
     <div class="nav">
-      <button id="navHome">🏠 Accueil</button>
-      <button id="navHistory">📅 Historique</button>
+      <button id="navHome" class="active">🏠 Accueil</button>
+      <button id="navHistory">📚 Historique</button>
     </div>
   </footer>
 </div>
 
 <dialog id="taskDialog">
   <form method="dialog" id="taskForm">
-    <div class="modal-head"><strong>Nouvelle tâche</strong><button type="button" class="icon-btn" id="closeDialog">✖</button></div>
+    <div class="modal-head"><span id="dialogTitle">Nouvelle activité</span><button type="button" class="icon-btn" id="closeDialog">✖</button></div>
     <div class="modal-body">
-      <input type="text" id="f_title" placeholder="Titre (ex: Brossage dents)" required />
-      <input type="text" id="f_emoji" placeholder="Émoji (ex: 😁)" list="emojiList" maxlength="2" />
-      <datalist id="emojiList">
-        <option>🍎</option><option>🥗</option><option>🥛</option><option>🚿</option><option>🪥</option><option>🏃</option><option>🧘</option><option>💪</option><option>😴</option><option>📵</option><option>🤝</option><option>💬</option><option>🎯</option>
-      </datalist>
-      <select id="f_importance">
-        <option value="must">Obligatoire</option>
-        <option value="nice">Conseillé</option>
-      </select>
-      <select id="f_recur">
-        <option value="daily">Tous les jours</option>
-        <option value="weekly">1×/semaine</option>
-        <option value="everyX">Tous les X jours</option>
-      </select>
-      <div id="recurWeeklyWrap" style="display:none">
-        <select id="f_weekday">
-          <option value="1">Lundi</option><option value="2">Mardi</option><option value="3">Mercredi</option><option value="4">Jeudi</option><option value="5">Vendredi</option><option value="6">Samedi</option><option value="0">Dimanche</option>
+      <div class="field">
+        <label for="f_title">Nom</label>
+        <input type="text" id="f_title" placeholder="Ex : Brossage dents" required />
+      </div>
+      <div class="field">
+        <label for="f_emoji">Émoji</label>
+        <input type="text" id="f_emoji" placeholder="Ex : 😁" maxlength="3" />
+        <div class="emoji-picker">
+          <input type="search" id="emojiSearch" placeholder="Recherche (fruit, sport, détente...)" />
+          <div class="emoji-results" id="emojiResults"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f_importance">Priorité</label>
+        <select id="f_importance">
+          <option value="must">Obligatoire</option>
+          <option value="nice">Conseillé</option>
         </select>
       </div>
-      <div id="recurEveryXWrap" style="display:none">
-        <input type="number" id="f_everyX" min="2" max="30" value="3" />
+      <div class="field">
+        <label for="f_recur">Fréquence</label>
+        <select id="f_recur">
+          <option value="daily">Quotidien</option>
+          <option value="specific">Jour(s) spécifique(s)</option>
+          <option value="weekly">Hebdomadaire</option>
+        </select>
+      </div>
+      <div class="field" id="specificWrap" style="display:none">
+        <label>Jour(s) de la semaine</label>
+        <div class="weekday-picker" id="specificDays"></div>
+      </div>
+      <div class="field" id="weeklyWrap" style="display:none">
+        <label for="f_weekday">Jour préféré</label>
+        <select id="f_weekday">
+          <option value="1">Lundi</option>
+          <option value="2">Mardi</option>
+          <option value="3">Mercredi</option>
+          <option value="4">Jeudi</option>
+          <option value="5">Vendredi</option>
+          <option value="6">Samedi</option>
+          <option value="0">Dimanche</option>
+        </select>
       </div>
     </div>
     <div class="modal-actions">
       <button class="icon-btn" value="cancel">Annuler</button>
-      <button class="icon-btn" id="saveTask" value="default">Enregistrer</button>
+      <button type="button" class="icon-btn danger" id="deleteTask" style="display:none">Supprimer</button>
+      <button class="icon-btn primary" id="saveTask" value="default">Enregistrer</button>
     </div>
   </form>
 </dialog>
 
 <script>
 const TZ = 'Europe/Paris'
-const fmtDate = (d)=> new Date(d).toLocaleDateString('en-CA',{timeZone:TZ}) // YYYY-MM-DD
+const fmtDate = (d)=> new Date(d).toLocaleDateString('en-CA',{timeZone:TZ})
 const todayISO = ()=> fmtDate(Date.now())
 const uid = ()=> Math.random().toString(36).slice(2,9)
-
-const CATS=[
-  {id:'Nutrition', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Nutrition').trim()},
-  {id:'Hygiène', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Hygiène').trim()},
-  {id:'Exercice', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Exercice').trim()},
-  {id:'Sommeil', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Sommeil').trim()},
-  {id:'Social', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Social').trim()},
-  {id:'Autre', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Autre').trim()}
+const WEEKDAY_SHORT = ['Lu','Ma','Me','Je','Ve','Sa','Di']
+const WEEKDAY_ORDER = [1,2,3,4,5,6,0]
+const STORE_KEY='ROUTINE_BUDDY_V2'
+const currentWeekStart = weekStart(todayISO())
+const EMOJIS=[
+  {char:'🍎', tags:['pomme','fruit','nutrition','vitamine']},
+  {char:'🍳', tags:['oeuf','petit dej','protéine','cuisine']},
+  {char:'🥗', tags:['salade','repas','légume','nutrition']},
+  {char:'🥛', tags:['lait','boisson','calcium']},
+  {char:'💧', tags:['eau','hydratation']},
+  {char:'🫖', tags:['thé','boisson']},
+  {char:'☕', tags:['café','boisson','pause']},
+  {char:'🚿', tags:['douche','hygiène']},
+  {char:'🪥', tags:['brossage','dents','hygiène']},
+  {char:'🧴', tags:['soin','visage','hygiène']},
+  {char:'🧼', tags:['savon','hygiène']},
+  {char:'🏃', tags:['course','sport','exercice']},
+  {char:'🚶', tags:['marche','balade']},
+  {char:'💪', tags:['muscu','force','sport']},
+  {char:'🧘', tags:['yoga','détente','respiration']},
+  {char:'🧘‍♂️', tags:['méditation','zen']},
+  {char:'🧘‍♀️', tags:['yoga','calme']},
+  {char:'🚲', tags:['vélo','sport','exterieur']},
+  {char:'💃', tags:['danse','soirée']},
+  {char:'🛏️', tags:['sommeil','lit','nuit']},
+  {char:'📵', tags:['digital detox','écran']},
+  {char:'😴', tags:['sieste','sommeil']},
+  {char:'🪟', tags:['aération','fenêtre']},
+  {char:'🕯️', tags:['rituel','calme']},
+  {char:'💬', tags:['message','social']},
+  {char:'🤝', tags:['ami','social','entraide']},
+  {char:'📞', tags:['appel','famille']},
+  {char:'🕺', tags:['danse','soirée']},
+  {char:'📚', tags:['lecture','livre']},
+  {char:'📝', tags:['journal','écriture']},
+  {char:'🗂️', tags:['administratif','paperasse']},
+  {char:'🌳', tags:['nature','balade']},
+  {char:'🎯', tags:['objectif','focus']},
+  {char:'🧺', tags:['linge','ménage']},
+  {char:'🐟', tags:['poisson','repas']},
+  {char:'🫘', tags:['légumineuses','repas']},
+  {char:'🕯', tags:['calme']}
 ]
 
-const STORE_KEY='ROUTINE_BUDDY_V1'
 let state = load() || seed()
+if(!state.ui){ state.ui={} }
+state.ui.historyWeekStart = state.ui.historyWeekStart || currentWeekStart
+state.ui.currentView = state.ui.currentView || 'home'
+state.ui.currentCat = state.ui.currentCat || null
+state.ui.categoryWeekStart = state.ui.categoryWeekStart || currentWeekStart
+state.ui.editTaskId = null
+save()
 
-// Elements
 const els={
-  dayPicker: document.getElementById('dayPicker'),
-  todayLabel: document.getElementById('todayLabel'),
-  resetDay: document.getElementById('resetDay'),
-  pct: document.getElementById('pct'),
-  progress: document.getElementById('progress'),
-  sumLine: document.getElementById('sumLine'),
+  summaryWeekLabel: document.getElementById('summaryWeekLabel'),
+  summaryCells: document.getElementById('summaryCells'),
+  pillGreen: document.getElementById('pillGreen'),
+  pillYellow: document.getElementById('pillYellow'),
+  pillRed: document.getElementById('pillRed'),
+  summaryLegend: document.getElementById('summaryLegend'),
   catGrid: document.getElementById('catGrid'),
   home: document.getElementById('home'),
+  history: document.getElementById('history'),
   category: document.getElementById('category'),
-  backBtn: document.getElementById('backBtn'),
-  catTitle: document.getElementById('catTitle'),
-  taskList: document.getElementById('taskList'),
   navHome: document.getElementById('navHome'),
   navHistory: document.getElementById('navHistory'),
+  historyPrev: document.getElementById('historyPrev'),
+  historyNext: document.getElementById('historyNext'),
+  historyLabel: document.getElementById('historyLabel'),
+  historyGrid: document.getElementById('historyGrid'),
+  backBtn: document.getElementById('backBtn'),
+  catTitle: document.getElementById('catTitle'),
+  catWeek: document.getElementById('catWeek'),
   addBtn: document.getElementById('addBtn'),
+  taskList: document.getElementById('taskList'),
   taskDialog: document.getElementById('taskDialog'),
+  closeDialog: document.getElementById('closeDialog'),
+  dialogTitle: document.getElementById('dialogTitle'),
   f_title: document.getElementById('f_title'),
   f_emoji: document.getElementById('f_emoji'),
   f_importance: document.getElementById('f_importance'),
   f_recur: document.getElementById('f_recur'),
+  specificWrap: document.getElementById('specificWrap'),
+  specificDays: document.getElementById('specificDays'),
+  weeklyWrap: document.getElementById('weeklyWrap'),
   f_weekday: document.getElementById('f_weekday'),
-  recurWeeklyWrap: document.getElementById('recurWeeklyWrap'),
-  recurEveryXWrap: document.getElementById('recurEveryXWrap'),
-  f_everyX: document.getElementById('f_everyX'),
-  closeDialog: document.getElementById('closeDialog'),
+  emojiSearch: document.getElementById('emojiSearch'),
+  emojiResults: document.getElementById('emojiResults'),
   saveTask: document.getElementById('saveTask'),
+  deleteTask: document.getElementById('deleteTask'),
 }
 
-// Init date picker
-els.dayPicker.value = state.ui?.selectedDay || todayISO()
-updateTodayLabel()
+renderSummary()
 renderHome()
+renderHistory()
+if(state.ui.currentView==='category' && state.ui.currentCat){ openCategory(state.ui.currentCat, state.ui.categoryWeekStart) }
+updateView(state.ui.currentView)
 
-// Events
-els.dayPicker.addEventListener('change', ()=>{ state.ui.selectedDay = els.dayPicker.value; save(); renderHome(); })
-els.resetDay.addEventListener('click', ()=>{ els.dayPicker.value=todayISO(); state.ui.selectedDay=els.dayPicker.value; save(); renderHome();})
-els.navHome.addEventListener('click', ()=>{gotoHome()})
-els.navHistory.addEventListener('click', ()=>{
-  // history is simply: stay on home but change date via prompt (for prototype)
-  const d = prompt('Date (YYYY-MM-DD)', els.dayPicker.value)
-  if(d){ els.dayPicker.value = d; state.ui.selectedDay=d; save(); renderHome(); }
-})
-els.backBtn.addEventListener('click', ()=>{gotoHome()})
-els.addBtn.addEventListener('click', ()=> openAddDialog())
+els.navHome.addEventListener('click', ()=>{ updateView('home') })
+els.navHistory.addEventListener('click', ()=>{ updateView('history') })
+els.backBtn.addEventListener('click', ()=>{ updateView('home'); state.ui.currentCat=null; save() })
+els.addBtn.addEventListener('click', ()=> openTaskDialog('create'))
 els.closeDialog.addEventListener('click', ()=> els.taskDialog.close())
 els.f_recur.addEventListener('change', onRecurChange)
+els.historyPrev.addEventListener('click', ()=>{ changeHistoryWeek(-1) })
+els.historyNext.addEventListener('click', ()=>{ changeHistoryWeek(1) })
+els.emojiSearch.addEventListener('input', updateEmojiResults)
+els.saveTask.addEventListener('click', submitTask)
+els.deleteTask.addEventListener('click', deleteCurrentTask)
 
-els.saveTask.addEventListener('click', (e)=>{
-  e.preventDefault()
-  const cat = state.ui.currentCat
-  const title = els.f_title.value.trim()
-  if(!title) return
-  const emoji = els.f_emoji.value || '🎯'
-  const importance = els.f_importance.value
-  const r = els.f_recur.value
-  const recur = r==='daily' ? {type:'daily'} : r==='weekly' ? {type:'weekly', weekday:+els.f_weekday.value} : {type:'everyX', interval:Math.max(2, +els.f_everyX.value||3), anchor: todayISO()}
-  state.tasks.push({id:uid(), cat, title, emoji, importance, recur, createdAt:todayISO()})
-  save(); els.taskDialog.close(); openCategory(cat)
-})
+updateEmojiResults()
+initSpecificDayPicker()
+onRecurChange()
 
-function onRecurChange(){
-  const v = els.f_recur.value
-  els.recurWeeklyWrap.style.display = v==='weekly' ? 'block' : 'none'
-  els.recurEveryXWrap.style.display = v==='everyX' ? 'block' : 'none'
+function updateView(view){
+  state.ui.currentView=view
+  save()
+  els.home.classList.toggle('active', view==='home')
+  els.history.classList.toggle('active', view==='history')
+  els.category.classList.toggle('active', view==='category')
+  els.navHome.classList.toggle('active', view==='home')
+  els.navHistory.classList.toggle('active', view==='history')
+  if(view==='home'){ renderSummary(); renderHome() }
+  if(view==='history'){ renderHistory() }
+  if(view==='category' && state.ui.currentCat){ renderCategory(state.ui.currentCat, state.ui.categoryWeekStart) }
 }
 
-function gotoHome(){
-  els.home.classList.add('active'); els.category.classList.remove('active')
-  state.ui.currentCat = null; save(); renderHome()
+function weekStart(ymd){
+  const d = new Date(ymd+'T00:00:00')
+  const day = (d.getDay()+6)%7
+  d.setDate(d.getDate()-day)
+  return fmtDate(d)
 }
-
-function openCategory(cat){
-  state.ui.currentCat = cat; save()
-  els.home.classList.remove('active'); els.category.classList.add('active')
-  els.catTitle.textContent = categoryLabel(cat)
-  renderTasks(cat)
+function addDays(ymd, days){
+  const d = new Date(ymd+'T00:00:00')
+  d.setDate(d.getDate()+days)
+  return fmtDate(d)
 }
+function weekDays(weekStart){
+  return Array.from({length:7}, (_,i)=> addDays(weekStart,i))
+}
+function formatWeekRange(weekStart){
+  const start = new Date(weekStart+'T00:00:00')
+  const end = new Date(start)
+  end.setDate(start.getDate()+6)
+  const opts={day:'numeric',month:'short'}
+  return `${start.toLocaleDateString('fr-FR',opts)} – ${end.toLocaleDateString('fr-FR',opts)}`
+}
+function compareDate(a,b){ return a.localeCompare(b) }
+function limitDateForWeek(weekStart){
+  if(weekStart===currentWeekStart){
+    return todayISO()
+  }
+  return addDays(weekStart,6)
+}
+function isFuture(day, limit){ return compareDate(day, limit)>0 }
 
-function openAddDialog(){
-  if(!state.ui.currentCat) return
-  els.f_title.value=''; els.f_emoji.value=''; els.f_importance.value='must'; els.f_recur.value='daily'; onRecurChange();
-  els.taskDialog.showModal()
+function renderSummary(){
+  const week = currentWeekStart
+  const days = weekDays(week)
+  const limit = limitDateForWeek(week)
+  els.summaryWeekLabel.textContent = `Semaine ${formatWeekRange(week)}`
+  const counts={green:0,yellow:0,red:0}
+  for(const task of state.tasks){
+    const status = taskWeeklyStatus(task, days, limit)
+    if(status){ counts[status]++ }
+  }
+  els.pillGreen.textContent=counts.green
+  els.pillYellow.textContent=counts.yellow
+  els.pillRed.textContent=counts.red
+  els.summaryCells.innerHTML=''
+  const statuses = days.map((day,i)=> dayStatus(day, state.tasks, limit))
+  statuses.forEach((status,idx)=>{
+    const cell=document.createElement('div')
+    cell.className='week-cell status-'+status
+    cell.innerHTML=`<span>${WEEKDAY_SHORT[idx]}</span>`
+    els.summaryCells.appendChild(cell)
+  })
 }
 
 function renderHome(){
-  updateTodayLabel()
-  const day = els.dayPicker.value
-  const dueToday = state.tasks.filter(t=>isDue(t, day))
-  const doneToday = dueToday.filter(t=>isDone(t, day))
-  const pct = dueToday.length? Math.round(doneToday.length*100/dueToday.length):100
-  els.progress.style.setProperty('--p', pct)
-  els.pct.textContent = pct+"%"
-  els.sumLine.textContent = `${doneToday.length}/${dueToday.length} tâches faites`
-
-  // grid
+  const week = currentWeekStart
+  const days = weekDays(week)
+  const limit = limitDateForWeek(week)
   els.catGrid.innerHTML=''
-  for(const c of CATS){
-    const tasks = state.tasks.filter(t=>t.cat===c.id && isDue(t, day))
-    const done = tasks.filter(t=>isDone(t, day))
-    const remaining = tasks.filter(t=>!isDone(t, day))
-    const status = tasks.length===0 || remaining.length===0 ? 'green' : (remaining.some(t=>t.importance==='must') ? 'red' : 'yellow')
-    const card=document.createElement('button')
+  for(const c of CATS()){
+    const tasks = state.tasks.filter(t=>t.cat===c.id)
+    if(tasks.length===0) continue
+    const statuses = days.map(day=> dayStatus(day, tasks, limit))
+    const card=document.createElement('div')
     card.className='card'
-    card.dataset.status=status
-    card.style.borderColor = status==='green'? 'var(--ok)': status==='yellow'? 'var(--warn)':'var(--bad)'
-    card.innerHTML = `
+    card.dataset.cat=c.id
+    card.innerHTML=`
       <div class="card-head">
         <div class="dot" style="background:${c.color}"></div>
-        <h3>${categoryLabel(c.id)}</h3>
-        <span class="status">${status==='green'?'✅ OK': status==='yellow'?'🟨 Conseils':'🟥 À faire'}</span>
+        <h3>${escapeHtml(categoryLabel(c.id))}</h3>
+        <span class="status">${statusLabel(statusFromDays(statuses))}</span>
       </div>
-      <div class="count">${done.length}/${tasks.length} aujourd'hui</div>
-      <div class="emoji-row">${remaining.map(t=>`<span class='emoji' title="${escapeHtml(t.title)}">${t.emoji}</span>`).join('') || '<span class="count">Rien à faire 🎉</span>'}</div>
+      <div class="count">${countsForCategory(tasks, days, limit)}</div>
+      <div class="cell-row">${statuses.map((s,idx)=>`<div class="week-cell status-${s}"><span>${WEEKDAY_SHORT[idx]}</span></div>`).join('')}</div>
     `
-    card.addEventListener('click', ()=> openCategory(c.id))
+    card.addEventListener('click', ()=> openCategory(c.id, week))
     els.catGrid.appendChild(card)
   }
 }
 
-function renderTasks(cat){
-  const day = els.dayPicker.value
-  const arr = state.tasks.filter(t=>t.cat===cat && isDue(t, day))
-  arr.sort((a,b)=> (isDone(a,day)-isDone(b,day)) || (a.importance>b.importance?1:-1))
+function countsForCategory(tasks, days, limit){
+  const relevantDays = days.filter(day=> !isFuture(day, limit))
+  const totalOcc=relevantDays.reduce((acc,day)=> acc + tasks.filter(t=>isDue(t,day)).length,0)
+  const doneOcc=relevantDays.reduce((acc,day)=> acc + tasks.filter(t=>isDue(t,day) && isDone(t,day)).length,0)
+  return `${doneOcc}/${totalOcc} réalisations`
+}
+
+function renderHistory(){
+  const week = state.ui.historyWeekStart
+  const days = weekDays(week)
+  const limit = limitDateForWeek(week)
+  els.historyLabel.textContent = `Semaine ${formatWeekRange(week)}`
+  els.historyGrid.innerHTML=''
+  for(const c of CATS()){
+    const tasks = state.tasks.filter(t=>t.cat===c.id)
+    if(tasks.length===0) continue
+    const statuses = days.map(day=> dayStatus(day, tasks, limit))
+    const card=document.createElement('div')
+    card.className='card'
+    card.innerHTML=`
+      <div class="card-head">
+        <div class="dot" style="background:${c.color}"></div>
+        <h3>${escapeHtml(categoryLabel(c.id))}</h3>
+        <span class="status">${statusLabel(statusFromDays(statuses))}</span>
+      </div>
+      <div class="count">${countsForCategory(tasks, days, limit)}</div>
+      <div class="cell-row">${statuses.map((s,idx)=>`<div class="week-cell status-${s}"><span>${WEEKDAY_SHORT[idx]}</span></div>`).join('')}</div>
+    `
+    card.addEventListener('click', ()=> openCategory(c.id, week))
+    els.historyGrid.appendChild(card)
+  }
+  const canGoNext = compareDate(week, currentWeekStart)<0
+  els.historyNext.disabled = !canGoNext
+}
+
+function renderCategory(cat, week){
+  state.ui.currentCat = cat
+  state.ui.categoryWeekStart = week
+  save()
+  const tasks = state.tasks.filter(t=>t.cat===cat)
+  els.catTitle.textContent = categoryLabel(cat)
+  els.catWeek.textContent = formatWeekRange(week)
+  const days = weekDays(week)
+  const limit = limitDateForWeek(week)
   els.taskList.innerHTML=''
-  if(arr.length===0){
-    els.taskList.innerHTML = `<div class="count">Aucune tâche due ce jour. Ajoute-en avec « + ».</div>`
+  if(tasks.length===0){
+    els.taskList.innerHTML='<p class="count">Ajoute une activité à cette rubrique.</p>'
     return
   }
-  for(const t of arr){
+  tasks.sort((a,b)=> (a.importance>b.importance?1:-1) || a.title.localeCompare(b.title))
+  for(const task of tasks){
     const row=document.createElement('div')
-    row.className='task'+(isDone(t,day)?' done':'')
-    row.style.borderLeft=`4px solid ${catColor(t.cat)}`
-    row.innerHTML=`<div class="swipe-hint"></div>
-      <span class="em">${t.emoji}</span>
-      <div>
-        <div class="title">${escapeHtml(t.title)}</div>
-        <div style="display:flex;gap:6px;margin-top:6px">
-          <span class="badge">${t.importance==='must'?'Obligatoire':'Conseillé'}</span>
-          <span class="badge">${recurLabel(t.recur)}</span>
+    row.className='task'
+    const badges = [`${task.importance==='must'?'Obligatoire':'Conseillé'}`, recurLabel(task.recur)]
+    row.innerHTML=`
+      <div class="task-header">
+        <span class="em">${escapeHtml(task.emoji||'🎯')}</span>
+        <div>
+          <div class="title">${escapeHtml(task.title)}</div>
+          <div class="badges">${badges.map(b=>`<span>${escapeHtml(b)}</span>`).join('')}</div>
+        </div>
+        <div class="task-actions">
+          <button type="button" data-act="edit">✏️ Modifier</button>
         </div>
       </div>
-      <div class="line">
-        <button class="icon-btn" data-act="toggle">${isDone(t,day)?'↩︎ Annuler':'✔️ Fait'}</button>
-      </div>`
-
-    // click toggle
-    row.querySelector('[data-act=toggle]').addEventListener('click', ()=>{ toggleDone(t, day); row.classList.toggle('done'); renderTasks(cat); renderHome(); })
-
-    // swipe to complete
-    let startX=0, swiping=false
-    row.addEventListener('touchstart', e=>{ startX=e.touches[0].clientX; swiping=false })
-    row.addEventListener('touchmove', e=>{
-      const dx = e.touches[0].clientX-startX
-      if(dx>8){ swiping=true; row.classList.add('swiping'); row.style.transform=`translateX(${Math.min(dx,80)}px)` }
+      <div class="task-week"></div>
+    `
+    const weekRow = row.querySelector('.task-week')
+    days.forEach((day,idx)=>{
+      const status = dayStatusForTask(task, day, limit)
+      const cell=document.createElement('button')
+      cell.type='button'
+      cell.className='week-cell status-'+status
+      cell.dataset.day=day
+      cell.dataset.task=task.id
+      cell.textContent=WEEKDAY_SHORT[idx]
+      const clickable = (status==='green' || status==='yellow' || status==='red')
+      if(clickable){
+        cell.classList.add('clickable')
+        cell.addEventListener('click', ()=>{ toggleDone(task, day); refreshAll() })
+      }else{
+        cell.classList.add('disabled')
+      }
+      weekRow.appendChild(cell)
     })
-    row.addEventListener('touchend', ()=>{
-      row.classList.remove('swiping')
-      if(parseInt(row.style.transform.replace(/[^0-9-]/g,''))>60){ toggleDone(t, day); renderTasks(cat); renderHome(); }
-      row.style.transform='translateX(0)'
-    })
-
+    row.querySelector('[data-act=edit]').addEventListener('click', ()=> openTaskDialog('edit', task))
     els.taskList.appendChild(row)
   }
 }
 
-// Helpers
-function recurLabel(r){
-  if(r.type==='daily') return 'Quotidien'
-  if(r.type==='weekly') return 'Chaque '+ ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][r.weekday]
-  if(r.type==='everyX') return `Tous les ${r.interval} j`
+function refreshAll(){
+  renderSummary()
+  renderHome()
+  renderHistory()
+  if(state.ui.currentView==='category' && state.ui.currentCat){ renderCategory(state.ui.currentCat, state.ui.categoryWeekStart) }
 }
-function categoryLabel(id){ return id }
-function catColor(id){ const c=CATS.find(x=>x.id===id); return c?c.color:'#fff'}
+
+function changeHistoryWeek(delta){
+  const current = state.ui.historyWeekStart
+  const newWeek = addDays(current, delta*7)
+  if(delta>0 && compareDate(newWeek, currentWeekStart)>0) return
+  state.ui.historyWeekStart = newWeek
+  save()
+  renderHistory()
+}
+
+function onRecurChange(){
+  const v = els.f_recur.value
+  els.specificWrap.style.display = v==='specific' ? 'block' : 'none'
+  els.weeklyWrap.style.display = v==='weekly' ? 'block' : 'none'
+}
+
+function initSpecificDayPicker(){
+  els.specificDays.innerHTML=''
+  WEEKDAY_ORDER.forEach(day=>{
+    const label=WEEKDAY_SHORT[(day+6)%7]
+    const wrapper=document.createElement('label')
+    wrapper.innerHTML=`<input type="checkbox" value="${day}">${label}`
+    els.specificDays.appendChild(wrapper)
+  })
+}
+
+function updateEmojiResults(){
+  const q = els.emojiSearch.value.trim().toLowerCase()
+  const list = q? EMOJIS.filter(e=> e.tags.some(t=>t.includes(q))): EMOJIS.slice(0,30)
+  els.emojiResults.innerHTML=''
+  list.forEach(e=>{
+    const btn=document.createElement('button')
+    btn.type='button'
+    btn.textContent=e.char
+    btn.addEventListener('click', ()=>{ els.f_emoji.value=e.char; els.f_emoji.focus() })
+    els.emojiResults.appendChild(btn)
+  })
+}
+
+function openCategory(cat, week){
+  state.ui.categoryWeekStart = week
+  state.ui.currentCat = cat
+  save()
+  updateView('category')
+}
+
+function openTaskDialog(mode, task){
+  els.taskDialog.returnValue=''
+  els.taskDialog.showModal()
+  els.deleteTask.style.display = mode==='edit' ? 'inline-flex' : 'none'
+  els.dialogTitle.textContent = mode==='edit' ? 'Modifier l'activité' : 'Nouvelle activité'
+  state.ui.editTaskId = mode==='edit' ? task.id : null
+  if(mode==='edit' && task){
+    els.f_title.value = task.title
+    els.f_emoji.value = task.emoji || ''
+    els.f_importance.value = task.importance
+    if(task.recur.type==='daily'){ els.f_recur.value='daily' }
+    else if(task.recur.type==='specific'){ els.f_recur.value='specific' }
+    else { els.f_recur.value='weekly'; els.f_weekday.value = String(task.recur.weekday ?? 1) }
+    onRecurChange()
+    const boxes=[...els.specificDays.querySelectorAll('input')]
+    boxes.forEach(box=>{ box.checked = task.recur.type==='specific' ? task.recur.days.includes(+box.value) : false })
+  }else{
+    els.f_title.value=''
+    els.f_emoji.value=''
+    els.f_importance.value='must'
+    els.f_recur.value='daily'
+    els.f_weekday.value='1'
+    onRecurChange()
+    els.specificDays.querySelectorAll('input').forEach(input=> input.checked=false)
+  }
+  updateEmojiResults()
+}
+
+function submitTask(e){
+  e.preventDefault()
+  const title = els.f_title.value.trim()
+  if(!title) return
+  const emoji = els.f_emoji.value.trim() || '🎯'
+  const importance = els.f_importance.value
+  const freq = els.f_recur.value
+  let recur
+  if(freq==='daily') recur = {type:'daily'}
+  if(freq==='specific'){
+    const days = [...els.specificDays.querySelectorAll('input:checked')].map(i=> +i.value)
+    if(days.length===0){ alert('Sélectionne au moins un jour'); return }
+    recur = {type:'specific', days}
+  }
+  if(freq==='weekly'){ recur = {type:'weekly', weekday:+els.f_weekday.value} }
+  const nowWeek = todayISO()
+  if(state.ui.editTaskId){
+    const task = state.tasks.find(t=>t.id===state.ui.editTaskId)
+    if(task){
+      task.title=title
+      task.emoji=emoji
+      task.importance=importance
+      task.recur=recur
+    }
+  }else{
+    const cat = state.ui.currentCat || CATS()[0].id
+    state.tasks.push({id:uid(), cat, title, emoji, importance, recur, createdAt:nowWeek})
+  }
+  save()
+  els.taskDialog.close()
+  refreshAll()
+}
+
+function deleteCurrentTask(){
+  if(!state.ui.editTaskId) return
+  const idx = state.tasks.findIndex(t=>t.id===state.ui.editTaskId)
+  if(idx>=0){ state.tasks.splice(idx,1) }
+  for(const day in state.done){ if(state.done[day]) delete state.done[day][state.ui.editTaskId] }
+  state.ui.editTaskId=null
+  save()
+  els.taskDialog.close()
+  refreshAll()
+}
+
+function taskWeeklyStatus(task, days, limit){
+  const dueDays = days.filter(day=> !isFuture(day, limit) && isDue(task, day))
+  if(dueDays.length===0) return null
+  const missing = dueDays.filter(day=> !isDone(task, day))
+  if(missing.length===0) return 'green'
+  return task.importance==='must' ? 'red' : 'yellow'
+}
+
+function dayStatus(day, tasks, limit){
+  if(isFuture(day, limit)) return 'future'
+  const due = tasks.filter(t=>isDue(t, day))
+  if(due.length===0) return 'off'
+  const missing = due.filter(t=>!isDone(t, day))
+  if(missing.length===0) return 'green'
+  const hasMust = missing.some(t=>t.importance==='must')
+  return hasMust ? 'red' : 'yellow'
+}
+
+function dayStatusForTask(task, day, limit){
+  if(isFuture(day, limit)) return 'future'
+  if(!isDue(task, day)) return 'off'
+  return isDone(task, day) ? 'green' : (task.importance==='must' ? 'red':'yellow')
+}
+
+function statusLabel(status){
+  if(status==='green') return '🟩 OK'
+  if(status==='yellow') return '🟨 À surveiller'
+  if(status==='red') return '🟥 À rattraper'
+  return '⬜ À venir'
+}
+
+function statusFromDays(days){
+  if(days.every(s=>s==='off' || s==='future' || s==='green')){
+    if(days.some(s=>s==='green')) return 'green'
+    return 'future'
+  }
+  if(days.some(s=>s==='red')) return 'red'
+  if(days.some(s=>s==='yellow')) return 'yellow'
+  return 'green'
+}
 
 function isDue(task, ymd){
-  const d = new Date(ymd +'T00:00:00')
+  const d = new Date(ymd+'T00:00:00')
   const w = d.getDay()
   if(task.recur.type==='daily') return true
-  if(task.recur.type==='weekly') return w===(+task.recur.weekday||1)
-  if(task.recur.type==='everyX'){
+  if(task.recur.type==='weekly') return w === (task.recur.weekday ?? 1)
+  if(task.recur.type==='specific') return task.recur.days.includes(w)
+  if(task.recur.type==='everyX'){ // fallback legacy
     const anchor = new Date((task.recur.anchor||task.createdAt)+'T00:00:00')
-    const diff = Math.floor((d - anchor)/86400000)
+    const diff = Math.floor((d-anchor)/86400000)
     return diff>=0 && diff % (task.recur.interval||3)===0
   }
   return false
@@ -373,8 +725,37 @@ function isDue(task, ymd){
 function isDone(task, ymd){ return !!(state.done[ymd] && state.done[ymd][task.id]) }
 function toggleDone(task, ymd){
   state.done[ymd] = state.done[ymd] || {}
-  state.done[ymd][task.id] = !isDone(task, ymd)
+  if(isDone(task, ymd)){
+    delete state.done[ymd][task.id]
+    if(Object.keys(state.done[ymd]).length===0){ delete state.done[ymd] }
+  }else{
+    state.done[ymd][task.id] = true
+  }
   save()
+}
+
+function recurLabel(r){
+  if(r.type==='daily') return 'Quotidien'
+  if(r.type==='weekly') return 'Hebdomadaire'
+  if(r.type==='specific'){
+    return 'Jour(s): '+ r.days.map(d=> WEEKDAY_SHORT[(d+6)%7]).join(', ')
+  }
+  if(r.type==='everyX') return `Tous les ${r.interval} j`
+  return ''
+}
+
+function categoryLabel(id){ return id }
+function escapeHtml(s){ return s.replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])) }
+
+function CATS(){
+  return [
+    {id:'Nutrition', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Nutrition').trim()},
+    {id:'Hygiène', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Hygiène').trim()},
+    {id:'Exercice', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Exercice').trim()},
+    {id:'Sommeil', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Sommeil').trim()},
+    {id:'Social', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Social').trim()},
+    {id:'Autre', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Autre').trim()},
+  ]
 }
 
 function save(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)) }
@@ -384,62 +765,44 @@ function seed(){
   const today = todayISO()
   const mk=(cat,title,emoji,importance,recur)=>({id:uid(),cat,title,emoji,importance,recur,createdAt:today})
   const S=[]
-  // Nutrition
   S.push(mk('Nutrition','Petit-déj. protéiné','🍳','must',{type:'daily'}))
   S.push(mk('Nutrition','2 fruits','🍎','nice',{type:'daily'}))
   S.push(mk('Nutrition','Hydratation 1,5L','💧','must',{type:'daily'}))
-  S.push(mk('Nutrition','Poisson','🐟','nice',{type:'weekly',weekday:5}))
-  S.push(mk('Nutrition','Légumineuses','🫘','nice',{type:'everyX',interval:3,anchor:today}))
-  // Hygiène
+  S.push(mk('Nutrition','Poisson','🐟','nice',{type:'specific',days:[5]}))
+  S.push(mk('Nutrition','Légumineuses','🫘','nice',{type:'specific',days:[2,5]}))
+
   S.push(mk('Hygiène','Brossage matin','🪥','must',{type:'daily'}))
   S.push(mk('Hygiène','Brossage soir','🪥','must',{type:'daily'}))
   S.push(mk('Hygiène','Douche tiède','🚿','nice',{type:'daily'}))
-  S.push(mk('Hygiène','Changer serviette','🧺','weekly',{type:'weekly',weekday:0}))
-  S.push(mk('Hygiène','Nettoyer visage','🧴','nice',{type:'everyX',interval:2,anchor:today}))
-  // Exercice
+  S.push(mk('Hygiène','Changer serviette','🧺','nice',{type:'weekly',weekday:0}))
+  S.push(mk('Hygiène','Nettoyer visage','🧴','nice',{type:'specific',days:[1,3,5]}))
+
   S.push(mk('Exercice','Marche 30 min','🚶','nice',{type:'daily'}))
-  S.push(mk('Exercice','Renfo 15 min','💪','must',{type:'everyX',interval:2,anchor:today}))
+  S.push(mk('Exercice','Renfo 15 min','💪','must',{type:'specific',days:[1,3,5]}))
   S.push(mk('Exercice','Étirements','🧘','nice',{type:'daily'}))
-  S.push(mk('Exercice','Vélo','🚲','nice',{type:'weekly',weekday:6}))
-  S.push(mk('Exercice','Bachata practice','💃','must',{type:'weekly',weekday:3}))
-  // Sommeil
+  S.push(mk('Exercice','Vélo','🚲','nice',{type:'specific',days:[6]}))
+  S.push(mk('Exercice','Bachata practice','💃','must',{type:'specific',days:[3]}))
+
   S.push(mk('Sommeil','Coucher < 23h','🛏️','must',{type:'daily'}))
   S.push(mk('Sommeil','Écran off 1h avant','📵','nice',{type:'daily'}))
-  S.push(mk('Sommeil','Sieste 20 min','😴','nice',{type:'everyX',interval:3,anchor:today}))
+  S.push(mk('Sommeil','Sieste 20 min','😴','nice',{type:'specific',days:[1,4]}))
   S.push(mk('Sommeil','Aération chambre','🪟','nice',{type:'daily'}))
-  S.push(mk('Sommeil','Rituel zen','🕯️','nice',{type:'weekly',weekday:5}))
-  // Social
-  S.push(mk('Social','Message à un ami','💬','nice',{type:'everyX',interval:2,anchor:today}))
-  S.push(mk('Social','Café/Thé avec quelqu’un','☕','nice',{type:'weekly',weekday:2}))
-  S.push(mk('Social','Danse sociale','🕺','must',{type:'weekly',weekday:5}))
+  S.push(mk('Sommeil','Rituel zen','🕯️','nice',{type:'specific',days:[5]}))
+
+  S.push(mk('Social','Message à un ami','💬','nice',{type:'specific',days:[2,4]}))
+  S.push(mk('Social','Café/Thé avec quelqu’un','☕','nice',{type:'specific',days:[2]}))
+  S.push(mk('Social','Danse sociale','🕺','must',{type:'specific',days:[5]}))
   S.push(mk('Social','Appel famille','📞','must',{type:'weekly',weekday:0}))
   S.push(mk('Social','Compliment sincère','🤝','nice',{type:'daily'}))
-  // Autre
+
   S.push(mk('Autre','Lecture 10 min','📚','nice',{type:'daily'}))
   S.push(mk('Autre','Journal 3 lignes','📝','nice',{type:'daily'}))
-  S.push(mk('Autre','Tâche admin','🗂️','must',{type:'everyX',interval:4,anchor:today}))
-  S.push(mk('Autre','Sortie nature','🌳','nice',{type:'weekly',weekday:6}))
+  S.push(mk('Autre','Tâche admin','🗂️','must',{type:'weekly',weekday:2}))
+  S.push(mk('Autre','Sortie nature','🌳','nice',{type:'specific',days:[6]}))
   S.push(mk('Autre','Méditation 5 min','🧘‍♂️','nice',{type:'daily'}))
 
-  return {tasks:S, done:{}, ui:{selectedDay:today, currentCat:null}}
+  return {tasks:S, done:{}, ui:{currentView:'home', historyWeekStart:currentWeekStart, categoryWeekStart:currentWeekStart, currentCat:null}}
 }
-
-function updateTodayLabel(){
-  const isToday = els.dayPicker.value===todayISO()
-  els.todayLabel.textContent = isToday? "Aujourd'hui" : "Sélection"
-}
-
-function escapeHtml(s){ return s.replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])) }
-
-// Open category from grid
-els.catGrid.addEventListener('click', (e)=>{
-  const card = e.target.closest('.card'); if(!card) return
-})
-
-// Deep link support (?cat=)
-const qp=new URLSearchParams(location.search)
-if(qp.get('cat')){ openCategory(qp.get('cat')) }
-
 </script>
 </body>
 </html>
