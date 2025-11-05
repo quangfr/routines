@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -19,12 +19,12 @@
   --future:#e5edf9;
   --off:#f1f5f9;
   --radius:18px;
-  --cat-Sport:#34d399;
+  --cat-Fitness:#34d399;
   --cat-Nutrition:#f97316;
-  --cat-Repos:#a855f7;
-  --cat-Relationnel:#f59e0b;
-  --cat-Éducation:#38bdf8;
-  --cat-Loisirs:#f472b6;
+  --cat-Rest:#a855f7;
+  --cat-Connection:#f59e0b;
+  --cat-Learning:#38bdf8;
+  --cat-Leisure:#f472b6;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -134,7 +134,7 @@ footer{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter
     <div class="head-wrap">
       <div class="h-title"><span aria-hidden="true">👥</span>Routine Buddy</div>
       <div class="h-grow"></div>
-      <button class="icon-btn" id="quickAdd">+ Nouvelle activité</button>
+      <button class="icon-btn" id="quickAdd">+ New activity</button>
     </div>
   </header>
 
@@ -149,7 +149,7 @@ footer{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter
         </div>
       </div>
       <div class="week-cells" id="summaryCells"></div>
-      <p class="count" style="margin:0" id="summaryLegend">Une semaine verte signifie que chaque tâche due a été accomplie.</p>
+      <p class="count" style="margin:0" id="summaryLegend">A green week means every due task was completed.</p>
     </section>
 
     <section id="home" class="view active">
@@ -158,10 +158,10 @@ footer{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter
 
     <section id="history" class="view">
       <div class="history-head">
-        <h2>Historique hebdomadaire</h2>
+        <h2>Weekly history</h2>
         <div class="history-nav">
-          <button class="icon-btn" id="historyPrev">← Semaine précédente</button>
-          <button class="icon-btn" id="historyNext">Semaine suivante →</button>
+          <button class="icon-btn" id="historyPrev">← Previous week</button>
+          <button class="icon-btn" id="historyNext">Next week →</button>
         </div>
       </div>
       <div class="count" id="historyLabel"></div>
@@ -170,10 +170,10 @@ footer{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter
 
     <section id="category" class="view">
       <div class="cat-head">
-        <button class="back" id="backBtn">← Accueil</button>
+        <button class="back" id="backBtn">← Home</button>
         <h2 id="catTitle"></h2>
         <div class="cat-week" id="catWeek"></div>
-        <button class="icon-btn add" id="addBtn">+ Ajouter</button>
+        <button class="icon-btn add" id="addBtn">+ Add</button>
       </div>
       <div id="taskList"></div>
     </section>
@@ -181,68 +181,68 @@ footer{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter
 
   <footer>
     <div class="nav">
-      <button id="navHome" class="active">🏠 Accueil</button>
-      <button id="navHistory">📚 Historique</button>
+      <button id="navHome" class="active">🏠 Home</button>
+      <button id="navHistory">📚 History</button>
     </div>
   </footer>
 </div>
 
 <dialog id="taskDialog">
   <form method="dialog" id="taskForm">
-    <div class="modal-head"><span id="dialogTitle">Nouvelle activité</span><button type="button" class="icon-btn" id="closeDialog">✖</button></div>
+    <div class="modal-head"><span id="dialogTitle">New activity</span><button type="button" class="icon-btn" id="closeDialog">✖</button></div>
     <div class="modal-body">
       <div class="field">
-        <label for="f_title">Nom</label>
-        <input type="text" id="f_title" placeholder="Ex : Brossage dents" required />
+        <label for="f_title">Name</label>
+        <input type="text" id="f_title" placeholder="Ex: Brush teeth" required />
       </div>
       <div class="field">
-        <label for="f_emoji">Émoji</label>
-        <input type="text" id="f_emoji" placeholder="Ex : 😁" maxlength="3" />
+        <label for="f_emoji">Emoji</label>
+        <input type="text" id="f_emoji" placeholder="Ex: 😁" maxlength="3" />
         <div class="emoji-picker">
-          <input type="search" id="emojiSearch" placeholder="Recherche (fruit, sport, détente...)" />
+          <input type="search" id="emojiSearch" placeholder="Search (fruit, workout, relax...)" />
           <div class="emoji-results" id="emojiResults"></div>
         </div>
       </div>
       <div class="field">
-        <label for="f_cat">Rubrique</label>
+        <label for="f_cat">Category</label>
         <select id="f_cat"></select>
       </div>
       <div class="field">
-        <label for="f_importance">Priorité</label>
+        <label for="f_importance">Priority</label>
         <select id="f_importance">
-          <option value="must">Obligatoire</option>
-          <option value="nice">Conseillé</option>
+          <option value="must">Must do</option>
+          <option value="nice">Nice to have</option>
         </select>
       </div>
       <div class="field">
-        <label for="f_recur">Fréquence</label>
+        <label for="f_recur">Frequency</label>
         <select id="f_recur">
-          <option value="daily">Quotidien</option>
-          <option value="specific">Jour(s) spécifique(s)</option>
-          <option value="weekly">Hebdomadaire</option>
+          <option value="daily">Daily</option>
+          <option value="specific">Specific day(s)</option>
+          <option value="weekly">Weekly</option>
         </select>
       </div>
       <div class="field" id="specificWrap" style="display:none">
-        <label>Jour(s) de la semaine</label>
+        <label>Days of the week</label>
         <div class="weekday-picker" id="specificDays"></div>
       </div>
       <div class="field" id="weeklyWrap" style="display:none">
-        <label for="f_weekday">Jour préféré</label>
+        <label for="f_weekday">Preferred day</label>
         <select id="f_weekday">
-          <option value="1">Lundi</option>
-          <option value="2">Mardi</option>
-          <option value="3">Mercredi</option>
-          <option value="4">Jeudi</option>
-          <option value="5">Vendredi</option>
-          <option value="6">Samedi</option>
-          <option value="0">Dimanche</option>
+          <option value="1">Monday</option>
+          <option value="2">Tuesday</option>
+          <option value="3">Wednesday</option>
+          <option value="4">Thursday</option>
+          <option value="5">Friday</option>
+          <option value="6">Saturday</option>
+          <option value="0">Sunday</option>
         </select>
       </div>
     </div>
     <div class="modal-actions">
-      <button class="icon-btn" value="cancel">Annuler</button>
-      <button type="button" class="icon-btn danger" id="deleteTask" style="display:none">Supprimer</button>
-      <button class="icon-btn primary" id="saveTask" value="default">Enregistrer</button>
+      <button class="icon-btn" value="cancel">Cancel</button>
+      <button type="button" class="icon-btn danger" id="deleteTask" style="display:none">Delete</button>
+      <button class="icon-btn primary" id="saveTask" value="default">Save</button>
     </div>
   </form>
 </dialog>
@@ -252,57 +252,57 @@ const TZ = 'Europe/Paris'
 const fmtDate = (d)=> new Date(d).toLocaleDateString('en-CA',{timeZone:TZ})
 const todayISO = ()=> fmtDate(Date.now())
 const uid = ()=> Math.random().toString(36).slice(2,9)
-const WEEKDAY_SHORT = ['Lu','Ma','Me','Je','Ve','Sa','Di']
+const WEEKDAY_SHORT = ['Mo','Tu','We','Th','Fr','Sa','Su']
 const WEEKDAY_ORDER = [1,2,3,4,5,6,0]
 const STORE_KEY='ROUTINE_BUDDY_V3'
 const currentWeekStart = weekStart(todayISO())
 const EMOJIS=[
-  {char:'🍎', tags:['pomme','fruit','nutrition','vitamine']},
-  {char:'🍳', tags:['oeuf','petit dej','protéine','cuisine']},
-  {char:'🥗', tags:['salade','repas','légume','nutrition']},
-  {char:'🥛', tags:['lait','boisson','calcium']},
-  {char:'💧', tags:['eau','hydratation']},
-  {char:'🫖', tags:['thé','boisson']},
-  {char:'☕', tags:['café','boisson','pause']},
-  {char:'🚿', tags:['douche','hygiène']},
-  {char:'🪥', tags:['brossage','dents','hygiène']},
-  {char:'🧴', tags:['soin','visage','hygiène']},
-  {char:'🧼', tags:['savon','hygiène']},
-  {char:'🤸', tags:['échauffement','sport','mobilité']},
-  {char:'🏃', tags:['course','sport','exercice']},
-  {char:'🚶', tags:['marche','balade']},
-  {char:'💪', tags:['muscu','force','sport']},
-  {char:'🧘', tags:['yoga','détente','respiration']},
-  {char:'🧘‍♂️', tags:['méditation','zen']},
-  {char:'🧘‍♀️', tags:['yoga','calme']},
-  {char:'🚲', tags:['vélo','sport','exterieur']},
-  {char:'💃', tags:['danse','soirée']},
-  {char:'🛏️', tags:['sommeil','lit','nuit']},
-  {char:'📵', tags:['digital detox','écran']},
-  {char:'😴', tags:['sieste','sommeil']},
-  {char:'🪟', tags:['aération','fenêtre']},
-  {char:'🕯️', tags:['rituel','calme']},
+  {char:'🍎', tags:['apple','fruit','nutrition','vitamin']},
+  {char:'🍳', tags:['egg','breakfast','protein','cooking']},
+  {char:'🥗', tags:['salad','meal','veggies','nutrition']},
+  {char:'🥛', tags:['milk','drink','calcium']},
+  {char:'💧', tags:['water','hydration']},
+  {char:'🫖', tags:['tea','drink']},
+  {char:'☕', tags:['coffee','drink','break']},
+  {char:'🚿', tags:['shower','hygiene']},
+  {char:'🪥', tags:['brush','teeth','hygiene']},
+  {char:'🧴', tags:['skincare','face','hygiene']},
+  {char:'🧼', tags:['soap','hygiene']},
+  {char:'🤸', tags:['warmup','fitness','mobility']},
+  {char:'🏃', tags:['run','fitness','exercise']},
+  {char:'🚶', tags:['walk','stroll']},
+  {char:'💪', tags:['strength','workout','fitness']},
+  {char:'🧘', tags:['yoga','relax','breathing']},
+  {char:'🧘‍♂️', tags:['meditation','calm']},
+  {char:'🧘‍♀️', tags:['yoga','calm']},
+  {char:'🚲', tags:['bike','fitness','outdoor']},
+  {char:'💃', tags:['dance','evening']},
+  {char:'🛏️', tags:['sleep','bed','night']},
+  {char:'📵', tags:['digital detox','screen']},
+  {char:'😴', tags:['nap','sleep']},
+  {char:'🪟', tags:['airing','window']},
+  {char:'🕯️', tags:['ritual','calm']},
   {char:'💬', tags:['message','social']},
-  {char:'🤝', tags:['ami','social','entraide']},
-  {char:'📞', tags:['appel','famille']},
-  {char:'🕺', tags:['danse','soirée']},
-  {char:'📚', tags:['lecture','livre']},
-  {char:'📝', tags:['journal','écriture']},
-  {char:'🗂️', tags:['administratif','paperasse']},
-  {char:'🌳', tags:['nature','balade']},
-  {char:'🌬️', tags:['respiration','calme','repos']},
-  {char:'🍽️', tags:['repas','relationnel','déjeuner']},
-  {char:'💻', tags:['cours','apprentissage','éducation']},
-  {char:'🗣️', tags:['langue','oral','éducation']},
-  {char:'🎨', tags:['dessin','loisir','créativité']},
-  {char:'🎸', tags:['musique','instrument','loisir']},
-  {char:'🎲', tags:['jeu','loisir','soirée']},
-  {char:'📺', tags:['série','détente','loisir']},
-  {char:'🎯', tags:['objectif','focus']},
-  {char:'🧺', tags:['linge','ménage']},
-  {char:'🐟', tags:['poisson','repas']},
-  {char:'🫘', tags:['légumineuses','repas']},
-  {char:'🕯', tags:['calme']}
+  {char:'🤝', tags:['friend','social','support']},
+  {char:'📞', tags:['call','family']},
+  {char:'🕺', tags:['dance','night out']},
+  {char:'📚', tags:['reading','book']},
+  {char:'📝', tags:['journal','writing']},
+  {char:'🗂️', tags:['admin','paperwork']},
+  {char:'🌳', tags:['nature','walk']},
+  {char:'🌬️', tags:['breathing','calm','rest']},
+  {char:'🍽️', tags:['meal','connection','lunch']},
+  {char:'💻', tags:['course','learning','education']},
+  {char:'🗣️', tags:['language','speaking','education']},
+  {char:'🎨', tags:['drawing','hobby','creativity']},
+  {char:'🎸', tags:['music','instrument','hobby']},
+  {char:'🎲', tags:['game','hobby','night']},
+  {char:'📺', tags:['series','relax','hobby']},
+  {char:'🎯', tags:['goal','focus']},
+  {char:'🧺', tags:['laundry','chores']},
+  {char:'🐟', tags:['fish','meal']},
+  {char:'🫘', tags:['beans','meal']},
+  {char:'🕯', tags:['calm']}
 ]
 
 let state = load() || seed()
@@ -411,7 +411,7 @@ function formatWeekRange(weekStart){
   const end = new Date(start)
   end.setDate(start.getDate()+6)
   const opts={day:'numeric',month:'short'}
-  return `${start.toLocaleDateString('fr-FR',opts)} – ${end.toLocaleDateString('fr-FR',opts)}`
+  return `${start.toLocaleDateString('en-US',opts)} – ${end.toLocaleDateString('en-US',opts)}`
 }
 function compareDate(a,b){ return a.localeCompare(b) }
 function limitDateForWeek(weekStart){
@@ -426,7 +426,7 @@ function renderSummary(){
   const week = currentWeekStart
   const days = weekDays(week)
   const limit = limitDateForWeek(week)
-  els.summaryWeekLabel.textContent = `Semaine ${formatWeekRange(week)}`
+  els.summaryWeekLabel.textContent = `Week ${formatWeekRange(week)}`
   const counts={green:0,yellow:0,red:0}
   for(const task of state.tasks){
     const status = taskWeeklyStatus(task, days, limit)
@@ -475,14 +475,14 @@ function countsForCategory(tasks, days, limit){
   const relevantDays = days.filter(day=> !isFuture(day, limit))
   const totalOcc=relevantDays.reduce((acc,day)=> acc + tasks.filter(t=>isDue(t,day)).length,0)
   const doneOcc=relevantDays.reduce((acc,day)=> acc + tasks.filter(t=>isDue(t,day) && isDone(t,day)).length,0)
-  return `${doneOcc}/${totalOcc} réalisations`
+  return `${doneOcc}/${totalOcc} completions`
 }
 
 function renderHistory(){
   const week = state.ui.historyWeekStart
   const days = weekDays(week)
   const limit = limitDateForWeek(week)
-  els.historyLabel.textContent = `Semaine ${formatWeekRange(week)}`
+  els.historyLabel.textContent = `Week ${formatWeekRange(week)}`
   els.historyGrid.innerHTML=''
   for(const c of CATS()){
     const tasks = state.tasks.filter(t=>t.cat===c.id)
@@ -517,14 +517,14 @@ function renderCategory(cat, week){
   const limit = limitDateForWeek(week)
   els.taskList.innerHTML=''
   if(tasks.length===0){
-    els.taskList.innerHTML='<p class="count">Ajoute une activité à cette rubrique.</p>'
+    els.taskList.innerHTML='<p class="count">Add an activity to this category.</p>'
     return
   }
   tasks.sort((a,b)=> (a.importance>b.importance?1:-1) || a.title.localeCompare(b.title))
   for(const task of tasks){
     const row=document.createElement('div')
     row.className='task'
-    const badges = [`${task.importance==='must'?'Obligatoire':'Conseillé'}`, recurLabel(task.recur)]
+    const badges = [`${task.importance==='must'?'Must do':'Nice to have'}`, recurLabel(task.recur)]
     row.innerHTML=`
       <div class="task-header">
         <span class="em">${escapeHtml(task.emoji||'🎯')}</span>
@@ -533,7 +533,7 @@ function renderCategory(cat, week){
           <div class="badges">${badges.map(b=>`<span>${escapeHtml(b)}</span>`).join('')}</div>
         </div>
         <div class="task-actions">
-          <button type="button" data-act="edit">✏️ Modifier</button>
+          <button type="button" data-act="edit">✏️ Edit</button>
         </div>
       </div>
       <div class="task-week"></div>
@@ -631,7 +631,7 @@ function openTaskDialog(mode, task){
   els.taskDialog.returnValue=''
   els.taskDialog.showModal()
   els.deleteTask.style.display = mode==='edit' ? 'inline-flex' : 'none'
-  els.dialogTitle.textContent = mode==='edit' ? 'Modifier l'activité' : 'Nouvelle activité'
+  els.dialogTitle.textContent = mode==='edit' ? 'Edit activity' : 'New activity'
   state.ui.editTaskId = mode==='edit' ? task.id : null
   const cats = CATS()
   let selectedCat = mode==='edit' && task ? task.cat : state.ui.currentCat
@@ -671,12 +671,12 @@ function submitTask(e){
   const cat = els.f_cat.value
   const importance = els.f_importance.value
   const freq = els.f_recur.value
-  if(!cat){ alert('Choisis une rubrique'); return }
+  if(!cat){ alert('Pick a category'); return }
   let recur
   if(freq==='daily') recur = {type:'daily'}
   if(freq==='specific'){
     const days = [...els.specificDays.querySelectorAll('input:checked')].map(i=> +i.value)
-    if(days.length===0){ alert('Sélectionne au moins un jour'); return }
+    if(days.length===0){ alert('Select at least one day'); return }
     recur = {type:'specific', days}
   }
   if(freq==='weekly'){ recur = {type:'weekly', weekday:+els.f_weekday.value} }
@@ -734,10 +734,10 @@ function dayStatusForTask(task, day, limit){
 }
 
 function statusLabel(status){
-  if(status==='green') return '🟩 OK'
-  if(status==='yellow') return '🟨 À surveiller'
-  if(status==='red') return '🟥 À rattraper'
-  return '⬜ À venir'
+  if(status==='green') return '🟩 On track'
+  if(status==='yellow') return '🟨 Needs attention'
+  if(status==='red') return '🟥 Catch up'
+  return '⬜ Upcoming'
 }
 
 function statusFromDays(days){
@@ -777,26 +777,36 @@ function toggleDone(task, ymd){
 }
 
 function recurLabel(r){
-  if(r.type==='daily') return 'Quotidien'
-  if(r.type==='weekly') return 'Hebdomadaire'
+  if(r.type==='daily') return 'Daily'
+  if(r.type==='weekly') return 'Weekly'
   if(r.type==='specific'){
-    return 'Jour(s): '+ r.days.map(d=> WEEKDAY_SHORT[(d+6)%7]).join(', ')
+    return 'Days: '+ r.days.map(d=> WEEKDAY_SHORT[(d+6)%7]).join(', ')
   }
-  if(r.type==='everyX') return `Tous les ${r.interval} j`
+  if(r.type==='everyX') return `Every ${r.interval} days`
   return ''
 }
 
-function categoryLabel(id){ return id }
+function categoryLabel(id){
+  const map={
+    Fitness:'Fitness',
+    Nutrition:'Nutrition',
+    Rest:'Rest',
+    Connection:'Connection',
+    Learning:'Learning',
+    Leisure:'Leisure'
+  }
+  return map[id] || id
+}
 function escapeHtml(s){ return s.replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])) }
 
 function CATS(){
   return [
-    {id:'Sport', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Sport').trim()},
+    {id:'Fitness', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Fitness').trim()},
     {id:'Nutrition', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Nutrition').trim()},
-    {id:'Repos', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Repos').trim()},
-    {id:'Relationnel', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Relationnel').trim()},
-    {id:'Éducation', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Éducation').trim()},
-    {id:'Loisirs', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Loisirs').trim()},
+    {id:'Rest', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Rest').trim()},
+    {id:'Connection', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Connection').trim()},
+    {id:'Learning', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Learning').trim()},
+    {id:'Leisure', color:getComputedStyle(document.documentElement).getPropertyValue('--cat-Leisure').trim()},
   ]
 }
 
@@ -807,41 +817,41 @@ function seed(){
   const today = todayISO()
   const mk=(cat,title,emoji,importance,recur)=>({id:uid(),cat,title,emoji,importance,recur,createdAt:today})
   const S=[]
-  S.push(mk('Sport','Échauffement 5 min','🤸','nice',{type:'daily'}))
-  S.push(mk('Sport','Cardio 20 min','🏃','must',{type:'specific',days:[1,3,5]}))
-  S.push(mk('Sport','Renforcement 15 min','💪','must',{type:'specific',days:[2,4]}))
-  S.push(mk('Sport','Étirements fin de séance','🧘','nice',{type:'daily'}))
-  S.push(mk('Sport','Sortie vélo','🚲','nice',{type:'specific',days:[6]}))
+  S.push(mk('Fitness','5 min warm-up','🤸','nice',{type:'daily'}))
+  S.push(mk('Fitness','20 min cardio','🏃','must',{type:'specific',days:[1,3,5]}))
+  S.push(mk('Fitness','15 min strength','💪','must',{type:'specific',days:[2,4]}))
+  S.push(mk('Fitness','Post-session stretches','🧘','nice',{type:'daily'}))
+  S.push(mk('Fitness','Bike ride','🚲','nice',{type:'specific',days:[6]}))
 
-  S.push(mk('Nutrition','Petit-déj. protéiné','🍳','must',{type:'daily'}))
-  S.push(mk('Nutrition','2 fruits frais','🍎','nice',{type:'daily'}))
-  S.push(mk('Nutrition','Hydratation 1,5L','💧','must',{type:'daily'}))
-  S.push(mk('Nutrition','Repas vert','🥗','nice',{type:'specific',days:[1,4]}))
-  S.push(mk('Nutrition','Poisson','🐟','nice',{type:'specific',days:[5]}))
+  S.push(mk('Nutrition','Protein breakfast','🍳','must',{type:'daily'}))
+  S.push(mk('Nutrition','2 fresh fruits','🍎','nice',{type:'daily'}))
+  S.push(mk('Nutrition','Drink 1.5L water','💧','must',{type:'daily'}))
+  S.push(mk('Nutrition','Veggie meal','🥗','nice',{type:'specific',days:[1,4]}))
+  S.push(mk('Nutrition','Fish meal','🐟','nice',{type:'specific',days:[5]}))
 
-  S.push(mk('Repos','Coucher avant 23h','🛏️','must',{type:'daily'}))
-  S.push(mk('Repos','Écran off 1h avant','📵','nice',{type:'daily'}))
-  S.push(mk('Repos','Sieste 20 min','😴','nice',{type:'specific',days:[1,4]}))
-  S.push(mk('Repos','Respiration calme','🌬️','nice',{type:'specific',days:[2,5]}))
-  S.push(mk('Repos','Aération chambre','🪟','nice',{type:'daily'}))
+  S.push(mk('Rest','In bed before 11pm','🛏️','must',{type:'daily'}))
+  S.push(mk('Rest','Screen off 1h before bed','📵','nice',{type:'daily'}))
+  S.push(mk('Rest','20 min nap','😴','nice',{type:'specific',days:[1,4]}))
+  S.push(mk('Rest','Calm breathing','🌬️','nice',{type:'specific',days:[2,5]}))
+  S.push(mk('Rest','Air out bedroom','🪟','nice',{type:'daily'}))
 
-  S.push(mk('Relationnel','Message à un proche','💬','nice',{type:'specific',days:[2,4]}))
-  S.push(mk('Relationnel','Appel famille','📞','must',{type:'weekly',weekday:0}))
-  S.push(mk('Relationnel','Déjeuner partagé','🍽️','nice',{type:'specific',days:[3]}))
-  S.push(mk('Relationnel','Compliment sincère','🤝','nice',{type:'daily'}))
-  S.push(mk('Relationnel','Sortie sociale','🕺','must',{type:'specific',days:[5]}))
+  S.push(mk('Connection','Message a loved one','💬','nice',{type:'specific',days:[2,4]}))
+  S.push(mk('Connection','Call family','📞','must',{type:'weekly',weekday:0}))
+  S.push(mk('Connection','Shared lunch','🍽️','nice',{type:'specific',days:[3]}))
+  S.push(mk('Connection','Give a sincere compliment','🤝','nice',{type:'daily'}))
+  S.push(mk('Connection','Social outing','🕺','must',{type:'specific',days:[5]}))
 
-  S.push(mk('Éducation','Lecture 15 min','📚','nice',{type:'daily'}))
-  S.push(mk('Éducation','Cours en ligne','💻','must',{type:'specific',days:[1,3]}))
-  S.push(mk('Éducation','Révision vocabulaire','🗂️','nice',{type:'specific',days:[2,5]}))
-  S.push(mk('Éducation','Pratique langue','🗣️','nice',{type:'specific',days:[4]}))
-  S.push(mk('Éducation','Journal d\'apprentissage','📝','nice',{type:'weekly',weekday:6}))
+  S.push(mk('Learning','Read for 15 min','📚','nice',{type:'daily'}))
+  S.push(mk('Learning','Online course','💻','must',{type:'specific',days:[1,3]}))
+  S.push(mk('Learning','Review vocabulary','🗂️','nice',{type:'specific',days:[2,5]}))
+  S.push(mk('Learning','Practice language','🗣️','nice',{type:'specific',days:[4]}))
+  S.push(mk('Learning','Learning journal','📝','nice',{type:'weekly',weekday:6}))
 
-  S.push(mk('Loisirs','Session dessin','🎨','nice',{type:'specific',days:[6]}))
-  S.push(mk('Loisirs','Jouer musique','🎸','nice',{type:'specific',days:[2,5]}))
-  S.push(mk('Loisirs','Soirée jeu','🎲','nice',{type:'specific',days:[5]}))
-  S.push(mk('Loisirs','Sortie nature','🌳','nice',{type:'specific',days:[6]}))
-  S.push(mk('Loisirs','Moment série','📺','nice',{type:'daily'}))
+  S.push(mk('Leisure','Drawing session','🎨','nice',{type:'specific',days:[6]}))
+  S.push(mk('Leisure','Play music','🎸','nice',{type:'specific',days:[2,5]}))
+  S.push(mk('Leisure','Game night','🎲','nice',{type:'specific',days:[5]}))
+  S.push(mk('Leisure','Nature outing','🌳','nice',{type:'specific',days:[6]}))
+  S.push(mk('Leisure','Watch a show','📺','nice',{type:'daily'}))
 
   return {tasks:S, done:{}, ui:{currentView:'home', historyWeekStart:currentWeekStart, categoryWeekStart:currentWeekStart, currentCat:null}}
 }
