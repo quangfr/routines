@@ -1,42 +1,51 @@
-# Routines (prototype)
+# 🌱 Routines — Your week, simplified.
 
-Routines is a single-page prototype that helps track recurring routines on a weekly cadence. The app runs entirely in the browser and persists data locally, so it can be installed like a lightweight PWA and used offline.
+**Routines** is a playful, minimalist app that helps you stay consistent with what truly matters — your daily and weekly habits.  
+It’s **offline-ready**, **private by design**, and runs entirely in your browser — no signup, no cloud, just you and your flow.
 
-## Interface tour
+---
 
-### Weekly overview
-- The top summary displays the count of routines labeled **Good**, **Careful**, and **Bad**, paired with a linear progress bar that visualises their distribution.
-- Week navigation controls allow browsing past weeks while preventing travel beyond the current week. The active range is shown beside the navigation buttons.
-- The home grid lists every category. Each card shows:
-  - The category name.
-  - A circular progress indicator summarising completions versus the weekly target for the selected week (or an empty state when nothing is scheduled).
-  - A dedicated catch-up row beneath the title with emoji reminders for overdue **must-do** routines.
-  - Seven day cells (Monday → Sunday) coloured according to aggregate progress for that day (green, yellow, red, future, or off).
+### 🗓️ A clear view of your week  
+See your habits come to life in a **colorful weekly dashboard**.  
+- One glance at your routines balance **🟩On track / 🟨Look up / 🟥Catch up** 
+- A **smooth progress bar** tracks your momentum.  
+- Tap arrows to travel through past weeks — but never beyond today.
 
-### Category detail
-- Selecting a category opens a focused view with a back arrow (`←`) to return home.
-- The header simply repeats the category name—categories no longer carry emoji or accent colours.
-- The summary strip from the home view is hidden here, keeping the focus on the category’s activities.
-- Every activity appears as a card showing its emoji, title, priority stripe (red for must, yellow for should), and a row of seven day cells for the chosen week.
-- Activity cards now display readable recurrence labels (e.g. **Daily**, **Weekly**, **Mo, Th**, **2x / Week**; French locale uses **Quotidien**, **Hebdo**, **2x / Sem**).
-- Clicking a due day cell toggles completion. Cells representing future dates are disabled.
-- When a category has no activities, a neutral hint clarifies that the list is empty.
+---
 
-### Configuration panel
-- The gear button in the header opens the configuration view.
-- From there you can add categories, add activities, and manage backups via import/export.
-- The configuration dialog for categories only asks for a name; activities keep the richer set of fields described below.
+### 💪 Categories that make sense  
+Group your routines by themes — *Body*, *Mind*, *Home*, *Social*...  
+Each card shows:  
+- A **circular tracker** toward your weekly goal  
+- **Emoji reminders** for what still needs love  
+- **Daily color cues** (green, yellow, red) to spot patterns at a glance  
 
-## Activities
-- An activity stores a **name**, an optional **emoji** (used as the activity icon), a **priority** (`must` or `should`), and a **recurrence** rule.
-- Supported recurrence types:
-  - **Daily** – due every day of the selected week.
-  - **Specific day(s)** – due only on the checked weekdays.
-  - **Weekly target** – choose how many times the activity should occur during the week.
-- Activity dialogs allow editing, deleting, and picking emoji via a searchable helper.
-- Daily reminders can be enabled for daily or weekly targets, with configurable hour and minute.
+---
 
-## Data & persistence
-- All information is saved to `localStorage` under the key `ROUTINES_V1` (existing `ROUTINE_BUDDY_V3` data is migrated automatically on load).
-- The prototype does not rely on external services; everything runs locally in the browser.
-- A service worker is registered on load so the app can be installed and revisited offline.
+### 🔍 Dive deeper  
+Open a category to focus on the details.  
+Each activity tells its story — emoji, title, priority stripe, and clear recurrence label:  
+**Daily**, **Weekly**, or **2x / Week**.  
+Tap a day to mark it done. Future days stay locked — so you focus on now.  
+
+---
+
+### ⚙️ Make it yours  
+Add or edit categories and activities in seconds.  
+Choose your emoji, set priorities, pick recurrence types (daily, specific days, or weekly targets).  
+You can even export or import your data — total control, zero friction.  
+
+---
+
+### 📲 Install it like an app  
+Add **Routines** straight to your Android home screen — no store, no signup.  
+1. Open Routines in **Chrome** or your preferred browser.  
+2. Tap the **⋮ menu (three dots)** → choose **“Add to Home screen.”**  
+3. It installs instantly and works **offline**, just like a native app.  
+
+Your data stays **100% local**, safe in your smartphone — fast, light, and private by design.  
+
+---
+
+✨ **Routines** helps you **see your progress, one week at a time.**  
+Simple. Beautiful. Yours.
