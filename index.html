@@ -788,8 +788,8 @@ function renderHome(){
         <div class="card-title">${titleHtml}</div>
         <span class="count">${countText}</span>
       </div>
-      <div class="catchup-line"${catchupAttr}>${catchupHtml}</div>
       <div class="cell-row">${statuses.map((s,idx)=>`<div class="week-cell status-${s}"><span>${WEEKDAY_SHORT[idx]}</span></div>`).join('')}</div>
+        <div class="catchup-line"${catchupAttr}>${catchupHtml}</div>
     `
     card.addEventListener('click', ()=> openCategory(c.id, week))
     els.catGrid.appendChild(card)
