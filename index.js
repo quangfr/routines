@@ -241,8 +241,10 @@ const LANGUAGE_STRINGS={
     label:'English',
     weekPrefix:'W',
     locale:'en-US',
-    summary:{green:'Done',yellow:'Should do',red:'Must do'},
-    summaryDistribution:counts=>`Done: ${counts.green}, Should do: ${counts.yellow}, Must do: ${counts.red}`,
+    summary:{green:'🟩 Done',yellow:'🟨 Should do',red:'🟥 Must do'},
+    summaryDistribution:counts=>`🟩 Done: ${counts.green}, 🟨 Should do: ${counts.yellow}, 🟥 Must do: ${counts.red}`,
+    summaryScore:'Score',
+    summaryScoreAria:score=>`Weekly score: ${score} out of 100`,
     progressLabel:(done,total)=>`${done} of ${total} completed`,
     emptyProgress:'No activities yet',
     noCategories:'Add a category to get started.',
@@ -259,14 +261,14 @@ const LANGUAGE_STRINGS={
     configExport:'Export backup',
     configNote:'Importing a backup will replace your current routines and progress.',
     reminderLabel:'Daily reminder',
-    reminderNote:'Send a notification every day at your chosen time to stay Done.',
+    reminderNote:'Send a notification every day at your chosen time to stay on track.',
     reminderPermission:'Enable notifications in your browser to receive reminders.',
     reminderUnsupported:'Daily reminders are not supported in this browser.',
     reminderTimeLabel:'Reminder time',
     reminderHour:'Hour',
     reminderMinute:'Minute',
     reminderNotificationTitle:name=>`Daily reminder: ${name}`,
-    reminderNotificationBody:name=>`Take a moment for “${name}” today.`,
+    reminderNotificationBody:name=>`Take a moment for "${name}" today.`,
     dialogNewActivity:'New activity',
     dialogEditActivity:'Edit activity',
     dialogNewCategory:'New category',
@@ -286,17 +288,19 @@ const LANGUAGE_STRINGS={
     label:'Français',
     weekPrefix:'S',
     locale:'fr-FR',
-    summary:{green:'Fait',yellow:'Recommandé',red:'À faire'},
-    summaryDistribution:counts=>`Fait : ${counts.green}, Recommandé : ${counts.yellow}, Obligatoire : ${counts.red}`,
+    summary:{green:'🟩 Fait',yellow:'🟨 Recommandé',red:'🟥 À faire'},
+    summaryDistribution:counts=>`🟩 Fait : ${counts.green}, 🟨 Recommandé : ${counts.yellow}, 🟥 Obligatoire : ${counts.red}`,
+    summaryScore:'Score',
+    summaryScoreAria:score=>`Score hebdomadaire : ${score} sur 100`,
     progressLabel:(done,total)=>`${done} sur ${total} réalisés`,
     emptyProgress:'Aucune activité',
     noCategories:'Ajoutez une catégorie pour commencer.',
     noActivities:'Aucune activité dans cette catégorie pour le moment.',
     weekNow:'Ajd',
-    weekNowAria:"Revenir à aujourd’hui",
+    weekNowAria:"Revenir à aujourd'hui",
     weeklyTimes:'Nombre de fois par semaine',
     languageTitle:'Choisissez votre langue',
-    languageIntro:"Sélectionnez votre langue préférée pour personnaliser l’expérience.",
+    languageIntro:"Sélectionnez votre langue préférée pour personnaliser l'expérience.",
     configTitle:'Configuration',
     configAddCategory:'Ajouter une catégorie',
     configAddActivity:'Ajouter une activité',
@@ -304,28 +308,28 @@ const LANGUAGE_STRINGS={
     configExport:'Exporter une sauvegarde',
     configNote:'Importer une sauvegarde remplacera vos routines et progrès actuels.',
     reminderLabel:'Rappel quotidien',
-    reminderNote:'Recevez une notification chaque jour à l’heure de votre choix pour rester sur la bonne voie.',
+    reminderNote:'Recevez une notification chaque jour à l’heure de votre choix pour rester motivé.',
     reminderPermission:'Activez les notifications du navigateur pour recevoir les rappels.',
     reminderUnsupported:'Les rappels quotidiens ne sont pas disponibles sur ce navigateur.',
     reminderTimeLabel:"Heure du rappel",
     reminderHour:'Heure',
     reminderMinute:'Minute',
-    reminderNotificationTitle:name=>`Rappel quotidien : ${name}`,
-    reminderNotificationBody:name=>`Prenez un instant pour « ${name} » aujourd’hui.`,
+    reminderNotificationTitle:name=>`Rappel quotidien : ${name}`,
+    reminderNotificationBody:name=>`Prenez un instant pour « ${name} » aujourd'hui.`,
     dialogNewActivity:'Nouvelle activité',
-    dialogEditActivity:"Modifier l’activité",
+    dialogEditActivity:"Modifier l'activité",
     dialogNewCategory:'Nouvelle catégorie',
     dialogEditCategory:'Modifier la catégorie',
     cancel:'Annuler',
     delete:'Supprimer',
     save:'Enregistrer',
     goBack:'Retour',
-    homeTitle:"Revenir à l’accueil",
+    homeTitle:"Revenir à l'accueil",
     openConfig:'Ouvrir la configuration',
     closeConfig:'Fermer la configuration',
     moodPicker:'Choisir une ambiance',
     editCategory:'Modifier la catégorie',
-    deleteCategoryConfirm:'Supprimer cette catégorie et ses activités ?',
+    deleteCategoryConfirm:'Supprimer cette catégorie et ses activités ?',
   }
 }
 
@@ -552,6 +556,9 @@ function currentLanguage(){ return state ? sanitizeLanguage(state.ui?.language) 
 const els={
   summary: document.getElementById('summary'),
   summaryProgress: document.querySelector('.summary-progress'),
+  summaryScore: document.getElementById('summaryScore'),
+  summaryScoreValue: document.getElementById('summaryScoreValue'),
+  summaryScoreLabel: document.getElementById('summaryScoreLabel'),
   pillGreen: document.getElementById('pillGreen'),
   pillYellow: document.getElementById('pillYellow'),
   pillRed: document.getElementById('pillRed'),
@@ -705,6 +712,7 @@ function applyLanguage(){
   if(els.labelGreen){ els.labelGreen.textContent = strings.summary?.green || 'Done' }
   if(els.labelYellow){ els.labelYellow.textContent = strings.summary?.yellow || 'Should do' }
   if(els.labelRed){ els.labelRed.textContent = strings.summary?.red || 'Must do' }
+  if(els.summaryScoreLabel){ els.summaryScoreLabel.textContent = strings.summaryScore || 'Score' }
   if(els.configAddCategory){ els.configAddCategory.textContent = strings.configAddCategory }
   if(els.configAddActivity){ els.configAddActivity.textContent = strings.configAddActivity }
   if(els.configImport){ els.configImport.textContent = strings.configImport }
@@ -806,7 +814,8 @@ function updateView(view){
   els.home.classList.toggle('active', isHome)
   els.category.classList.toggle('active', isCategory)
   if(els.config){ els.config.classList.toggle('active', isConfig) }
-  if(els.weekControls){ els.weekControls.style.display = isConfig ? 'none' : '' }
+  const showWeekControls = isHome
+  if(els.weekControls){ els.weekControls.style.display = showWeekControls ? '' : 'none' }
   if(els.summary){ els.summary.style.display = isHome ? '' : 'none' }
   if(isCategory && state.ui.currentCat){
     renderCategory(state.ui.currentCat, state.ui.categoryWeekStart)
@@ -885,10 +894,23 @@ function renderSummary(){
   const days = weekDays(week)
   const limit = limitDateForWeek(week)
   const counts={green:0,yellow:0,red:0}
+  let mustDue=0
+  let mustDone=0
+  let shouldDue=0
+  let shouldDone=0
   for(const task of state.tasks){
     const status = taskWeeklyStatus(task, days, limit)
     if(status && Object.prototype.hasOwnProperty.call(counts, status)){
       counts[status]++
+    }
+    if(status!==null){
+      if(task.importance==='must'){
+        mustDue++
+        if(status==='green'){ mustDone++ }
+      }else{
+        shouldDue++
+        if(status==='green'){ shouldDone++ }
+      }
     }
   }
   els.pillGreen.textContent=counts.green
@@ -896,6 +918,7 @@ function renderSummary(){
   els.pillRed.textContent=counts.red
   updateSummarySegments(counts)
   const strings = getStrings(currentLanguage())
+  updateSummaryScore({mustDone, mustDue, shouldDone, shouldDue}, strings)
   if(els.summaryProgress){ els.summaryProgress.setAttribute('aria-label', strings.summaryDistribution(counts)) }
 }
 
@@ -913,6 +936,35 @@ function updateSummarySegments(counts){
     el.style.opacity = total===0 ? 0 : (count>0 ? 1 : 0)
   })
   if(els.summaryProgress){ els.summaryProgress.classList.toggle('is-empty', total===0) }
+}
+
+function calculateSummaryScore(mustDone, mustDue, shouldDone, shouldDue){
+  const MUST_WEIGHT = 0.7
+  const SHOULD_WEIGHT = 0.3
+  const clamp = value=> Math.max(0, Math.min(1, value))
+  const mustRatio = mustDue===0 ? 1 : clamp(mustDone / mustDue)
+  const shouldRatio = shouldDue===0 ? 1 : clamp(shouldDone / shouldDue)
+  const combined = clamp(MUST_WEIGHT * mustRatio + SHOULD_WEIGHT * shouldRatio)
+  return Math.round(combined * 100)
+}
+
+function updateSummaryScore(stats, strings){
+  if(!els.summaryScoreValue) return
+  const score = calculateSummaryScore(stats.mustDone, stats.mustDue, stats.shouldDone, stats.shouldDue)
+  els.summaryScoreValue.textContent = String(score)
+  if(els.summaryScoreLabel && strings.summaryScore){
+    els.summaryScoreLabel.textContent = strings.summaryScore
+  }
+  if(els.summaryScore){
+    const redLabel = strings.summary?.red || 'Must do'
+    const yellowLabel = strings.summary?.yellow || 'Should do'
+    const detail = `${redLabel}: ${stats.mustDone}/${stats.mustDue || 0}, ${yellowLabel}: ${stats.shouldDone}/${stats.shouldDue || 0}`
+    const aria = typeof strings.summaryScoreAria==='function'
+      ? strings.summaryScoreAria(score)
+      : `Score ${score} out of 100`
+    els.summaryScore.setAttribute('aria-label', `${aria} (${detail})`)
+    els.summaryScore.title = `${score}/100 • ${detail}`
+  }
 }
 
 function renderHome(){

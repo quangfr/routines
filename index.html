@@ -17,21 +17,25 @@
     <div class="head-wrap">
       <button type="button" class="h-title" id="homeBtn"><img src="icon-192.png" alt="" class="h-logo" /><span class="h-title-text">Routines</span></button>
       <div class="h-grow"></div>
-      <button class="icon-btn icon-only" id="configBtn" aria-label="Open configuration">âš™ï¸</button>
+      <button class="icon-btn icon-only" id="configBtn" aria-label="Open configuration">ℹ️</button>
     </div>
   </header>
 
   <div class="week-controls" id="weekControls">
     <div class="week-nav">
-      <button class="icon-btn" id="weekPrev" aria-label="Previous week">â†</button>
+      <button class="icon-btn" id="weekPrev" aria-label="Previous week">←</button>
       <div class="week-label" id="weekLabel"></div>
-      <button class="icon-btn" id="weekNext" aria-label="Next week">â†’</button>
+      <button class="icon-btn" id="weekNext" aria-label="Next week">→</button>
       <button class="icon-btn" id="weekNow" aria-label="Go to current week">Now</button>
     </div>
   </div>
 
   <main>
     <section class="summary" id="summary">
+      <div class="summary-score" id="summaryScore">
+        <span class="summary-score-label" id="summaryScoreLabel">Score</span>
+        <span class="summary-score-value"><span id="summaryScoreValue">100</span><small>/100</small></span>
+      </div>
       <div class="summary-progress" role="img" aria-label="">
         <div class="summary-bar">
           <span class="summary-segment" data-status="green" id="summaryBarGreen"></span>
@@ -40,9 +44,9 @@
         </div>
       </div>
       <div class="summary-status">
-        <span data-status="green"><span class="summary-count" id="pillGreen">0</span><span class="summary-label" id="labelGreen">Done</span></span>
-        <span data-status="yellow"><span class="summary-count" id="pillYellow">0</span><span class="summary-label" id="labelYellow">Should do</span></span>
-        <span data-status="red"><span class="summary-count" id="pillRed">0</span><span class="summary-label" id="labelRed">Must do</span></span>
+        <span data-status="green"><span class="summary-count" id="pillGreen">0</span><span class="summary-label" id="labelGreen">🟩 Done</span></span>
+        <span data-status="yellow"><span class="summary-count" id="pillYellow">0</span><span class="summary-label" id="labelYellow">🟨 Should do</span></span>
+        <span data-status="red"><span class="summary-count" id="pillRed">0</span><span class="summary-label" id="labelRed">🟥 Must do</span></span>
       </div>
     </section>
 
@@ -52,9 +56,9 @@
 
     <section id="category" class="view">
       <div class="cat-head">
-        <button class="back" id="backBtn" aria-label="Go back">â†</button>
+        <button class="back" id="backBtn" aria-label="Go back">←</button>
         <h2 id="catTitle"></h2>
-        <button type="button" class="icon-btn icon-only" id="editCategoryBtn" aria-label="Edit category" title="Edit category">âœï¸</button>
+        <button type="button" class="icon-btn icon-only" id="editCategoryBtn" aria-label="Edit category" title="Edit category">✏️</button>
       </div>
       <div class="cat-mood" id="catMood" role="group" aria-label="Select mood"></div>
       <div id="taskList"></div>
@@ -224,4 +228,3 @@
 
 </body>
 </html>
-
