@@ -17,6 +17,11 @@ const WEEKDAY_SHORT_LABELS = {
   fr: ['Lu','Ma','Me','Je','Ve','Sa','Di'],
 }
 const WEEKDAY_ORDER = [1,2,3,4,5,6,0]
+function getWeekdayShortLabels(lang){
+  const safe = sanitizeLanguage(lang)
+  const labels = WEEKDAY_SHORT_LABELS[safe]
+  return Array.isArray(labels) && labels.length===7 ? labels : WEEKDAY_SHORT
+}
 const MOOD_CHOICES = [
   {value:'😄', label:'Upbeat'},
   {value:'😌', label:'Calm'},
@@ -246,18 +251,29 @@ const LANGUAGE_STRINGS={
     summaryScore:'Score',
     summaryScoreAria:score=>`Weekly score: ${score} out of 100`,
     progressLabel:(done,total)=>`${done} of ${total} completed`,
-    emptyProgress:'No activities yet',
+    emptyProgress:'No habits yet',
     noCategories:'Add a category to get started.',
-    noActivities:'No activities in this category yet.',
+    noActivities:'No habits in this category yet.',
     weekNow:'Now',
     weekNowAria:'Go to current week',
     weeklyTimes:'Times per week',
+    fieldName:'Name',
+    fieldCategory:'Category',
+    fieldPriority:'Priority',
+    fieldFrequency:'Frequency',
+    fieldSpecificDays:'Days of the week',
+    fieldVisual:'Visual',
+    priorityMust:'🟥 Must',
+    priorityShould:'🟨 Should',
+    frequencyDaily:'Daily',
+    frequencySpecific:'Specific day(s)',
+    frequencyWeekly:'Weekly target',
     languageTitle:'Choose your language',
     languageIntro:'Select your preferred language to personalize the experience.',
     languageConfirm:"I'm ready!",
     configTitle:'Configuration',
     configAddCategory:'Add category',
-    configAddActivity:'Add activity',
+    configAddActivity:'Add habit',
     configImport:'Import backup (replace)',
     configExport:'Export backup',
     configNote:'Importing a backup will replace your current habits and progress.',
@@ -270,8 +286,8 @@ const LANGUAGE_STRINGS={
     reminderMinute:'Minute',
     reminderNotificationTitle:name=>`Daily reminder: ${name}`,
     reminderNotificationBody:name=>`Take a moment for "${name}" today.`,
-    dialogNewActivity:'New activity',
-    dialogEditActivity:'Edit activity',
+    dialogNewActivity:'New habit',
+    dialogEditActivity:'Edit habit',
     dialogNewCategory:'New category',
     dialogEditCategory:'Edit category',
     cancel:'Cancel',
@@ -282,9 +298,10 @@ const LANGUAGE_STRINGS={
     openConfig:'Open configuration',
     closeConfig:'Close configuration',
     moodPicker:'Select mood',
+    moodLabel:'Mood',
     editCategory:'Edit category',
-    addActivity:'Add activity',
-    deleteCategoryConfirm:'Delete this category and its activities?',
+    addActivity:'Add habit',
+    deleteCategoryConfirm:'Delete this category and its habits?',
   },
   fr:{
     label:'Français',
@@ -297,16 +314,27 @@ const LANGUAGE_STRINGS={
     progressLabel:(done,total)=>`${done} sur ${total} réalisés`,
     emptyProgress:'Aucune habitude',
     noCategories:'Ajoutez une catégorie pour commencer.',
-    noActivities:'Aucune activité dans cette catégorie pour le moment.',
+    noActivities:'Aucune habitude dans cette catégorie pour le moment.',
     weekNow:'Ajd',
     weekNowAria:"Revenir à aujourd'hui",
     weeklyTimes:'Nombre de fois par semaine',
+    fieldName:'Nom',
+    fieldCategory:'Catégorie',
+    fieldPriority:'Priorité',
+    fieldFrequency:'Fréquence',
+    fieldSpecificDays:'Jour(s) de la semaine',
+    fieldVisual:'Visuel',
+    priorityMust:'🟥 Obligatoire',
+    priorityShould:'🟨 Recommandé',
+    frequencyDaily:'Quotidien',
+    frequencySpecific:'Jour(s) précis',
+    frequencyWeekly:'Objectif hebdo',
     languageTitle:'Choisissez votre langue',
     languageIntro:"Sélectionnez votre langue préférée pour personnaliser l'expérience.",
     languageConfirm:'Je suis prêt !',
     configTitle:'Configuration',
     configAddCategory:'Ajouter une catégorie',
-    configAddActivity:'Ajouter une activité',
+    configAddActivity:'Ajouter une habitude',
     configImport:'Importer une sauvegarde (remplace)',
     configExport:'Exporter une sauvegarde',
     configNote:'Importer une sauvegarde remplacera vos habitudes et progrès actuels.',
@@ -319,8 +347,8 @@ const LANGUAGE_STRINGS={
     reminderMinute:'Minute',
     reminderNotificationTitle:name=>`Rappel quotidien : ${name}`,
     reminderNotificationBody:name=>`Prenez un instant pour « ${name} » aujourd'hui.`,
-    dialogNewActivity:'Nouvelle activité',
-    dialogEditActivity:"Modifier l'activité",
+    dialogNewActivity:'Nouvelle habitude',
+    dialogEditActivity:"Modifier l'habitude",
     dialogNewCategory:'Nouvelle catégorie',
     dialogEditCategory:'Modifier la catégorie',
     cancel:'Annuler',
@@ -330,10 +358,11 @@ const LANGUAGE_STRINGS={
     homeTitle:"Revenir à l'accueil",
     openConfig:'Ouvrir la configuration',
     closeConfig:'Fermer la configuration',
-    moodPicker:'Choisir une ambiance',
+    moodPicker:'Choisir une humeur',
+    moodLabel:'Humeur',
     editCategory:'Modifier la catégorie',
-    addActivity:'Ajouter une activité',
-    deleteCategoryConfirm:'Supprimer cette catégorie et ses activités ?',
+    addActivity:'Ajouter une habitude',
+    deleteCategoryConfirm:'Supprimer cette catégorie et ses habitudes ?',
   }
 }
 
@@ -465,6 +494,9 @@ function safeWeekStart(value){
 
 function reminderEligible(recur){
   const type = recur && recur.type
+  if(type==='specific'){
+    return Array.isArray(recur.days) && recur.days.length>0
+  }
   return type==='daily' || type==='weekly'
 }
 
@@ -625,6 +657,12 @@ const els={
   f_cat: document.getElementById('f_cat'),
   f_importance: document.getElementById('f_importance'),
   f_recur: document.getElementById('f_recur'),
+  labelTitle: document.getElementById('labelTitle'),
+  labelCategory: document.getElementById('labelCategory'),
+  labelPriority: document.getElementById('labelPriority'),
+  labelFrequency: document.getElementById('labelFrequency'),
+  labelVisual: document.getElementById('labelVisual'),
+  specificDaysLabel: document.getElementById('specificDaysLabel'),
   weeklyWrap: document.getElementById('weeklyWrap'),
   f_weeklyTimes: document.getElementById('f_weeklyTimes'),
   specificWrap: document.getElementById('specificWrap'),
@@ -648,6 +686,7 @@ const els={
   catDialogTitle: document.getElementById('catDialogTitle'),
   closeCategoryDialog: document.getElementById('closeCategoryDialog'),
   c_name: document.getElementById('c_name'),
+  categoryNameLabel: document.getElementById('categoryNameLabel'),
   saveCategory: document.getElementById('saveCategory'),
   deleteCategory: document.getElementById('deleteCategory'),
   configAddActivity: document.getElementById('configAddActivity'),
@@ -763,6 +802,28 @@ function applyLanguage(){
   if(els.configTitle){ els.configTitle.textContent = strings.configTitle }
   if(els.configNote){ els.configNote.textContent = strings.configNote }
   if(els.weeklyTimesLabel){ els.weeklyTimesLabel.textContent = strings.weeklyTimes }
+  if(els.labelTitle){ els.labelTitle.textContent = strings.fieldName || 'Name' }
+  if(els.labelCategory){ els.labelCategory.textContent = strings.fieldCategory || 'Category' }
+  if(els.labelPriority){ els.labelPriority.textContent = strings.fieldPriority || 'Priority' }
+  if(els.labelFrequency){ els.labelFrequency.textContent = strings.fieldFrequency || 'Frequency' }
+  if(els.specificDaysLabel){ els.specificDaysLabel.textContent = strings.fieldSpecificDays || 'Days of the week' }
+  if(els.labelVisual){ els.labelVisual.textContent = strings.fieldVisual || 'Visual' }
+  if(els.categoryNameLabel){ els.categoryNameLabel.textContent = strings.fieldName || 'Name' }
+  if(els.f_importance){
+    const options = Array.from(els.f_importance.options || [])
+    options.forEach(opt=>{
+      if(opt.value==='must'){ opt.textContent = strings.priorityMust || '🟥 Must' }
+      if(opt.value==='should'){ opt.textContent = strings.priorityShould || '🟨 Should' }
+    })
+  }
+  if(els.f_recur){
+    const options = Array.from(els.f_recur.options || [])
+    options.forEach(opt=>{
+      if(opt.value==='daily'){ opt.textContent = strings.frequencyDaily || 'Daily' }
+      if(opt.value==='specific'){ opt.textContent = strings.frequencySpecific || 'Specific day(s)' }
+      if(opt.value==='weekly'){ opt.textContent = strings.frequencyWeekly || 'Weekly target' }
+    })
+  }
   if(els.languageDialogTitle){ els.languageDialogTitle.textContent = strings.languageTitle }
   if(els.languageDialogIntro){ els.languageDialogIntro.textContent = strings.languageIntro }
   if(els.reminderLabel){ els.reminderLabel.textContent = strings.reminderLabel || 'Daily reminder' }
@@ -786,7 +847,7 @@ function applyLanguage(){
     els.editCategoryBtn.title = strings.editCategory || 'Edit category'
   }
   if(els.catAddActivityBtn){
-    const addLabel = strings.addActivity || strings.configAddActivity || 'Add activity'
+    const addLabel = strings.addActivity || strings.configAddActivity || 'Add habit'
     els.catAddActivityBtn.setAttribute('aria-label', addLabel)
     els.catAddActivityBtn.title = addLabel
   }
@@ -795,6 +856,7 @@ function applyLanguage(){
   if(els.languageConfirm){ els.languageConfirm.textContent = strings.languageConfirm || strings.save }
   pendingLanguage = currentLanguage()
   refreshLanguageDialog()
+  initSpecificDayPicker()
   updateConfigButton(state.ui.currentView || 'home')
   updateWeekLabel()
   updateReminderVisibility()
@@ -906,7 +968,9 @@ function updateView(view){
 function updateConfigButton(view){
   if(!els.configBtn) return
   const isConfig = view==='config'
-  const strings = getStrings(currentLanguage())
+  const lang = currentLanguage()
+  const strings = getStrings(lang)
+  const dayLabels = getWeekdayShortLabels(lang)
   els.configBtn.setAttribute('aria-label', isConfig ? strings.closeConfig : strings.openConfig)
   els.configBtn.setAttribute('aria-pressed', isConfig ? 'true' : 'false')
   els.configBtn.classList.toggle('active', isConfig)
@@ -1050,7 +1114,9 @@ function renderHome(){
   state.ui.categoryWeekStart = week
   const days = weekDays(week)
   const limit = limitDateForWeek(week)
-  const strings = getStrings(currentLanguage())
+  const lang = currentLanguage()
+  const strings = getStrings(lang)
+  const dayLabels = getWeekdayShortLabels(lang)
   els.catGrid.innerHTML=''
   const categories = CATS()
   if(categories.length===0){
@@ -1075,7 +1141,7 @@ function renderHome(){
         <div class="card-title">${titleHtml}</div>
         ${progressHtml}
       </div>
-      <div class="cell-row">${statuses.map((s,idx)=>`<div class="week-cell status-${s}"><span>${WEEKDAY_SHORT[idx]}</span></div>`).join('')}</div>
+      <div class="cell-row">${statuses.map((s,idx)=>`<div class="week-cell status-${s}"><span>${dayLabels[idx] || WEEKDAY_SHORT[idx]}</span></div>`).join('')}</div>
         <div class="catchup-line"${catchupAttr}>${catchupHtml}</div>
     `
     card.addEventListener('click', ()=> openCategory(c.id, week))
@@ -1168,9 +1234,10 @@ function renderCategory(cat, week){
     const row=document.createElement('div')
     row.className='task'
     row.dataset.importance = task.importance
-    const freqMark = frequencyLabel(task.recur, currentLanguage())
+    const freqMark = frequencyLabel(task.recur, lang)
     const freqHtml = freqMark?` <span class="freq"><span class="freq-value">${escapeHtml(freqMark)}</span></span>`:''
     const reminderBadge = task.notifyDaily && reminderEligible(task.recur) ? ` <span class="reminder" title="${escapeHtml(strings.reminderLabel)}" aria-label="${escapeHtml(strings.reminderLabel)}">🔔</span>` : ''
+    const editLabel = escapeHtml(strings.dialogEditActivity || 'Edit habit')
     row.innerHTML=`
       <div class="task-header">
         <span class="em">${escapeHtml(task.emoji||'🎯')}</span>
@@ -1178,7 +1245,7 @@ function renderCategory(cat, week){
           <div class="title">${escapeHtml(task.title)}${freqHtml}${reminderBadge}</div>
         </div>
         <div class="task-actions">
-          <button type="button" data-act="edit" aria-label="Edit activity">✏️</button>
+          <button type="button" data-act="edit" aria-label="${editLabel}" title="${editLabel}">✏️</button>
         </div>
       </div>
       <div class="task-week"></div>
@@ -1191,7 +1258,7 @@ function renderCategory(cat, week){
       cell.className='week-cell status-'+status
       cell.dataset.day=day
       cell.dataset.task=task.id
-      cell.textContent=WEEKDAY_SHORT[idx]
+      cell.textContent=dayLabels[idx] || WEEKDAY_SHORT[idx]
       const clickable = (status==='green' || status==='yellow' || status==='red')
       if(clickable){
         cell.classList.add('clickable')
@@ -1217,8 +1284,14 @@ function renderMoodSelector(cat){
   els.catMood.hidden = false
   const strings = getStrings(currentLanguage())
   els.catMood.setAttribute('aria-label', strings.moodPicker)
+  const label=document.createElement('span')
+  label.className='cat-mood-label'
+  label.id='catMoodLabel'
+  label.textContent=strings.moodLabel || strings.moodPicker || 'Mood'
   const options=document.createElement('div')
   options.className='cat-mood-options'
+  options.setAttribute('role','group')
+  options.setAttribute('aria-labelledby', label.id)
   const current = typeof cat.mood==='string' ? cat.mood : ''
   MOOD_CHOICES.forEach(choice=>{
     const btn=document.createElement('button')
@@ -1232,6 +1305,7 @@ function renderMoodSelector(cat){
     btn.addEventListener('click', ()=> setCategoryMood(cat.id, choice.value))
     options.appendChild(btn)
   })
+  els.catMood.appendChild(label)
   els.catMood.appendChild(options)
 }
 
@@ -1316,11 +1390,25 @@ function onRecurChange(){
 }
 
 function initSpecificDayPicker(){
+  if(!els.specificDays) return
+  const checked=new Set()
+  els.specificDays.querySelectorAll('input:checked').forEach(input=>{
+    const value = Number(input.value)
+    if(Number.isInteger(value)){ checked.add(value) }
+  })
   els.specificDays.innerHTML=''
+  const labels = getWeekdayShortLabels(currentLanguage())
   WEEKDAY_ORDER.forEach(day=>{
-    const label=WEEKDAY_SHORT[(day+6)%7]
+    const label = labels[(day+6)%7] || WEEKDAY_SHORT[(day+6)%7]
     const wrapper=document.createElement('label')
-    wrapper.innerHTML=`<input type="checkbox" value="${day}">${label}`
+    const input=document.createElement('input')
+    input.type='checkbox'
+    input.value=day
+    if(checked.has(day)){ input.checked=true }
+    const text=document.createElement('span')
+    text.textContent=label
+    wrapper.appendChild(input)
+    wrapper.appendChild(text)
     els.specificDays.appendChild(wrapper)
   })
 }
@@ -1334,7 +1422,7 @@ function updateReminderVisibility(){
     return
   }
   const type = els.f_recur ? els.f_recur.value : ''
-  const eligible = type==='daily' || type==='weekly'
+  const eligible = type==='daily' || type==='weekly' || type==='specific'
   els.reminderField.style.display = eligible ? 'grid' : 'none'
   if(els.reminderTimeWrap){
     els.reminderTimeWrap.style.display = eligible ? 'grid' : 'none'
@@ -1418,6 +1506,11 @@ function triggerReminder(taskId){
   const task = state.tasks.find(t=> t.id===taskId)
   if(!task || !task.notifyDaily || !reminderEligible(task.recur)){
     updateReminders()
+    return
+  }
+  const today = todayISO()
+  if(!isDue(task, today) || isDone(task, today)){
+    scheduleReminder(taskId, task.reminderTime)
     return
   }
   const strings = getStrings(currentLanguage())

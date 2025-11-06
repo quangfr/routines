@@ -58,7 +58,7 @@
       <div class="cat-head">
         <button class="back" id="backBtn" aria-label="Go back">←</button>
         <h2 id="catTitle"></h2>
-        <button type="button" class="icon-btn icon-only" id="catAddActivityBtn" aria-label="Add activity" title="Add activity">➕</button>
+        <button type="button" class="icon-btn icon-only" id="catAddActivityBtn" aria-label="Add habit" title="Add habit">➕</button>
         <button type="button" class="icon-btn icon-only" id="editCategoryBtn" aria-label="Edit category" title="Edit category">✏️</button>
       </div>
       <div class="cat-mood" id="catMood" role="group" aria-label="Select mood"></div>
@@ -72,7 +72,7 @@
         </div>
         <div class="config-actions">
           <button class="icon-btn" id="configAddCategory">Add category</button>
-          <button class="icon-btn" id="configAddActivity">Add activity</button>
+          <button class="icon-btn" id="configAddActivity">Add habit</button>
           <button class="icon-btn" id="configImport">Import backup (replace)</button>
           <button class="icon-btn" id="configExport">Export backup</button>
         </div>
@@ -102,25 +102,25 @@
 
 <dialog id="taskDialog">
   <form method="dialog" id="taskForm">
-    <div class="modal-head"><span id="dialogTitle">New activity</span><button type="button" class="icon-btn" id="closeDialog">⨉</button></div>
+    <div class="modal-head"><span id="dialogTitle">New habit</span><button type="button" class="icon-btn" id="closeDialog">⨉</button></div>
     <div class="modal-body">
       <div class="field">
-        <label for="f_title">Name</label>
+        <label for="f_title" id="labelTitle">Name</label>
         <input type="text" id="f_title" placeholder="Ex: Brush teeth" required />
       </div>
       <div class="field">
-        <label for="f_cat">Category</label>
+        <label for="f_cat" id="labelCategory">Category</label>
         <select id="f_cat"></select>
       </div>
       <div class="field">
-        <label for="f_importance">Priority</label>
+        <label for="f_importance" id="labelPriority">Priority</label>
         <select id="f_importance">
           <option value="must">🟥 Must</option>
           <option value="should">🟨 Should</option>
         </select>
       </div>
       <div class="field">
-        <label for="f_recur">Frequency</label>
+        <label for="f_recur" id="labelFrequency">Frequency</label>
         <select id="f_recur">
           <option value="daily">Daily</option>
           <option value="specific">Specific day(s)</option>
@@ -139,7 +139,7 @@
         </select>
       </div>
       <div class="field" id="specificWrap" style="display:none">
-        <label>Days of the week</label>
+        <label id="specificDaysLabel">Days of the week</label>
         <div class="weekday-picker" id="specificDays"></div>
       </div>
       <div class="field" id="reminderField" style="display:none">
@@ -198,7 +198,7 @@
         <p class="field-note" id="reminderNote">Send a notification every day at your chosen time.</p>
       </div>
       <div class="field">
-        <label for="f_emoji">Emoji</label>
+        <label for="f_emoji" id="labelVisual">Visual</label>
         <input type="text" id="f_emoji" placeholder="Ex: 🌱" maxlength="3" />
         <div class="emoji-picker">
           <input type="search" id="emojiSearch" placeholder="Search (fruit, workout, relax...)" />
@@ -207,7 +207,6 @@
       </div>
     </div>
     <div class="modal-actions">
-      <button class="icon-btn" value="cancel">Cancel</button>
       <button type="button" class="icon-btn danger" id="deleteTask" style="display:none">Delete</button>
       <button class="icon-btn primary" id="saveTask" value="default">Save</button>
     </div>
@@ -219,12 +218,11 @@
     <div class="modal-head"><span id="catDialogTitle">New category</span><button type="button" class="icon-btn" id="closeCategoryDialog">⨉</button></div>
     <div class="modal-body">
       <div class="field">
-        <label for="c_name">Name</label>
+        <label for="c_name" id="categoryNameLabel">Name</label>
         <input type="text" id="c_name" placeholder="Ex: Mindfulness" required />
       </div>
     </div>
     <div class="modal-actions">
-      <button class="icon-btn" value="cancel">Cancel</button>
       <button type="button" class="icon-btn danger" id="deleteCategory" style="display:none">Delete</button>
       <button type="button" class="icon-btn primary" id="saveCategory" value="default">Save</button>
     </div>

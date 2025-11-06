@@ -89,6 +89,7 @@ main>section{max-width:960px;width:100%;margin:0 auto}
 .cat-head h2{margin:0;font-size:18px;flex:1}
 .cat-mood{display:flex;align-items:center;gap:10px;margin:0 0 12px}
 .cat-mood[hidden]{display:none}
+.cat-mood-label{font-weight:600;font-size:14px;color:var(--muted)}
 .cat-mood-options{display:flex;gap:6px;flex-wrap:wrap}
 .cat-mood-options button{padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;width:40px;height:36px;transition:all .15s ease}
 .cat-mood-options button:hover{border-color:var(--accent)}
@@ -116,7 +117,7 @@ main>section{max-width:960px;width:100%;margin:0 auto}
 .task-week .week-cell.disabled{opacity:.45;cursor:not-allowed}
 
 
-dialog{border:1px solid #cbd5e1;border-radius:18px;padding:0;background:var(--panel);color:var(--text);width:min(440px,calc(100vw - 32px));max-width:440px;max-height:calc(100dvh - 32px);display:flex;flex-direction:column;overflow:hidden}
+dialog{border:1px solid #cbd5e1;border-radius:18px;padding:0;background:var(--panel);color:var(--text);width:min(520px,calc(100dvw - 24px));max-width:calc(100dvw - 24px);max-height:calc(100dvh - 32px);display:flex;flex-direction:column;overflow:hidden;margin:12px auto}
 dialog:not([open]){display:none}
 dialog::backdrop{background:rgba(15,23,42,.45)}
 
