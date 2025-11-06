@@ -1,4 +1,4 @@
-**🌱 Routines — Your week, simplified.**  
+**🌱 Habitu.be — Your week, simplified.**  
 
 A playful, minimalist app to stay consistent with what truly matters — your daily and weekly habits.  
 🕊️ 100% free, open source, offline & private — no signup, no internet, just you.
@@ -13,7 +13,7 @@ A playful, minimalist app to stay consistent with what truly matters — your da
 
 --
 
-**🌱 Routines — Ta semaine, simplifiée.**  
+**🌱 Habitu.be — Ta semaine, simplifiée.**  
 
 Une appli ludique et minimaliste pour rester régulier dans ce qui compte vraiment — tes habitudes du quotidien et de la semaine.  
 🕊️ 100 % gratuit, open source, hors ligne et privée — aucun compte, aucun cloud, juste toi.
