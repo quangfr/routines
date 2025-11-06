@@ -18,6 +18,7 @@ Routine Buddy is a single-page prototype that helps track recurring routines on 
 - The header simply repeats the category name—categories no longer carry emoji or accent colours.
 - The summary strip from the home view is hidden here, keeping the focus on the category’s activities.
 - Every activity appears as a card showing its emoji, title, priority stripe (red for must, yellow for should), and a row of seven day cells for the chosen week.
+- Activity cards now display readable recurrence labels (e.g. **Daily**, **Weekly**, **Mo, Th**, **2x / Week**; French locale uses **Quotidien**, **Hebdo**, **2x / Sem**).
 - Clicking a due day cell toggles completion. Cells representing future dates are disabled.
 - When a category has no activities, a neutral hint clarifies that the list is empty.
 
