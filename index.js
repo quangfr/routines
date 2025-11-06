@@ -555,6 +555,7 @@ function currentLanguage(){ return state ? sanitizeLanguage(state.ui?.language) 
 
 const els={
   summary: document.getElementById('summary'),
+  about: document.getElementById('about'),
   summaryProgress: document.querySelector('.summary-progress'),
   summaryScore: document.getElementById('summaryScore'),
   summaryScoreValue: document.getElementById('summaryScoreValue'),
@@ -695,7 +696,15 @@ updateReminderVisibility()
 function initializeApp(){
   if(!state) return
   bindEvents()
-  applyLanguage()
+  applyLanguage(
+if (els.about) {
+  const lang = currentLanguage()
+  els.about.querySelectorAll('[data-lang]').forEach(n=>{
+    n.style.display = (n.dataset.lang === lang) ? '' : 'none'
+  })
+}
+    
+  )
   refreshAll()
   updateView(state.ui.currentView || 'home')
 }
@@ -822,6 +831,7 @@ function updateView(view){
   }else if(isHome){
     renderHome()
   }
+  if (els.about) { els.about.style.display = isHome ? '' : 'none' }
   updateConfigButton(view)
   save()
 }
