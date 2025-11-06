@@ -325,6 +325,10 @@ const fmtDate = (d)=> new Date(d).toLocaleDateString('en-CA',{timeZone:TZ})
 const todayISO = ()=> fmtDate(Date.now())
 const uid = ()=> Math.random().toString(36).slice(2,9)
 const WEEKDAY_SHORT = ['Mo','Tu','We','Th','Fr','Sa','Su']
+const WEEKDAY_SHORT_LABELS = {
+  en: WEEKDAY_SHORT,
+  fr: ['Lu','Ma','Me','Je','Ve','Sa','Di'],
+}
 const WEEKDAY_ORDER = [1,2,3,4,5,6,0]
 const MOOD_CHOICES = [
   {value:'😄', label:'Upbeat'},
@@ -1225,12 +1229,12 @@ function renderCategory(cat, week){
     const row=document.createElement('div')
     row.className='task'
     row.dataset.importance = task.importance
-    const freqMark = frequencyCount(task.recur)
+    const freqMark = frequencyLabel(task.recur, currentLanguage())
     row.innerHTML=`
       <div class="task-header">
         <span class="em">${escapeHtml(task.emoji||'🎯')}</span>
         <div class="task-info">
-          <div class="title">${escapeHtml(task.title)}${freqMark?` <span class="freq"><span class="freq-value">${freqMark}</span>×</span>`:''}</div>
+          <div class="title">${escapeHtml(task.title)}${freqMark?` <span class="freq"><span class="freq-value">${escapeHtml(freqMark)}</span></span>`:''}</div>
         </div>
         <div class="task-actions">
           <button type="button" data-act="edit" aria-label="Edit activity">✏️</button>
@@ -1594,17 +1598,29 @@ function dayStatusForTask(task, day, limit){
   return task.importance==='must' ? 'red':'yellow'
 }
 
-function frequencyCount(recur){
-  const map={1:'1',2:'2',3:'3',4:'4',5:'5',6:'6',7:'7'}
+function frequencyLabel(recur, lang){
   if(!recur) return ''
-  if(recur.type==='daily') return '7'
+  const safe = sanitizeLanguage(lang)
+  if(recur.type==='daily'){
+    return safe==='fr' ? 'Quotidien' : 'Daily'
+  }
   if(recur.type==='weekly'){
-    const times = Math.min(7, Math.max(1, recur.times||1))
-    return map[times] || ''
+    const times = Math.min(7, Math.max(1, Math.round(recur.times||1)))
+    if(times<=1){
+      return safe==='fr' ? 'Hebdo' : 'Weekly'
+    }
+    const template = safe==='fr' ? '%dx / Sem' : '%dx / Week'
+    return template.replace('%d', times)
   }
   if(recur.type==='specific'){
-    const count = Array.isArray(recur.days) ? Math.min(7, Math.max(1, recur.days.length)) : 0
-    return map[count] || ''
+    if(!Array.isArray(recur.days) || recur.days.length===0) return ''
+    const labels = WEEKDAY_SHORT_LABELS[safe] || WEEKDAY_SHORT_LABELS.en
+    const ordered = [...new Set(recur.days
+      .map(d=> Number(d))
+      .filter(d=> Number.isInteger(d) && d>=0 && d<=6))]
+      .sort((a,b)=> WEEKDAY_ORDER.indexOf(a) - WEEKDAY_ORDER.indexOf(b))
+    if(ordered.length===0) return ''
+    return ordered.map(day=> labels[(day+6)%7]).join(', ')
   }
   return ''
 }
