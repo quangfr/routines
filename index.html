@@ -103,13 +103,14 @@ main>section{max-width:960px;width:100%;margin:0 auto}
 .task-week .week-cell.disabled{opacity:.45;cursor:not-allowed}
 
 
-dialog{border:1px solid #cbd5e1;border-radius:18px;padding:0;background:var(--panel);color:var(--text);width:min(440px,calc(100vw - 32px));max-width:440px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden}
+dialog{border:1px solid #cbd5e1;border-radius:18px;padding:0;background:var(--panel);color:var(--text);width:min(440px,calc(100vw - 32px));max-width:440px;max-height:calc(100dvh - 32px);display:flex;flex-direction:column;overflow:hidden}
 dialog:not([open]){display:none}
 dialog::backdrop{background:rgba(15,23,42,.45)}
 
 /* Dialog */
+dialog form{display:flex;flex-direction:column;height:100%;min-height:0}
 .modal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);font-weight:700;font-size:16px}
-.modal-body{padding:12px 14px;display:grid;gap:12px}
+.modal-body{padding:12px 14px;display:grid;gap:12px;flex:1;overflow:auto;min-height:0;-webkit-overflow-scrolling:touch}
 .field{display:grid;gap:6px}
 .field label{font-weight:600;font-size:13px;color:#475569}
 .modal-body input,.modal-body select,.modal-body textarea{background:var(--off);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:10px;font:inherit;font-size:14px}
