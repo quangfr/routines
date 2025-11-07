@@ -1,246 +1,709 @@
-﻿<!doctype html>
-<html lang="en">
+<!doctype html>
+<html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#1d9410" />
-<link rel="manifest" href="manifest.webmanifest" />
-<link rel="apple-touch-icon" href="icon-192.png" />
-<link rel="icon" href="icon-192.png" sizes="192x192" />
-<title>Habitu.be</title>
-<link rel="stylesheet" href="index.css" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Habitu.be — Prototype (drops v2)</title>
+<style>
+  :root{
+    --bg:#f7f3ea; --card:#fffdf8; --text:#1e1f1a;
+    --green:#2a7a57; --greenL:#8ec5a8; --border:#e6dfd2;
+    --r:4px; --gap:8px; --shadow:0 1px 0 rgba(0,0,0,.03);
+    --fs:13px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font:400 var(--fs)/1.35 system-ui,-apple-system,Roboto,sans-serif; color:var(--text); background:var(--bg);
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  #app{max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;position:relative}
+  /* Heat background */
+  .heat{position:fixed;left:0;right:0;bottom:0;height:0;background:linear-gradient(0deg,var(--greenL),transparent);opacity:.35;pointer-events:none;z-index:0}
 
+  /* Top bar */
+  .top{position:sticky; top:0; background:var(--bg); z-index:6; border-bottom:1px solid var(--border);
+       padding:6px var(--gap); display:flex; align-items:center; gap:8px}
+  .brand{font-weight:800; cursor:pointer; display:flex; align-items:center; gap:6px}
+  .brand .logo{font-size:18px}
+  .navbtn{font-size:14px;border:1px solid var(--border); background:var(--card); border-radius:var(--r); padding:6px 10px; box-shadow:var(--shadow); cursor:pointer}
+  .spacer{flex:1}
+
+  /* Day bar (← [date] Ajd →  |  compteur du jour) */
+  .daysWrap{position:sticky; top:44px; background:var(--bg); z-index:5; border-bottom:1px solid var(--border);
+            padding:6px var(--gap); display:flex; align-items:center; gap:6px; justify-content:space-between}
+  .dateLabel{padding:8px 12px; border:1px solid var(--border); background:var(--card); border-radius:4px; box-shadow:var(--shadow);font-weight:700;
+             font-variant-numeric:tabular-nums}
+  .todayCount{padding:8px 12px; border:1px solid var(--border); background:var(--card); border-radius:4px; box-shadow:var(--shadow); font-weight:700}
+
+  /* Home list */
+  .list{padding:var(--gap); display:grid; grid-template-columns:1fr; gap:var(--gap); position:relative; z-index:1}
+  .card{border:1px solid var(--border); background:var(--card); border-radius:var(--r); box-shadow:var(--shadow);
+        display:grid; grid-template-columns:1fr 64px; overflow:hidden; transition:outline .15s ease}
+  .card.done{outline:3px solid var(--green)}
+  .content{padding:6px; display:flex; flex-direction:column; gap:4px}
+  .title{font-weight:700; display:flex; align-items:center; gap:8px; font-size:15px}
+  .subtitle{color:#5b5b56; font-size:14px; min-height:18px}
+  .friends{margin-top:auto; display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+  .badge{display:flex; align-items:center; gap:0px; padding:2px 4px; border:1px solid var(--border); border-radius:var(--r); background:var(--bg); font-size:11px}
+  .badge .streak{font-size:11px}
+
+  /* Level column (à DROITE) */
+  .levelCol{border-left:1px solid var(--border); display:flex; align-items:stretch; justify-content:stretch; padding:0}
+  .levelBtn{
+    width:100%; height:100%; border-radius:var(--r); border:1px solid var(--border); background:var(--bg);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; user-select:none; line-height:1.05; position:relative
+  }
+  /* ⬇️ niveau du jour en bas */
+  .levelBtn .mini{
+    font-size:17px; letter-spacing:-4px; position:absolute; bottom:4px; left:0; right:0; text-align:center; pointer-events:none
+  }
+  /* ⬆️ avatar (emoji) utilisateur issu du score total (💧 + ☀️) */
+  .levelBtn .self{
+    font-size:24px; letter-spacing:-4px; position:absolute; top:4px; left:0; right:0; text-align:center; pointer-events:none
+  }
+  .levelBtn .big{font-size:22px; font-weight:800; margin-top:8px}
+  .levelBtn .num{font-variant-numeric:tabular-nums}
+
+  /* Detail */
+  .section{padding:var(--gap)}
+  .detailHead{display:flex; align-items:center; gap:8px; position:sticky; top:0px; z-index:5; background:var(--bg); padding:6px var(--gap); border-bottom:1px solid var(--border)}
+  .detailTitle{font-weight:800; font-size:16px}
+  .backMini{border:1px solid var(--border); background:var(--card); border-radius:var(--r); padding:6px 10px; cursor:pointer}
+
+  /* Tabs + views */
+  .tabs{display:flex; gap:6px; padding:var(--gap); border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:80px; z-index:4}
+  .tab{flex:1; text-align:center; padding:8px; border:1px solid var(--border); background:var(--card); border-radius:var(--r); cursor:pointer}
+  .tab.active{outline:2px solid var(--green); font-weight:700}
+  .view{display:none}
+  .view.active{display:block}
+
+  /* Rank */
+  .rankHeader{display:flex; gap:8px; align-items:center; justify-content:space-between; margin-top:8px}
+  .rank{display:grid; gap:8px; margin-top:8px}
+  .row{display:flex; justify-content:space-between; align-items:center; padding:6px; border:1px solid var(--border); background:var(--card); border-radius:var(--r)}
+  .clap{cursor:pointer; user-select:none}
+  .row .avatar{width:32px; height:32px; font-size:24px; display:grid; place-items:center}
+  .scoreEmoji{font-size:26px; font-weight:900; margin-left:4px; white-space:pre-line}
+
+  /* Calendar */
+  .calendarWrap{padding:0 var(--gap) var(--gap)}
+  .calTop{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
+  .calBtn{border:1px solid var(--border); background:var(--card); border-radius:var(--r); padding:6px 10px; cursor:pointer}
+  .calendar{display:grid; grid-template-columns:repeat(7,1fr); gap:6px}
+  .cell{
+    height:55px; display:grid; place-items:center; 
+    border:1px dashed var(--border); background:var(--card); border-radius:var(--r);
+    position:relative; overflow:hidden; cursor:pointer
+  }
+  .dayNum{position:absolute; top:4px; right:6px; font-size:10px; color:#777}
+  .clapMark{position:absolute; top:18px; left:0; right:0; text-align:center; font-size:12px; line-height:1; font-weight:700}
+  .dropMark{position:absolute; bottom:3px; left:0; right:0; text-align:center; font-size:12px; line-height:1; font-weight:700}
+
+  /* Modals full-screen */
+  .modal{position:fixed; inset:0; display:none; background:rgba(0,0,0,.2); padding:0; z-index:10}
+  .modal.on{display:block}
+  .sheet{position:absolute; inset:0; background:var(--card); border-radius:0}
+  .sheetHeader{position:sticky; top:0; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px var(--gap); border-bottom:1px solid var(--border); background:var(--bg)}
+  .closeX{border:1px solid var(--border); background:var(--card); border-radius:var(--r); padding:6px 10px; cursor:pointer}
+  .sheetBody{padding:var(--gap); height:calc(100% - 50px); overflow:auto}
+  .grid{display:grid; gap:8px}
+  .opt{border:1px solid var(--border); background:var(--card); border-radius:var(--r); padding:12px; display:flex; gap:8px; align-items:center; cursor:pointer}
+  .opt .emoji{font-size:20px}
+  .qr{width:160px; height:160px; background:repeating-linear-gradient(45deg,#000 0 6px,#fff 6px 12px); image-rendering:pixelated; border-radius:var(--r)}
+  .field{display:grid; gap:4px}
+  input[type="text"]{padding:10px; border:1px solid var(--border); border-radius:var(--r); background:#fffdf8; font-size:13px}
+  .btn{border:1px solid var(--border); background:var(--card); border-radius:var(--r); padding:10px 12px; cursor:pointer; text-align:center}
+  .btn.primary{background:var(--green); color:#fff; border-color:transparent}
+
+  @media(min-width:481px){ .list{grid-template-columns:1fr 1fr} }
+</style>
 </head>
 <body>
-  <div class="app" id="app">
-    <header>
-      <div class="head-wrap">
-        <button type="button" class="h-title" id="homeBtn"><img src="icon-192.png" alt="" class="h-logo" /><span class="h-title-text">Habitu.be</span></button>
-        <div class="h-grow"></div>
-        <button class="icon-btn icon-only" id="configBtn" aria-label="Open configuration">ℹ️</button>
-      </div>
-    </header>
+<div class="heat" id="heat"></div>
+<div id="app">
 
-    <div class="install-banner" id="installBanner" hidden role="region" aria-live="polite">
-      <div class="install-banner-inner">
-        <div class="install-banner-text" id="installBannerMessage">Install Habitu.be on your smartphone</div>
-        <div class="install-banner-actions">
-          <button type="button" class="icon-btn install-action" id="installBannerAction">Installer</button>
-          <button type="button" class="icon-btn icon-only install-dismiss" id="installBannerDismiss" aria-label="Close">⨉</button>
-        </div>
-      </div>
+  <!-- Top -->
+  <div class="top">
+    <div class="brand" id="brand"><span class="logo">🌱</span>Habitu.be</div>
+    <div class="spacer"></div>
+    <!-- Renommé en ⓘ Info -->
+    <button class="navbtn" id="settingsBtn" title="Info">ⓘ</button>
+    <button class="navbtn" id="addBtn" title="Ajouter">＋</button>
+  </div>
+
+  <!-- Day bar (← [date] Ajd → | 💧/☀️ d'aujourd'hui) -->
+  <div class="daysWrap" id="daysWrap">
+    <button class="navbtn" id="prevDay">←</button>
+    <div style="display:flex; align-items:center; gap:6px">
+      <div class="dateLabel" id="dateLabel">—</div>
+      <div class="todayCount" id="todayCount">💧0 ☀️0</div>
     </div>
-
-    <div class="week-controls" id="weekControls">
-      <div class="week-nav">
-        <button class="icon-btn" id="weekPrev" aria-label="Previous week">←</button>
-        <div class="week-label" id="weekLabel"></div>
-      <button class="icon-btn" id="weekNext" aria-label="Next week">→</button>
-      <button class="icon-btn" id="weekNow" aria-label="Go to current week">Now</button>
+    <div style="display:flex; gap:6px">
+      <button class="navbtn" id="todayBtn">Ajd</button>
+      <button class="navbtn" id="nextDay">→</button>
     </div>
   </div>
 
-  <main>
-    <section class="summary" id="summary">
-      <div class="summary-score" id="summaryScore">
-        <span class="summary-score-label" id="summaryScoreLabel">Score</span>
-        <span class="summary-score-value"><span id="summaryScoreValue">100</span><small>/100</small></span>
-      </div>
-      <div class="summary-progress" role="img" aria-label="">
-        <div class="summary-bar">
-          <span class="summary-segment" data-status="green" id="summaryBarGreen"></span>
-          <span class="summary-segment" data-status="yellow" id="summaryBarYellow"></span>
-          <span class="summary-segment" data-status="red" id="summaryBarRed"></span>
-        </div>
-      </div>
-      <div class="summary-status">
-        <span data-status="green"><span class="summary-count" id="pillGreen">0</span><span class="summary-label" id="labelGreen">🟩 Done</span></span>
-        <span data-status="yellow"><span class="summary-count" id="pillYellow">0</span><span class="summary-label" id="labelYellow">🟨 Should do</span></span>
-        <span data-status="red"><span class="summary-count" id="pillRed">0</span><span class="summary-label" id="labelRed">🟥 Must do</span></span>
-      </div>
-    </section>
-
-    <section id="home" class="view active">
-      <div class="grid" id="catGrid"></div>
-    </section>
-
-    <section id="category" class="view">
-      <div class="cat-head">
-        <button class="back" id="backBtn" aria-label="Go back">←</button>
-        <h2 id="catTitle"></h2>
-        <button type="button" class="icon-btn icon-only" id="catAddActivityBtn" aria-label="Add habit" title="Add habit">➕</button>
-        <button type="button" class="icon-btn icon-only" id="editCategoryBtn" aria-label="Edit category" title="Edit category">✏️</button>
-      </div>
-      <div class="cat-mood" id="catMood" role="group" aria-label="Select mood"></div>
-      <div id="taskList"></div>
-    </section>
-
-    <section id="config" class="view">
-      <div class="config-panel">
-        <div class="config-head">
-          <h2>Configuration</h2>
-        </div>
-        <div class="config-actions">
-          <button class="icon-btn" id="configAddCategory">Add category</button>
-          <button class="icon-btn" id="configAddActivity">Add habit</button>
-          <button class="icon-btn" id="configInstall" type="button" hidden>Install on my smartphone</button>
-          <button class="icon-btn" id="configImport">Import backup (replace)</button>
-          <button class="icon-btn" id="configExport">Export backup</button>
-          <button class="icon-btn" id="configAbout" type="button">About Habitu.be</button>
-        </div>
-        <p class="config-note">Importing a backup will replace your current habits and progress.</p>
-      </div>
-      <input type="file" id="configImportInput" accept="application/json" hidden />
-    </section>
+  <!-- Home -->
+  <main id="home" class="view active">
+    <div class="list" id="cards"></div>
   </main>
-</div>
 
-<dialog id="languageDialog">
-  <div class="modal-head"><span id="languageDialogTitle">Choose your language</span></div>
-  <div class="modal-body language-body">
-    <div class="language-select">
-      <div class="language-options" role="group" aria-label="Available languages">
-        <button type="button" class="icon-btn" data-lang="fr">Français</button>
-        <button type="button" class="icon-btn" data-lang="en">English</button>
+  <!-- Detail -->
+  <section id="detail" class="view">
+    <!-- Entête détail -->
+    <div class="detailHead">
+      <button class="backMini" id="backHome">←</button>
+      <div class="detailTitle" id="detailTitle"></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="friends">👥 Amis</button>
+      <button class="tab" data-tab="progress">📈 Progression</button>
+    </div>
+
+    <div class="section">
+      <!-- Amis -->
+      <div class="view active" id="tab-friends">
+        <div class="rankHeader">
+          <div><b>Classement</b></div>
+          <label style="font-size:12px;display:flex;gap:6px;align-items:center">
+            Période:
+            <select id="periodSel" style="padding:6px;border:1px solid var(--border);border-radius:var(--r);background:var(--card)">
+              <option value="30" selected>30 derniers jours</option>
+              <option value="all">Total</option>
+            </select>
+          </label>
+        </div>
+        <div class="rank" id="rank"></div>
+      </div>
+
+      <!-- Progression -->
+      <div class="view" id="tab-progress">
+        <div class="calendarWrap">
+          <div class="calTop">
+            <button class="calBtn" id="prevMonth">←</button>
+            <div id="monthLabel" style="font-weight:700"></div>
+            <button class="calBtn" id="nextMonth">→</button>
+          </div>
+          <div class="calendar" id="cal"></div>
+        </div>
       </div>
     </div>
-    <div class="language-description" id="languageDescription" tabindex="0" role="document"></div>
-    <div class="language-actions">
-      <button type="button" class="icon-btn" id="languageConfirm">Je suis prêt !</button>
+  </section>
+
+  <!-- Modal: Add root -->
+  <div class="modal" id="modalAdd">
+    <div class="sheet">
+      <div class="sheetHeader">
+        <div id="modalTitle">Ajouter</div>
+        <button class="closeX" id="closeAdd">⨉</button>
+      </div>
+      <div class="sheetBody">
+        <div class="grid">
+          <div class="opt" id="addHabit"><div class="emoji">🌱</div><div><b>Nouvelle habitude</b><div class="subtitle">Rejoindre un défi</div></div></div>
+          <div class="opt" id="addFriend"><div class="emoji">☀️</div><div><b>Ajouter un ami</b><div class="subtitle">Rejoindre via code</div></div></div>
+        </div>
+      </div>
     </div>
   </div>
-</dialog>
 
-<dialog id="taskDialog">
-  <form method="dialog" id="taskForm">
-    <div class="modal-head"><span id="dialogTitle">New habit</span><button type="button" class="icon-btn" id="closeDialog">⨉</button></div>
-    <div class="modal-body">
-      <div class="field">
-        <label for="f_title" id="labelTitle">Name</label>
-        <input type="text" id="f_title" placeholder="Ex: Brush teeth" required />
+  <!-- Modal: Habit -->
+  <div class="modal" id="modalHabit">
+    <div class="sheet">
+      <div class="sheetHeader">
+        <div id="habitTitle">Nouvelle habitude</div>
+        <button class="closeX" id="closeHabit">⨉</button>
       </div>
-      <div class="field">
-        <label for="f_cat" id="labelCategory">Category</label>
-        <select id="f_cat"></select>
+      <div class="sheetBody">
+        <div class="grid" id="step1"></div>
+        <div class="grid" id="step2" style="display:none"></div>
       </div>
-      <div class="field">
-        <label for="f_importance" id="labelPriority">Priority</label>
-        <select id="f_importance">
-          <option value="must">🟥 Must</option>
-          <option value="should">🟨 Should</option>
-        </select>
+    </div>
+  </div>
+
+  <!-- Modal: Friend -->
+  <div class="modal" id="modalFriend">
+    <div class="sheet">
+      <div class="sheetHeader">
+        <div>Ajouter un ami</div>
+        <button class="closeX" id="closeFriend">⨉</button>
       </div>
-      <div class="field">
-        <label for="f_recur" id="labelFrequency">Frequency</label>
-        <select id="f_recur">
-          <option value="daily">Daily</option>
-          <option value="specific">Specific day(s)</option>
-          <option value="weekly">Weekly target</option>
-        </select>
-      </div>
-      <div class="field" id="weeklyWrap" style="display:none">
-        <label for="f_weeklyTimes" id="weeklyTimesLabel">Times per week</label>
-        <select id="f_weeklyTimes">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-        </select>
-      </div>
-      <div class="field" id="specificWrap" style="display:none">
-        <label id="specificDaysLabel">Days of the week</label>
-        <div class="weekday-picker" id="specificDays"></div>
-      </div>
-      <div class="field" id="reminderField" style="display:none">
-        <label class="toggle">
-          <input type="checkbox" id="f_notifyDaily" />
-          <span id="reminderLabel">Daily reminder</span>
-        </label>
-        <div class="reminder-time" id="reminderTimeWrap" role="group" aria-labelledby="reminderTimeLabel">
-          <span class="reminder-time-label" id="reminderTimeLabel">Reminder time</span>
-          <div class="reminder-time-inputs">
-            <label class="sr-only" for="f_reminderHour" id="reminderHourLabel">Hour</label>
-            <select id="f_reminderHour" aria-labelledby="reminderHourLabel">
-              <option value="00">00</option>
-              <option value="01">01</option>
-              <option value="02">02</option>
-              <option value="03">03</option>
-              <option value="04">04</option>
-              <option value="05">05</option>
-              <option value="06">06</option>
-              <option value="07">07</option>
-              <option value="08">08</option>
-              <option value="09" selected>09</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-              <option value="14">14</option>
-              <option value="15">15</option>
-              <option value="16">16</option>
-              <option value="17">17</option>
-              <option value="18">18</option>
-              <option value="19">19</option>
-              <option value="20">20</option>
-              <option value="21">21</option>
-              <option value="22">22</option>
-              <option value="23">23</option>
-            </select>
-            <span aria-hidden="true">:</span>
-            <label class="sr-only" for="f_reminderMinute" id="reminderMinuteLabel">Minute</label>
-            <select id="f_reminderMinute" aria-labelledby="reminderMinuteLabel">
-              <option value="00">00</option>
-              <option value="05">05</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="20">20</option>
-              <option value="25">25</option>
-              <option value="30">30</option>
-              <option value="35">35</option>
-              <option value="40">40</option>
-              <option value="45">45</option>
-              <option value="50">50</option>
-              <option value="55">55</option>
-            </select>
+      <div class="sheetBody">
+        <div class="grid">
+          <div class="qr" aria-label="QR factice"></div>
+          <div class="field">
+            <label><b>Entrer le code de l’ami</b></label>
+            <input id="friendCode" type="text" placeholder="ABCDE1" maxlength="6" style="text-transform:uppercase"/>
+          </div>
+          <div class="field">
+            <label><b>Ton code</b></label>
+            <div style="display:flex; gap:8px; align-items:center">
+              <input id="myCode" type="text" readonly/>
+              <button class="btn" id="regenCode">Régénérer</button>
+            </div>
+          </div>
+          <div class="grid" style="grid-template-columns:1fr 1fr">
+            <button class="btn" id="cancelFriend">Annuler</button>
+            <button class="btn primary" id="validateFriend">Valider</button>
           </div>
         </div>
-        <p class="field-note" id="reminderNote">Send a notification every day at your chosen time.</p>
       </div>
-      <div class="field">
-        <label for="f_emoji" id="labelVisual">Visual</label>
-        <input type="text" id="f_emoji" placeholder="Ex: 🌱" maxlength="3" />
-        <div class="emoji-picker">
-          <input type="search" id="emojiSearch" placeholder="Search (fruit, workout, relax...)" />
-          <div class="emoji-results" id="emojiResults"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Info (ex-Paramètres) -->
+  <div class="modal" id="modalSettings">
+    <div class="sheet">
+      <div class="sheetHeader">
+        <div>Info</div>
+        <button class="closeX" id="closeSettings">⨉</button>
+      </div>
+      <div class="sheetBody">
+        <div class="grid">
+          <div class="opt">
+            <div><b>Période affichée</b>
+              <div class="subtitle">Classements & badges amis</div>
+              <div style="margin-top:6px;display:flex;gap:8px">
+                <button class="btn" data-period="30">30 jours</button>
+                <button class="btn" data-period="all">Total</button>
+              </div>
+            </div>
+          </div>
+          <!-- Légende barème emoji score -->
+          <div class="opt">
+            <div>
+              <b>Barème des scores </b>
+              <div class="subtitle" id="legendText"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="modal-actions">
-      <button type="button" class="icon-btn danger" id="deleteTask" style="display:none">Delete</button>
-      <button class="icon-btn primary" id="saveTask" value="default">Save</button>
-    </div>
-  </form>
-</dialog>
+  </div>
 
-<dialog id="categoryDialog">
-  <form method="dialog" id="categoryForm">
-    <div class="modal-head"><span id="catDialogTitle">New category</span><button type="button" class="icon-btn" id="closeCategoryDialog">⨉</button></div>
-    <div class="modal-body">
-      <div class="field">
-        <label for="c_name" id="categoryNameLabel">Name</label>
-        <input type="text" id="c_name" placeholder="Ex: Mindfulness" required />
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button type="button" class="icon-btn danger" id="deleteCategory" style="display:none">Delete</button>
-      <button type="button" class="icon-btn primary" id="saveCategory" value="default">Save</button>
-    </div>
-  </form>
-</dialog>
+</div>
 
-<script src="index.js"></script>
+<script>
+/* ======= Données ======= */
+const CATS=[
+  {id:'sante',emoji:'🩺',nom:'Santé'},
+  {id:'relations',emoji:'🤝',nom:'Relations'},
+  {id:'esprit',emoji:'🧠',nom:'Esprit'},
+  {id:'corps',emoji:'💪',nom:'Corps'},
+  {id:'vie',emoji:'🧺',nom:'Vie'},
+  {id:'loisirs',emoji:'🎨',nom:'Loisirs'},
+  {id:'repos',emoji:'😌',nom:'Repos'}
+];
+const CHALLENGES=[
+  {id:'screenoff',cat:'sante',emoji:'📵',titre:'Écran coupé avant lit',levels:['10 min','30 min','1 h'],amis:['Anna','Ben','Chloé']},
+  {id:'repas',cat:'sante',emoji:'🥗',titre:'Repas sain',levels:['1 repas','2 repas','3 repas'],amis:['Ben','Duc']},
+  {id:'lire',cat:'esprit',emoji:'📖',titre:'Lire',levels:['5 min','15 min','30 min'],amis:['Chloé']},
+  {id:'etire',cat:'corps',emoji:'🤸',titre:'Étirements',levels:['3 min','10 min','20 min'],amis:['Anna']},
+  {id:'ranger',cat:'vie',emoji:'🧽',titre:'Rangement express',levels:['5 min','10 min','20 min'],amis:['Chloé']},
+  {id:'creer',cat:'loisirs',emoji:'🎸',titre:'Créer / Jouer',levels:['5 min','15 min','30 min'],amis:['Ben']},
+  {id:'respirer',cat:'repos',emoji:'🌬️',titre:'Respiration',levels:['2 min','5 min','10 min'],amis:['Anna']}
+];
+const HOME_SELECTION=['screenoff','repas','lire','etire','ranger','creer','respirer'];
 
+const levelTxt2={0:'',1:'💧1',2:'💧2',3:'💧3'};
+const levelTxt={0:'',1:'💧',2:'💧💧',3:'💧💧💧'};
+const levelPts={0:0,1:1,2:2,3:3};
+
+/* ======= Amis / événements (60 j) ======= */
+const FRIENDS=['Anna','Ben','Chloé','Duc'];
+const friendEvents={};
+(function seedFriendEvents(){
+  const now=Date.now();
+  FRIENDS.forEach(n=>{
+    friendEvents[n]=[];
+    for(let d=0; d<60; d++){
+      if(Math.random()<0.45){
+        const lvl=[1,1,2,3][Math.floor(Math.random()*4)];
+        friendEvents[n].push({ts: now - d*864e5, pts: levelPts[lvl]});
+      }
+    }
+  });
+})();
+
+/* ======= Claps totaux par défi et par utilisateur (0–100, fixés aléatoirement) ======= */
+const challengeClaps={}; // {challengeId:{ 'Anna':42, ..., 'Moi':73 }}
+(function seedClaps(){
+  CHALLENGES.forEach(c=>{
+    challengeClaps[c.id]={};
+    [...new Set([...c.amis,'Moi'])].forEach(n=>{
+      challengeClaps[c.id][n]=Math.floor(Math.random()*101); // 0..100
+    });
+  });
+})();
+
+/* ======= Helpers ======= */
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const sumPeriod=(arr,period)=> period==='all' ? arr.reduce((a,e)=>a+e.pts,0)
+                                             : arr.filter(e=>e.ts>=Date.now()-30*864e5).reduce((a,e)=>a+e.pts,0);
+function fmtDate(d){const m=['01','02','03','04','05','06','07','08','09','10','11','12'][d.getMonth()];const j=String(d.getDate()).padStart(2,'0');const J=['Di','Lu','Ma','Me','Je','Ve','Sa'][d.getDay()];return `${J} ${j}/${m}`;}
+
+/* === Barème des niveaux (tooltips) === */
+function levelEmojiFromScore(v){
+  if(v<=9) return '🌰'; if(v<=99) return '🌱'; if(v<=199) return '🍀'; if(v<=299) return '🌼';
+  if(v<=399) return '🌻'; if(v<=499) return '🌷'; if(v<=599) return '🌹'; if(v<=699) return '🪻';
+  if(v<=799) return '💐'; return '🎋';
+}
+function emojiScaleLegend() {
+  return [
+    '🌰 0–9 — Graine — début du chemin',
+    '🌱 10–99 — Pousse — premiers pas',
+    '🍀 100–199 — Trèfle — petites victoires',
+    '🌼 200–299 — Bourgeon — régularité naissante',
+    '🌻 300–399 — Tournesol — confiance qui grandit',
+    '🌷 400–499 — Tulipe — curiosité épanouie',
+    '🌹 500–599 — Rose — maîtrise élégante',
+    '🪻 600–699 — Lavande — calme et constance',
+    '💐 700–799 — Bouquet — harmonie des savoirs',
+    '🎋 800+ — Bambou — sagesse durable'
+  ].join('<br>');
+}
+function scoreBreakdownTitle(drops,claps){
+  const total=drops+claps;
+  return `${levelEmojiFromScore(total)} ${total}`;
+}
+
+/* ======= Score = 💧(défi) + ☀️(claps totaux) ======= */
+function scoreFor(challengeId, name, drops){
+  const cl=challengeClaps[challengeId]?.[name] ?? 0;
+  return {total:(drops+cl), claps:cl, drops};
+}
+
+/* ======= Période globale (paramètres) ======= */
+let periodSetting='30';
+
+/* ======= Sélecteur de date ======= */
+let dayOffset=0;
+function currentDate(){ const t=new Date(); t.setHours(0,0,0,0); t.setDate(t.getDate()+dayOffset); return t; }
+function renderDateBar(){
+  $("#dateLabel").textContent = fmtDate(currentDate());
+  const dropsToday = $$('#cards .levelBtn').map(b=>levelPts[Number(b.dataset.level||0)]).reduce((a,b)=>a+b,0);
+  const sunsToday = Math.floor(Math.random()*11); // 0..10 (démo)
+  $("#todayCount").textContent = `💧${dropsToday}  ☀️${sunsToday}`;
+}
+$("#prevDay").onclick=()=>{ dayOffset--; renderDateBar(); };
+$("#nextDay").onclick=()=>{ dayOffset++; renderDateBar(); };
+$("#todayBtn").onclick=()=>{ dayOffset=0; renderDateBar(); };
+
+/* ======= Heat background ======= */
+function setHeat(pct){ $("#heat").style.height=`${Math.max(0,Math.min(100,pct))}%`; }
+function computeGlobalDrops(){ return $$('#cards .levelBtn .num').map(n=>Number(n.textContent||0)).reduce((a,b)=>a+b,0); }
+
+/* ======= Cartes ======= */
+let activeCardId=null, refBtn=null;
+function findById(id){ return CHALLENGES.find(c=>c.id===id); }
+
+function renderCards(){
+  const root=$("#cards"); root.innerHTML='';
+  HOME_SELECTION.forEach(id=>{
+    const it=findById(id);
+    const card=document.createElement('article'); card.className='card';
+
+    // Contenu (à gauche)
+    const cont=document.createElement('div'); cont.className='content';
+    const title=document.createElement('div'); title.className='title';
+    title.innerHTML=`<span style="font-size:18px">${it.emoji}</span> <span>${it.titre}</span>`;
+    const sub=document.createElement('div'); sub.className='subtitle'; sub.textContent='';
+
+    const friends=document.createElement('div'); friends.className='friends';
+    friends.addEventListener('click', (e) => {
+      if (e.target && e.target.nodeType === 3) return;
+      const badge = e.target.closest('.badge');
+      if (badge) {
+        openDetail(it.id, btn, 'friends');
+        e.stopPropagation();
+      }
+    });
+
+    it.amis.forEach(n=>{
+      const drops=sumPeriod(friendEvents[n]||[], periodSetting);
+      const {total,claps} = scoreFor(it.id, n, drops);
+
+      const b=document.createElement('div'); b.className='badge';
+      const name=document.createElement('span'); name.className='name'; name.textContent=n;
+      const maybeSun = (Math.random()>=0.5) ? (()=>{ const s=document.createElement('span'); s.className='sun'; s.textContent='☀️'; s.title = `${claps} claps (démo)`; return s; })() : null;
+      const hot=document.createElement('div'); hot.className='streak'; 
+      const todayLvl = 1 + Math.floor(Math.random()*3);
+      hot.textContent = levelTxt2[todayLvl];
+      hot.setAttribute('title','Niveau de réalisation du jour');
+
+      if(maybeSun){ b.append(name, maybeSun, hot); } else { b.append(name, hot); }
+      friends.appendChild(b);
+    });
+    cont.append(title,sub,friends);
+
+    // Colonne niveau (à DROITE)
+    const col=document.createElement('div'); col.className='levelCol';
+    const btn=document.createElement('button'); btn.className='levelBtn';
+    const startTotal = Math.floor(Math.random()*200)+1;
+    btn.dataset.level='0'; 
+    btn.dataset.total=String(startTotal);
+    btn.dataset.cid=it.id;
+    btn.innerHTML=`<div class="self" title=""></div><div class="mini"></div><div class="big"><span class="num">${startTotal}</span></div>`;
+
+    const updateMini = ()=>{ const L=Number(btn.dataset.level); btn.querySelector('.mini').textContent = levelTxt[L]; };
+    const updateSelf = ()=>{ 
+      const drops = Number(btn.dataset.total||0); 
+      const claps = challengeClaps[btn.dataset.cid]?.['Moi'] ?? 0;
+      const score = drops + claps;
+      const el = btn.querySelector('.self');
+      el.textContent = levelEmojiFromScore(score); 
+      el.setAttribute('title', scoreBreakdownTitle(drops,claps));
+    };
+    updateMini(); updateSelf();
+
+    btn.onclick=()=>{
+      const prev=Number(btn.dataset.level);
+      const next=(prev+1)%4; btn.dataset.level=String(next);
+      const delta = next===0 ? -levelPts[prev] : (levelPts[next]-levelPts[prev]);
+      const newDrops = Math.max(0, Number(btn.dataset.total) + delta);
+      btn.dataset.total=String(newDrops);
+      btn.querySelector('.num').textContent=String(newDrops);
+      updateMini(); updateSelf();
+      if(next>0){ card.classList.add('done'); sub.textContent = `${it.levels[next-1]}`; } else { card.classList.remove('done'); sub.textContent=''; }
+      setHeat(Math.min(100, computeGlobalDrops()));
+      renderDateBar();
+    };
+
+    col.append(btn);
+
+    // Clics carte : ailleurs que sur amis => onglet Progression
+    card.addEventListener('click',(ev)=>{
+      if(ev.target.closest('.levelBtn')) return;
+      if(ev.target.closest('.friends')) return;
+      openDetail(it.id, btn, 'progress');
+    });
+
+    card.append(cont,col);
+    root.appendChild(card);
+  });
+
+  setHeat(Math.min(100, computeGlobalDrops()));
+  renderDateBar();
+}
+
+/* ======= Detail ======= */
+function openDetail(id, btnRef, tab='friends'){
+  activeCardId=id; refBtn=btnRef;
+  $("#home").classList.remove('active'); $("#detail").classList.add('active');
+  $("#daysWrap").style.display='none';
+
+  $$('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  $$('#detail .view').forEach(v=>v.classList.remove('active'));
+  $(`#tab-${tab}`).classList.add('active');
+
+  const it=findById(id);
+  // 💧 retiré du titre
+  $("#detailTitle").textContent=`${it.emoji} ${it.titre}`;
+  renderRank();
+  renderCalendar();
+}
+$("#backHome").onclick=()=>{ $("#detail").classList.remove('active'); $("#home").classList.add('active'); $("#daysWrap").style.display='flex'; };
+$("#brand").onclick=()=>{ $("#detail").classList.remove('active'); $("#home").classList.add('active'); $("#daysWrap").style.display='flex'; };
+
+/* Classement (scoreEmoji = scoreBreakdownTitle) */
+function renderRank(){
+  const it=findById(activeCardId);
+  const period=$("#periodSel").value;
+
+  const rows = [
+    ...it.amis.map(n=>{
+      const drops = sumPeriod(friendEvents[n]||[],period);
+      const claps = challengeClaps[it.id]?.[n] ?? 0;
+      const total = drops + claps;
+      return {n, drops, claps, total, me:false};
+    }),
+    (function meRow(){
+      const drops = Number(refBtn?.dataset.total||0);
+      const claps = challengeClaps[it.id]?.['Moi'] ?? 0;
+      const total = drops + claps;
+      return {n:'Moi', drops, claps, total, me:true};
+    })()
+  ].sort((a,b)=>b.total-a.total);
+
+  const root=$("#rank"); root.innerHTML='';
+  rows.forEach(({n,drops,claps,total,me})=>{
+    const row=document.createElement('div'); row.className='row';
+
+    const left=document.createElement('div');
+    left.style.display='flex'; left.style.alignItems='center'; left.style.gap='8px';
+
+    const av=document.createElement('span');
+    av.title=scoreBreakdownTitle(drops,claps);
+
+    const bigScore=document.createElement('span');
+    bigScore.className='scoreEmoji';
+    bigScore.textContent=scoreBreakdownTitle(drops,claps); 
+
+    const name=document.createElement('b');
+    name.textContent=`${n}${me?' (toi)':''}`;
+
+    left.append(av, bigScore, name);
+
+    const right=document.createElement('div');
+    right.style.display='flex'; right.style.alignItems='center'; right.style.gap='12px';
+
+    const dropsSpan=document.createElement('span');
+    dropsSpan.style.fontWeight='700';
+    dropsSpan.title='💧 sur la période';
+    dropsSpan.textContent=`💧${drops}`;
+
+    const clapBtn=document.createElement('button');
+    clapBtn.className='clap navbtn';
+    clapBtn.dataset.liked='0';
+    clapBtn.title='☀️ claps';
+    clapBtn.textContent=`☀️ ${claps}`;
+
+    clapBtn.onclick=()=>{
+      if(clapBtn.dataset.liked==='1') return;
+      clapBtn.dataset.liked='1'; 
+      const cur=parseInt(clapBtn.textContent.replace(/[^\d]/g,''))||0;
+      clapBtn.textContent=`☀️ ${cur+1}`; 
+      clapBtn.style.opacity=.7;
+    };
+
+    right.append(dropsSpan, clapBtn);
+
+    row.append(left, right);
+    root.appendChild(row);
+  });
+}
+$("#periodSel").addEventListener('change',renderRank);
+
+/* Calendrier (☀️ en haut, 💧 en bas, totaux mois dans label) */
+let calMonthOffset=0;
+function monthInfo(offset=0){
+  const base=new Date(); base.setDate(1); base.setMonth(base.getMonth()+offset);
+  const y=base.getFullYear(), m=base.getMonth();
+  return {y,m, firstDay:(new Date(y,m,1).getDay()+6)%7, days:new Date(y,m+1,0).getDate()};
+}
+function renderCalendar(){
+  const wrap=$("#cal"); wrap.innerHTML='';
+  const {y,m,firstDay,days}=monthInfo(calMonthOffset);
+  const monthNames=['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'];
+
+  let monthClaps=0, monthDrops=0;
+
+  for(let i=0;i<firstDay;i++){ const c=document.createElement('div'); c.className='cell'; c.style.opacity=.35; wrap.appendChild(c); }
+  const today=new Date(); const isThisMonth=(calMonthOffset===0);
+
+  for(let d=1; d<=days; d++){
+    const c=document.createElement('div'); c.className='cell';
+
+    // numéro du jour
+    const dn=document.createElement('div'); dn.className='dayNum'; dn.textContent=String(d); c.appendChild(dn);
+
+    // 💧 niveau du jour (démo)
+    const lvl=[0,1,1,2,3,0][Math.floor(Math.random()*6)];
+    const drops = lvl;
+    const dropEl=document.createElement('div'); dropEl.className='dropMark'; dropEl.textContent=levelTxt2[lvl]||''; c.appendChild(dropEl);
+    monthDrops += drops;
+
+    // ☀️ claps du jour : 50% -> 0, sinon 1..4
+    let claps=0;
+    if(Math.random()>=0.5){ claps = 1 + Math.floor(Math.random()*4); }
+    const clapEl=document.createElement('div'); clapEl.className='clapMark'; clapEl.textContent=claps?`☀️${claps}`:''; c.appendChild(clapEl);
+    monthClaps += claps;
+
+    if(isThisMonth && d===today.getDate()){ c.style.outline=`2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--green')}`; }
+
+    // clic jour => aller à ce jour dans l'accueil
+    c.onclick=()=>{
+      const base=new Date(); base.setDate(1); base.setMonth(base.getMonth()+calMonthOffset);
+      const target=new Date(base.getFullYear(), base.getMonth(), d);
+      const now=new Date(); now.setHours(0,0,0,0);
+      dayOffset = Math.round((target - now)/86400000);
+      $("#detail").classList.remove('active'); $("#home").classList.add('active'); $("#daysWrap").style.display='flex';
+      renderDateBar();
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+    wrap.appendChild(c);
+  }
+
+  // Label mois + totaux
+  $("#monthLabel").textContent=`${monthNames[m]} ${y} · ☀️${monthClaps} 💧${monthDrops}`;
+}
+$("#prevMonth").onclick=()=>{ calMonthOffset--; renderCalendar(); };
+$("#nextMonth").onclick=()=>{ calMonthOffset++; renderCalendar(); };
+
+/* Tabs */
+$$('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    $$('.tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    const name=t.dataset.tab;
+    $$('#detail .view').forEach(v=>v.classList.remove('active'));
+    $('#tab-'+name).classList.add('active');
+  });
+});
+
+/* ======= Modals ======= */
+const modalAdd=$("#modalAdd"), modalHabit=$("#modalHabit"), modalFriend=$("#modalFriend"), modalSettings=$("#modalSettings");
+const open = m => m.classList.add('on');
+const close = m => m.classList.remove('on');
+
+$("#addBtn").onclick=()=>open(modalAdd);
+$("#closeAdd").onclick=()=>close(modalAdd);
+$("#addHabit").onclick=()=>{ close(modalAdd); open(modalHabit); renderStep1(); };
+$("#addFriend").onclick=()=>{ close(modalAdd); open(modalFriend); };
+// Bouton Info (ex-Paramètres)
+$("#settingsBtn").onclick=()=>{
+  open(modalSettings);
+  // Remplir la légende au vol
+  $("#legendText").innerHTML = emojiScaleLegend();
+};
+$("#closeSettings").onclick=()=>close(modalSettings);
+
+$("#closeHabit").onclick=()=>close(modalHabit);
+$("#closeFriend").onclick=()=>close(modalFriend);
+$("#cancelFriend").onclick=()=>close(modalFriend);
+$("#validateFriend").onclick=()=>{ alert("Ami ajouté (démo)"); close(modalFriend); };
+
+function genCode(){ const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; let s=''; for(let i=0;i<6;i++){ s+=chars[Math.floor(Math.random()*chars.length)]; } return s; }
+$("#myCode").value=genCode();
+$("#regenCode").onclick=()=>{ $("#myCode").value=genCode(); };
+
+/* Habit steps (sans niveau) */
+let pickedCat=null, pickedItem=null;
+function renderStep1(){
+  $("#step1").style.display='grid'; $("#step2").style.display='none';
+  const root=$("#step1"); root.innerHTML='';
+  CATS.forEach(c=>{
+    const el=document.createElement('div'); el.className='opt';
+    el.innerHTML=`<div class="emoji">${c.emoji}</div><div><b>${c.nom}</b></div>`;
+    el.onclick=()=>{ pickedCat=c.id; renderStep2(); };
+    root.appendChild(el);
+  });
+}
+function renderStep2(){
+  $("#step1").style.display='none'; $("#step2").style.display='grid';
+  const root=$("#step2"); root.innerHTML='';
+  CHALLENGES.filter(x=>x.cat===pickedCat).forEach(x=>{
+    const el=document.createElement('div'); el.className='opt';
+    el.innerHTML=`<div class="emoji">${x.emoji}</div><div><b>${x.titre}</b><div class="subtitle">${x.levels.join(' · ')}</div></div>`;
+    el.onclick=()=>{ pickedItem=x; alert("Habitude ajoutée (démo)"); close(modalHabit); };
+    root.appendChild(el);
+  });
+}
+
+/* Paramètres: choix période globale */
+$$('#modalSettings .btn[data-period]').forEach(b=>{
+  b.onclick=()=>{ periodSetting=b.dataset.period; close(modalSettings); renderCards(); if($("#detail").classList.contains('active')) renderRank(); };
+});
+
+/* ======= Init ======= */
+function renderCalendarAndKeepMonth(){ renderCalendar(); }
+renderDateBar();
+renderCards();
+renderCalendarAndKeepMonth();
+</script>
 </body>
 </html>
