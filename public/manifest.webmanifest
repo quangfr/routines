@@ -2,7 +2,7 @@
   "name": "Habitu.be - Your week, simplified",
   "short_name": "Habitu.be",
   "description": "See your progress, one week at a time.",
-  "start_url": ".",
+  "start_url": "./index.html",
   "display": "standalone",
   "scope": ".",
   "background_color": "#f4f7fb",
