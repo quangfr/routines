@@ -10,6 +10,7 @@ button,.select,.tab,.stab,.btn,.btnToggle,.navbtn,.calBtn,.backMini{font:600 13p
 .top{position:sticky;top:0;background:var(--bg);z-index:6;border-bottom:1px solid var(--border);padding:6px var(--gap);display:flex;align-items:center;gap:8px}
 .brand{font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px}.brand .logo{font-size:18px}.spacer{flex:1}
 .daysWrap{position:sticky;top:44px;background:var(--bg);z-index:5;border-bottom:1px solid var(--border);padding:6px var(--gap);display:flex;align-items:center;gap:6px;justify-content:space-between}
+.rightBtns{display:flex;flex-direction:row;gap:6px;align-items:flex-end} /* → & ＋ empilés à droite */
 .dateLabel,.todayCount{font-weight:700;padding:0;border:none;background:transparent}
 .list{padding:var(--gap);display:grid;grid-template-columns:1fr;gap:var(--gap);position:relative;z-index:1}
 .card{border:1px solid var(--border);background:var(--card);border-radius:var(--r);display:grid;grid-template-columns:1fr 64px;overflow:hidden}
@@ -61,7 +62,6 @@ textarea{min-height:72px}
     <div class="spacer"></div>
     <select id="spaceSel" class="select" title="Changer d’espace"></select>
     <button class="navbtn" id="settingsBtn" title="Info">ⓘ</button>
-    <button class="navbtn" id="addBtn" title="Ajouter">＋</button>
   </div>
 
   <div class="daysWrap" id="daysWrap">
@@ -70,14 +70,21 @@ textarea{min-height:72px}
       <div class="dateLabel" id="dateLabel">—</div>
       <div class="todayCount" id="todayCount">🌱 0</div>
     </div>
-    <div style="display:flex;gap:6px"><button class="navbtn" id="nextDay">→</button></div>
+    <div class="rightBtns">
+      <button class="navbtn" id="nextDay">→</button>
+      <button class="navbtn" id="addBtn" title="Ajouter">＋</button>
+    </div>
   </div>
 
   <main id="home" class="view active"><div class="list" id="cards"></div></main>
 
   <section id="detail" class="view">
     <div class="detailHead"><button class="backMini" id="backHome">←</button><div class="detailTitle" id="detailTitle"></div></div>
-    <div class="tabs"><button class="tab active" data-tab="friends">👥 Amis</button><button class="tab" data-tab="progress">📅 Historique</button></div>
+    <div class="tabs">
+      <button class="tab active" data-tab="friends">👥 Amis</button>
+      <button class="tab" data-tab="progress">📅 Historique</button>
+      <button class="tab" data-tab="settings">⚙️ Paramètres</button>
+    </div>
     <div class="section">
       <div class="view active" id="tab-friends">
         <div class="rankHeader">
@@ -106,6 +113,23 @@ textarea{min-height:72px}
             </div>
           </div>
           <div class="calendar" id="cal"></div>
+        </div>
+      </div>
+      <div class="view" id="tab-settings">
+        <div class="grid">
+          <div class="field">
+            <label><b>Régularité</b> <span class="subtitle"></span></label>
+            <select id="freqSelect" class="select">
+              <option value="1">Quotidien</option>
+              <option value="2">Tous les 2 jours</option>
+              <option value="3">Tous les 3 jours</option>
+              <option value="4">Tous les 4 jours</option>
+              <option value="5">Tous les 5 jours</option>
+              <option value="6">Tous les 6 jours</option>
+               <option value="7">Hebdomadaire</option>
+            </select>
+           
+          </div>
         </div>
       </div>
     </div>
@@ -216,11 +240,25 @@ function lvlEmoji(v){if(v<=7)return'🌰';if(v<=14)return'🌱';if(v<=21)return'
 function legend(){return['🌰 0–7 — Graine','🌱 8–14 — Pousse','🍀 15–21 — Trèfle','🌼 22–28 — Bourgeon','🌻 29–35 — Tournesol','🌷 36–42 — Tulipe','🌹 43–49 — Rose','🪻 50–56 — Lavande','💐 57–64 — Bouquet','🎋 65+ — Bambou'].join('<br>');}
 function names(xs,m=3){if(xs.length<=m)return xs.join(', ');const s=xs.slice(0,m).join(', ');return `${s}… et ${xs.length-m} autres`;}
 
+/* === Espace / état === */
 let period='30';
 const SPACES={'D0PWE3':{emoji:'👤',label:'👤 Individu',type:'private',ch:CHALLENGES,desc:'Espace personnel.'},'E8D3FS':{emoji:'🏠',label:'🏠 Colocation',type:'group',ch:GROUP_CHALLENGES,desc:'Espace partagé à la maison.'},'WS32D7':{emoji:'❤️',label:'❤️ Famille',type:'group',ch:FAMILY_CHALLENGES,desc:'Routines familiales au quotidien.'},'SR3S0D':{emoji:'🏫',label:'🏫 Classe',type:'group',ch:CLASS_CHALLENGES,desc:'Vie de classe et rituels pédagogiques.'},'PD03XZ':{emoji:'🏢',label:'🏢 Bureau',type:'group',ch:OFFICE_CHALLENGES,desc:'Rituels simples pour mieux travailler.'}};
 let spaceId='D0PWE3', userName='Moi', dayOff=0, genThis=false;
+
+/* === Scores simulés === */
 const claps={};(()=>{const all=[...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,...CLASS_CHALLENGES,...OFFICE_CHALLENGES];all.forEach(c=>{claps[c.id]={};[...new Set([...c.amis,'Moi'])].forEach(n=>claps[c.id][n]=Math.floor(Math.random()*101));});})();
 
+/* === Fréquences par habitude (1..5) — 40% = 1/jour === */
+const FREQ={};
+function defaultFreq(){return Math.random()<0.4?1:rint(2,5)}
+;[...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,...CLASS_CHALLENGES,...OFFICE_CHALLENGES].forEach(h=>{FREQ[h.id]=FREQ[h.id]||defaultFreq()});
+
+/* === Visibilité déterministe par jour (25% masqué) === */
+function daySerial(d){return Math.floor(d.getTime()/86400000)} // jours depuis epoch
+function randDay(id,serial){let h=0;const s=id+':'+serial;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return (h%100)/100}
+function isVisibleToday(hid,d){const serial=daySerial(d);const f=FREQ[hid]||1;const due=(serial%f)===0;const hidden=(randDay(hid,serial)<0.25);return due && !hidden}
+
+/* === Helpers date & UI === */
 function curDate(){const t=new Date();t.setHours(0,0,0,0);t.setDate(t.getDate()+dayOff);return t;}
 function setHeat(p){$("#heat").style.height=`${Math.max(0,Math.min(100,p))}%`;}
 function getSpace(){return SPACES[spaceId]||SPACES['D0PWE3'];}
@@ -228,24 +266,32 @@ function listChallenges(){return getSpace().ch;}
 function findAny(id){return [...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,...CLASS_CHALLENGES,...OFFICE_CHALLENGES].find(c=>c.id===id);}
 
 function renderDateBar(){$("#dateLabel").textContent=fmtDate(curDate());const s=$$('#cards .levelBtn').map(b=>+b.dataset.doneToday||0).reduce((a,b)=>a+b,0);$("#todayCount").textContent=`🌱 ${s}`;}
-$("#prevDay").onclick=()=>{dayOff--;renderDateBar()};$("#nextDay").onclick=()=>{dayOff++;renderDateBar()};
+$("#prevDay").onclick=()=>{dayOff--;renderCards();renderDateBar()};$("#nextDay").onclick=()=>{dayOff++;renderCards();renderDateBar()};
 
+/* === Cartes (règles collectivisées pour tous les espaces) === */
 let activeId=null, refBtn=null;
 function renderCards(){
-  const root=$("#cards");root.innerHTML='';const isGroup=getSpace().type==='group';
+  const root=$("#cards");root.innerHTML='';
+  const d=curDate();
   listChallenges().forEach(it=>{
+    if(!isVisibleToday(it.id,d)) return; // fréquence + 25% aléatoire
+
     const card=document.createElement('article');card.className='card';
     const cont=document.createElement('div');cont.className='content';
     const title=document.createElement('div');title.className='title';title.innerHTML=`<span style="font-size:24px">${it.emoji}</span><span class="base">${it.titre}</span><span class="hint" id="h-${it.id}"></span>`;
     const friends=document.createElement('div');friends.className='friends';
-    if(isGroup){
-      let seedNames=[];
-      if(Math.random()<.5){const n=rint(1,2);seedNames=[...it.amis].sort(()=>Math.random()-.5).slice(0,n);const b=document.createElement('div');b.className='badge seed-badge';b.textContent=`🌱 ${names(seedNames)}`;friends.appendChild(b);}
-      if(Math.random()<.7){const n=rint(2,5),sun=[...it.amis].sort(()=>Math.random()-.5).slice(0,n);const b=document.createElement('div');b.className='badge sun-badge';b.textContent=`🌞 ${names(sun)}`;friends.appendChild(b);}
-      card._seedNames=seedNames;
-    }else{
-      const zero=Math.random()<.2;const n=zero?0:rint(1,5);const sun=n?[...it.amis].sort(()=>Math.random()-.5).slice(0,n):[];const b=document.createElement('div');b.className='badge sun-badge';b.textContent=n?`🌞 ${names(sun)}`:`🌞`;friends.appendChild(b);
+
+    // Badges selon règles "collectif" appliquées partout
+    let seedNames=[];
+    if(Math.random()<.5){ // 🌱
+      const n=rint(1,2);seedNames=[...it.amis].sort(()=>Math.random()-.5).slice(0,n);
+      const b=document.createElement('div');b.className='badge seed-badge';b.textContent=`🌱 ${names(seedNames)}`;friends.appendChild(b);
     }
+    if(Math.random()<.7){ // 🌞
+      const n=rint(2,5),sun=[...it.amis].sort(()=>Math.random()-.5).slice(0,n);
+      const b=document.createElement('div');b.className='badge sun-badge';b.textContent=`🌞 ${names(sun)}`;friends.appendChild(b);
+    }
+
     cont.append(title,friends);
 
     const col=document.createElement('div');col.className='levelCol';
@@ -254,24 +300,29 @@ function renderCards(){
     btn.dataset.basePlants=String(base);btn.dataset.plants=String(base);btn.dataset.suns=String(suns);btn.dataset.doneToday='0';
     const draw=()=>{const p=+btn.dataset.plants||0;const s=+btn.dataset.suns||0;const tot=p+s;btn.innerHTML=`<div class="big">${lvlEmoji(tot)}</div><div class="scoreText">${tot}</div>`};draw();
 
-    const updSeed=()=>{const sb=friends.querySelector('.seed-badge');if(!sb)return;const nm=card._seedNames||[];if(!nm.length){sb.remove();return}sb.textContent=`🌱 ${names(nm)}`};
+    const updSeed=()=>{const sb=friends.querySelector('.seed-badge');if(!sb)return;const nm=seedNames||[];if(!nm.length){sb.remove();return}sb.textContent=`🌱 ${names(nm)}`};
 
     const toggle=()=>{const done=btn.dataset.doneToday==='1', b=+btn.dataset.basePlants||0;
-      if(!done){btn.dataset.doneToday='1';btn.dataset.plants=String(b+1);card.classList.add('done');
-        if(getSpace().type==='group'){if(!Array.isArray(card._seedNames))card._seedNames=[];if(!card._seedNames.includes('Moi'))card._seedNames.push('Moi');if(!friends.querySelector('.seed-badge')){const sb=document.createElement('div');sb.className='badge seed-badge';friends.prepend(sb)}updSeed();}
-      }else{btn.dataset.doneToday='0';btn.dataset.plants=String(b);card.classList.remove('done');
-        if(getSpace().type==='group'){if(Array.isArray(card._seedNames)){const i=card._seedNames.indexOf('Moi');if(i>-1)card._seedNames.splice(i,1);updSeed();}}
+      if(!done){
+        btn.dataset.doneToday='1';btn.dataset.plants=String(b+1);card.classList.add('done');
+        if(!seedNames.includes('Moi'))seedNames=['Moi',...seedNames];
+        if(!friends.querySelector('.seed-badge')){const sb=document.createElement('div');sb.className='badge seed-badge';friends.prepend(sb)}
+        updSeed();
+      }else{
+        btn.dataset.doneToday='0';btn.dataset.plants=String(b);card.classList.remove('done');
+        const i=seedNames.indexOf('Moi');if(i>-1)seedNames.splice(i,1);updSeed();
       }
       draw();renderDateBar();setHeat($$('.levelBtn').reduce((a,b)=>a+(b.dataset.doneToday==='1'?10:0),0));
     };
     col.onclick=toggle;cont.onclick=()=>openDetail(it.id,btn);
+
     col.append(btn);card.append(cont,col);root.appendChild(card);
   });
   renderDateBar();
 }
 
 function populateCalWho(){const wrap=$("#calWhoWrap"),sel=$("#calWho");if(getSpace().type!=='group'){wrap.style.display='none';return}wrap.style.display='flex';sel.innerHTML='';sel.add(new Option('Tous','__all__'));sel.add(new Option('Moi','Moi'));(findAny(activeId)?.amis||[]).forEach(n=>sel.add(new Option(n,n)));sel.value='__all__';}
-function openDetail(id,btnRef){activeId=id;refBtn=btnRef;$("#home").classList.remove('active');$("#detail").classList.add('active');$("#daysWrap").style.display='none';$$('.tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab="friends"]').classList.add('active');$$('#detail .view').forEach(v=>v.classList.remove('active'));$('#tab-friends').classList.add('active');const it=findAny(id);$("#detailTitle").textContent=`${it.emoji} ${it.titre}`;renderRank();populateCalWho();renderCalendar();}
+function openDetail(id,btnRef){activeId=id;refBtn=btnRef;$("#home").classList.remove('active');$("#detail").classList.add('active');$("#daysWrap").style.display='none';$$('.tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab="friends"]').classList.add('active');$$('#detail .view').forEach(v=>v.classList.remove('active'));$('#tab-friends').classList.add('active');const it=findAny(id);$("#detailTitle").textContent=`${it.emoji} ${it.titre}`;renderRank();populateCalWho();renderCalendar();renderHabitSettings();}
 $("#backHome").onclick=$("#brand").onclick=()=>{$("#detail").classList.remove('active');$("#home").classList.add('active');$("#daysWrap").style.display='flex'};
 
 function brnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
@@ -303,14 +354,22 @@ function renderCalendar(){
   for(let d=1;d<=days;d++){const c=document.createElement('div');c.className='cell';const dn=document.createElement('div');dn.className='dayNum';dn.textContent=String(d);c.appendChild(dn);
     if(Math.random()<prob){const seed=document.createElement('div');seed.className='seedMark';seed.textContent='🌱';c.appendChild(seed);monthSeeds++}
     if(sameMonth&&d===today.getDate()){c.style.outline=`2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--green')}`}
-    c.onclick=()=>{const b=new Date();b.setDate(1);b.setMonth(b.getMonth()+calOff);const tgt=new Date(b.getFullYear(),b.getMonth(),d),now=new Date();now.setHours(0,0,0,0);dayOff=Math.round((tgt-now)/86400000);$("#detail").classList.remove('active');$("#home").classList.add('active');$("#daysWrap").style.display='flex';renderDateBar();window.scrollTo({top:0,behavior:'smooth'})};
+    c.onclick=()=>{const b=new Date();b.setDate(1);b.setMonth(b.getMonth()+calOff);const tgt=new Date(b.getFullYear(),b.getMonth(),d),now=new Date();now.setHours(0,0,0,0);dayOff=Math.round((tgt-now)/86400000);$("#detail").classList.remove('active');$("#home").classList.add('active');$("#daysWrap").style.display='flex';renderCards();renderDateBar();window.scrollTo({top:0,behavior:'smooth'})};
     wrap.appendChild(c)
   }
-  $("#monthLabel").textContent=`${months[m]} ${y} · 🌱${monthSeeds}`;
+  $("#monthLabel").textContent=`${months[m]} ${y}  🌱${monthSeeds}`;
 }
 $("#prevMonth").onclick=()=>{calOff--;renderCalendar()};$("#nextMonth").onclick=()=>{calOff++;renderCalendar()};$("#calWho")?.addEventListener('change',renderCalendar);
 
-$$('.tab').forEach(t=>t.addEventListener('click',()=>{$$('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');const n=t.dataset.tab;$$('#detail .view').forEach(v=>v.classList.remove('active'));$('#tab-'+n).classList.add('active');if(n==='progress')renderCalendar()}));
+/* Tabs détail (incluant Paramètres) */
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{$$('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');const n=t.dataset.tab;$$('#detail .view').forEach(v=>v.classList.remove('active'));$('#tab-'+n).classList.add('active');if(n==='progress')renderCalendar();if(n==='settings')renderHabitSettings()}));
+
+/* Onglet Paramètres d'une habitude */
+function renderHabitSettings(){
+  const sel=$("#freqSelect");if(!activeId||!sel)return;
+  sel.value=String(FREQ[activeId]||1);
+  sel.onchange=()=>{FREQ[activeId]=parseInt(sel.value||'1',10);renderCards();};
+}
 
 const mAdd=$("#modalAdd"),mHabit=$("#modalHabit"),mInvite=$("#modalInvite"),mSettings=$("#modalSettings"),mSpace=$("#modalSpace"),mWizard=$("#modalWizard");
 const open=m=>m.classList.add('on'), close=m=>m.classList.remove('on');
