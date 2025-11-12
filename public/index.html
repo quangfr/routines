@@ -1,45 +1,77 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>Habitu.be — Prototype (simplifié)</title>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Habitu.be — Les petites habitudes qui changent tout </title>
 <style>
 :root{--bg:#f7f3ea;--card:#fffdf8;--text:#1e1f1a;--green:#2a7a57;--border:#c6beae;--r:4px;--gap:8px;--fs:13px}
-*{box-sizing:border-box}html,body{height:100%}body{margin:0;font:400 var(--fs)/1.35 system-ui,-apple-system,Roboto,sans-serif;color:var(--text);background:var(--bg)}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;font:400 var(--fs)/1.35 system-ui,-apple-system,Roboto,sans-serif;color:var(--text);background:var(--bg)}
 #app{max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;position:relative}
-button,.select,.tab,.stab,.btn,.btnToggle,.navbtn,.calBtn,.backMini{font:600 13px/1.2 system-ui,-apple-system,Roboto,sans-serif;padding:6px 10px;border-radius:var(--r);cursor:pointer;border:1px solid var(--border);background:var(--card)}
-.btn.primary{background:var(--green);color:#fff;border-color:transparent}.btn.danger{border-color:#d99;color:#600;background:#fff5f5}
-.btnToggle.active,.tab.active,.stab.active{outline:2px solid var(--green)}.select{appearance:none}
+
+button,.select,.tab,.stab,.btn,.btnToggle,.navbtn,.calBtn,.backMini{
+  font:600 13px/1.2 system-ui,-apple-system,Roboto,sans-serif;padding:6px 10px;border-radius:var(--r);
+  cursor:pointer;border:1px solid var(--border);background:var(--card)
+}
+.btn.primary{background:var(--green);color:#fff;border-color:transparent}
+.btn.danger{border-color:#d99;color:#600;background:#fff5f5}
+.btnToggle.active,.tab.active,.stab.active{outline:2px solid var(--green)}
+.select{appearance:none}
+
 .top{position:sticky;top:0;background:var(--bg);z-index:6;border-bottom:1px solid var(--border);padding:6px var(--gap);display:flex;align-items:center;gap:8px}
 .brand{font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px}.brand .logo{font-size:18px}.spacer{flex:1}
+
 .daysWrap{position:sticky;top:44px;background:var(--bg);z-index:5;border-bottom:1px solid var(--border);padding:6px var(--gap);display:flex;align-items:center;gap:6px;justify-content:space-between}
 .rightBtns{display:flex;flex-direction:row;gap:6px;align-items:flex-end}
 .dateLabel,.todayCount{font-weight:700;padding:0;border:none;background:transparent}
+
 .list{padding:var(--gap);display:grid;grid-template-columns:1fr;gap:var(--gap);position:relative;z-index:1}
 .card{border:1px solid var(--border);background:var(--bg);border-radius:var(--r);display:grid;grid-template-columns:64px 1fr;overflow:hidden}
-.card.done{border:2px solid var(--green)}
+
+/* Encadrés par état + auteur + mode */
+.card.s0{border:2px solid #e05555}                 /* rouge = À faire (Chacun) */
+.card.s0shared{border:2px solid #bfb9ad}           /* gris = À faire (Partagé) */
+.card.s1me,.card.s1help{border:2px solid #e6c200}  /* jaune = Je fais / J'aide */
+.card.s1other,.card.s2other{border:2px solid #bfb9ad} /* gris = En cours (autre) / Fait (autre) */
+.card.s2me{border:2px solid var(--green)}          /* vert = Fait (moi) */
+
 .content{padding:4px;display:flex;flex-direction:column;gap:4px}
 .title{font-weight:700;display:flex;align-items:center;gap:4px;font-size:14px;min-height:22px;justify-content:space-between}
-.title .left{display:flex;align-items:center;gap:4px}
-.title .hint{font-size:10px;color:#8f8f8c;font-weight:600}
+.title .left{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .title .base.strike{text-decoration:line-through;opacity:.75}
 .editPen{background-color:transparent;border-color:var(--border);padding:4px;}
 .desc{font-size:11px;color:#8f8f8c;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:default}
 .desc.open{-webkit-line-clamp:unset;display:block;white-space:pre-line;overflow:visible}
 .desc.hidden{display:none}
+
+/* Badges */
 .friends{margin-top:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .badge{display:flex;align-items:center;gap:6px;padding:4px 6px;border:1px solid var(--border);border-radius:var(--r);background:#fff;font-size:11px;line-height:1.2}
+.badge.heart{border-color:#c6beae;background:#fff0fb}
+.badge.heart.liked{border-color:#f3b}
+
+/* Tag de mode — supprimé visuellement */
+.modeTag{display:none}
+
 .levelCol{padding:0 6px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .levelBtn{width:100%;height:60px;border-radius:var(--r);border:1px solid var(--border);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;user-select:none;line-height:1.05;position:relative}
 .levelBtn .big{position:absolute;top:4px;left:0;right:0;text-align:center;font-size:22px;font-weight:800}
 .levelBtn .scoreText{position:absolute;bottom:2px;left:4px;right:4px;text-align:center;font-size:12px;font-weight:800;line-height:1}
+
+/* Sections & vues */
 .section{padding:var(--gap)}
 .detailHead{display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px var(--gap);border-bottom:1px solid var(--border)}
 .detailTitle{font-weight:800;font-size:16px}
 .tabs{display:flex;gap:6px;padding:var(--gap);border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:80px;z-index:4}
 .tab{flex:1;text-align:center}.view{display:none}.view.active{display:block}
+
 .rankHeader{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:8px}
 .rank{display:grid;gap:8px;margin-top:8px}
 .row{display:flex;justify-content:space-between;align-items:center;padding:6px;border:1px solid var(--border);background:var(--bg);border-radius:var(--r)}
 .leftRank{display:flex;align-items:center;gap:8px}
-.likeBtn{min-width:74px;text-align:center}
 .scoreEmoji{font-size:18px;font-weight:900;margin-left:4px;white-space:pre-line}
+
 .calendarWrap{padding:0 var(--gap) var(--gap)}
 .calTop{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px}
 .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
@@ -47,6 +79,8 @@ button,.select,.tab,.stab,.btn,.btnToggle,.navbtn,.calBtn,.backMini{font:600 13p
 .dayNum{position:absolute;top:4px;right:6px;font-size:10px;color:#777}
 .seedMark{position:absolute;top:18px;left:0;right:0;text-align:center;font-size:14px;line-height:1;font-weight:700}
 .cell .dur{position:absolute;bottom:2px;left:4px;right:4px;text-align:center;font:800 12px/1 system-ui}
+
+/* Modales */
 .modal{position:fixed;inset:0;display:none;background:rgba(0,0,0,.2);padding:0;z-index:10}
 .modal.on{display:flex;align-items:stretch;justify-content:stretch}
 .sheet{position:absolute;inset:0;background:var(--card)}
@@ -61,13 +95,29 @@ input[type="text"],textarea,select{padding:10px;border:1px solid var(--border);b
 .inputEmoji .emojiPrefix{position:absolute;left:10px;font-size:20px;pointer-events:none;line-height:1}
 .inputEmoji input{width:100%;padding-left:42px}
 textarea.editing{background:#fff;border:1px solid var(--border)}
+
 .stabs{display:flex;gap:6px;padding:6px;position:sticky;top:52px;background:var(--bg);border-bottom:1px solid var(--border);z-index:2}
 .stab{flex:1;text-align:center}
 .sview{display:none}.sview.active{display:block}
 .rowInline{display:flex;gap:8px;align-items:center}.rowInline input{flex:1}.rowInline .btn.copyOnly{padding:6px 10px}
 .miniInfo{font-size:12px;color:#555}
 .hide{display:none}
-</style></head><body>
+
+/* Barre ajout habitude (filtre + bouton) sticky */
+.addBar{
+  position:sticky;
+  top:0;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  background:var(--bg);
+  padding:6px 0;
+}
+</style>
+</head>
+<body>
 <div id="app">
   <div class="top">
     <div class="brand" id="brand"><span class="logo">🌱</span>Habitu.be</div>
@@ -88,7 +138,9 @@ textarea.editing{background:#fff;border:1px solid var(--border)}
     </div>
   </div>
 
-  <main id="home" class="view active"><div class="list" id="cards"></div></main>
+  <main id="home" class="view active">
+    <div class="list" id="cards"></div>
+  </main>
 
   <section id="detail" class="view">
     <div class="detailHead">
@@ -115,6 +167,7 @@ textarea.editing{background:#fff;border:1px solid var(--border)}
         </div>
         <div class="rank" id="rank"></div>
       </div>
+
       <div class="view" id="tab-history">
         <div class="calendarWrap">
           <div class="calTop">
@@ -151,7 +204,7 @@ textarea.editing{background:#fff;border:1px solid var(--border)}
             <label><b>Fréquence</b></label>
             <div class="grid" style="gap:6px">
               <select id="freqType" class="select">
-                <option value="quotidien">Quotidien</option>
+                <option value="quotidien" selected>Quotidien</option>
                 <option value="tousx">Tous les X jours</option>
                 <option value="hebdo">Hebdomadaire</option>
                 <option value="ponctuelle">Ponctuelle</option>
@@ -171,25 +224,32 @@ textarea.editing{background:#fff;border:1px solid var(--border)}
             </div>
           </div>
 
-          <div class="field"><label><b>Durée par défaut</b></label><select id="mockDefaultDur" class="select"><option>15 min</option><option>30 min</option><option>45 min</option><option>60 min</option></select></div>
+          <div class="field">
+            <label><b>Durée par défaut</b></label>
+            <select id="mockDefaultDur" class="select">
+              <option>5 min</option>
+              <option>15 min</option>
+              <option>30 min</option>
+              <option>45 min</option>
+              <option>60 min</option>
+            </select>
+          </div>
 
           <div class="field">
             <label><b>Mode de réalisation</b></label>
             <div class="rowInline">
               <select id="modeSelect" class="select">
-                <option value="libre">Libre</option>
-                <option value="commun">Commun</option>
-              </select>
-              <select id="modeN" class="select hide" title="Nombre requis"> <!-- masqué (plus de Partagé) -->
-                <option value="2">×2</option><option value="3">×3</option><option value="4">×4</option>
+                <option value="libre">Chacun</option>
+                <option value="commun">Partagé</option>
               </select>
             </div>
-            <div class="miniInfo">Libre (toi) · Commun (1 personne). Le mode “Partagé” est retiré.</div>
+            <div class="miniInfo">Chacun (toi) · Partagé (1 personne suffit).</div>
           </div>
 
-          <div class="field"><label><b>Rappel (mock)</b></label><select class="select"><option>Aucun</option><option>9:00</option><option>12:30</option><option>20:00</option></select></div>
-
-          <div style="margin-top:14px"><button class="btn danger" id="deleteHabitBtn">Supprimer</button></div>
+          <div style="margin-top:14px;display:flex;justify-content:space-between;gap:8px">
+            <button class="btn danger" id="deleteHabitBtn">Supprimer</button>
+            <button class="btn primary" id="saveHabitBtn">Sauvegarder</button>
+          </div>
         </div>
       </div>
     </div>
@@ -246,6 +306,13 @@ textarea.editing{background:#fff;border:1px solid var(--border)}
           </div>
           <div class="field"><label><b>Mon pseudo</b></label><input id="paramName" type="text" value="Moi"/></div>
           <div class="field"><label><b>Nom du jardin</b></label><input id="paramSpaceLabel" type="text"/></div>
+          <div class="field">
+            <label><b>Mode d'organisation</b></label>
+            <select id="spaceOrgMode" class="select" disabled>
+              <option value="day">À la journée</option>
+              <option value="week">À la semaine</option>
+            </select>
+          </div>
           <div class="field"><label><b>Accès</b></label><select class="select"><option>Public</option><option>Sur invitation</option></select></div>
           <div class="field"><label><b>Droits d'édition</b></label><select class="select"><option>Admin</option><option>Tous</option></select></div>
           <div style="margin-top:12px"><button class="btn danger" id="quitSpaceBtn">Quitter le jardin</button></div>
@@ -260,9 +327,9 @@ textarea.editing{background:#fff;border:1px solid var(--border)}
       <div class="sheetHeader"><div id="modalTitle">Ajouter</div><button class="closeX" id="closeAdd">⨉</button></div>
       <div class="sheetBody">
         <div class="grid">
-          <div class="opt" id="addHabit"><div class="emoji">🌱</div><div><b>Nouvelle habitude</b><div class="subtitle">Rejoindre un défi</div></div></div>
+          <div class="opt" id="addHabit"><div class="emoji">🌱</div><div><b>Nouvelle(s) habitude(s)</b><div class="subtitle">Rejoindre un défi</div></div></div>
           <div class="opt hide" id="addPrivateHabit"><div class="emoji">✨</div><div><b>Nouvelle habitude privée</b><div class="subtitle">Entièrement personnalisable</div></div></div>
-          <div class="opt" id="inviteFriend"><div class="emoji">🌞</div><div><b>Inviter un jardinier</b><div class="subtitle">Lien à partager</div></div></div>
+          <div class="opt" id="inviteFriend"><div class="emoji">❤️</div><div><b>Inviter un jardinier</b><div class="subtitle">Lien à partager</div></div></div>
           <div class="opt" id="joinSpace"><div class="emoji">🤝</div><div><b>Rejoindre un jardin</b><div class="subtitle">Entrer un code</div></div></div>
         </div>
       </div>
@@ -285,11 +352,14 @@ textarea.editing{background:#fff;border:1px solid var(--border)}
     </div>
   </div>
 
-  <!-- Habitude (wizard mini) -->
+  <!-- Habitude (bibliothèque multi-sélection) -->
   <div class="modal" id="modalHabit">
     <div class="sheet">
-      <div class="sheetHeader"><div id="habitTitle">Nouvelle habitude</div><button class="closeX" id="closeHabit">⨉</button></div>
-      <div class="sheetBody"><div class="grid" id="step1"></div><div class="grid" id="step2" style="display:none"></div></div>
+      <div class="sheetHeader"><div id="habitTitle">Nouvelle(s) habitude(s)</div><button class="closeX" id="closeHabit">⨉</button></div>
+      <div class="sheetBody">
+        <div class="grid" id="step1"></div>
+        <div class="grid" id="step2" style="display:none"></div>
+      </div>
     </div>
   </div>
 
@@ -325,218 +395,1673 @@ textarea.editing{background:#fff;border:1px solid var(--border)}
 <script>
 /* ===== Données ===== */
 
-// Habitudes récurrentes — VIE MATÉRIELLE EN COMMUNAUTÉ (only)
-// À coller à la place des listes précédentes
-
+// Habitudes existantes (démo) — espace individuel
 const CHALLENGES = [
-  {type:'private',id:'screenoff',cat:'sante',emoji:'🛌',titre:'Sans écran avant le coucher',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'private',id:'repas',cat:'sante',emoji:'🥗',titre:'Repas sain fait maison',amis:['Ben','Duc']},
-  {type:'private',id:'lire',cat:'esprit',emoji:'📖',titre:'Lire un livre ou un roman',amis:['Chloé']},
-  {type:'private',id:'etire',cat:'corps',emoji:'🤸',titre:'Étirements corporels',amis:['Anna','Nicolas']},
-  {type:'private',id:'ranger',cat:'vie',emoji:'🧽',titre:'Rangement ou ménage',amis:['Chloé']},
-  {type:'private',id:'creer',cat:'loisirs',emoji:'🎸',titre:'Créer ou jouer',amis:['Ben','Pauline']},
-  {type:'private',id:'respirer',cat:'repos',emoji:'🌬️',titre:'Respiration cohérence cardiaque',amis:['Anna','Marie']},
-  /* +12 Individu (bien-être & quotidien) */
-  {type:'private',id:'hydratation_quot',cat:'sante',emoji:'💧',titre:'Boire 6–8 verres d’eau',amis:['Moi']},
-  {type:'private',id:'marche_20',cat:'corps',emoji:'🚶',titre:'Marche active 20 min',amis:['Moi','Ben']},
-  {type:'private',id:'dos_gainage',cat:'corps',emoji:'🧱',titre:'Gainage 3×30s',amis:['Moi','Anna']},
-  {type:'private',id:'plan_repas',cat:'vie',emoji:'🧾',titre:'Planifier les repas',amis:['Moi','Chloé']},
-  {type:'private',id:'inbox_zero_perso',cat:'esprit',emoji:'📬',titre:'Inbox zéro perso (10 min)',amis:['Moi']},
-  {type:'private',id:'budget_flash',cat:'esprit',emoji:'💶',titre:'Budget flash (5 lignes)',amis:['Moi']},
-  {type:'private',id:'mediter_10',cat:'repos',emoji:'🧘',titre:'Méditer 10 min',amis:['Moi','Marie']},
-  {type:'private',id:'etire_cervicales',cat:'corps',emoji:'🦴',titre:'Étirements nuque/épaules',amis:['Moi']},
-  {type:'private',id:'lecture_tech',cat:'esprit',emoji:'🧩',titre:'Lire 10 pages utile',amis:['Moi']},
-  {type:'private',id:'lessive_personnelle',cat:'vie',emoji:'🧺',titre:'Lancer sa lessive',amis:['Moi']},
-  {type:'private',id:'sortir_dehors',cat:'loisirs',emoji:'🌤️',titre:'10 min de lumière naturelle',amis:['Moi']},
-  {type:'private',id:'gratitude_3',cat:'esprit',emoji:'✨',titre:'Écrire 3 gratitudes',amis:['Moi']}
+  {type:'private',id:'screenoff',cat:'sante',emoji:'🛌',titre:'Sans écran avant le coucher',
+   amis:['Anna','Ben','Chloé','Nicolas','Marie','David','Jonas','Julie','Alicia','Franck']},
+  {type:'private',id:'repas',cat:'sante',emoji:'🥗',titre:'Repas sain fait maison',
+   amis:['Ben','Duc','Nicolas','David','Jonas','Julie','Alicia','Franck']},
+  {type:'private',id:'lire',cat:'esprit',emoji:'📖',titre:'Lire un livre ou un roman',
+   amis:['Chloé','Nicolas','David','Jonas','Julie','Alicia','Franck']},
+  {type:'private',id:'etire',cat:'corps',emoji:'🤸',titre:'Étirements corporels',
+   amis:['Anna','Nicolas','David','Jonas','Julie','Alicia','Franck']},
+  {type:'private',id:'ranger',cat:'vie',emoji:'🧽',titre:'Rangement ou ménage',
+   amis:['Chloé','Nicolas','David','Jonas','Julie','Alicia','Franck']},
+  {type:'private',id:'creer',cat:'loisirs',emoji:'🎸',titre:'Créer ou jouer',
+   amis:['Ben','Pauline','Nicolas','David','Jonas','Julie','Alicia','Franck']},
+  {type:'private',id:'respirer',cat:'repos',emoji:'🌬️',titre:'Respiration cohérence cardiaque',
+   amis:['Anna','Marie','Nicolas','David','Jonas','Julie','Alicia','Franck']}
 ];
 
+// Colocation
 const GROUP_CHALLENGES = [
-  // 🏠 COLOCATION — opérations & intendance
-  {type:'group',id:'coloc_courses',cat:'coloc',emoji:'🛒',titre:'Courses communes faites',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_frigo_tri',cat:'coloc',emoji:'🥶',titre:'Frigo trié + dates vérifiées',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_lv_range',cat:'coloc',emoji:'🍽️',titre:'Lave-vaisselle vidé & rangé',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_plan_menage',cat:'coloc',emoji:'🗂️',titre:'Planning ménage à jour',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_sol',cat:'coloc',emoji:'🧹',titre:'Aspiration + serpillère',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_sdb_wc',cat:'coloc',emoji:'🚿',titre:'SDB & WC nettoyés',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_poubelles',cat:'coloc',emoji:'🗑️',titre:'Poubelles & tri sortis',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_stock_hygiene',cat:'coloc',emoji:'🧻',titre:'Stocks (papier, savon) OK',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_plantes',cat:'coloc',emoji:'🪴',titre:'Arrosage des plantes',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_entree',cat:'coloc',emoji:'🚪',titre:'Entrée dégagée & propre',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_energie',cat:'coloc',emoji:'🔌',titre:'Veilles éteintes / conso',amis:['Anna','Ben','Chloé','Nicolas','Marie']},
-  {type:'group',id:'coloc_machine',cat:'coloc',emoji:'🧼',titre:'Machine détartrée / filtre',amis:['Anna','Ben','Chloé','Nicolas','Marie']}
+  {type:'group',id:'coloc_lv_range',cat:'coloc',emoji:'🍽️',titre:'Lave-vaisselle vidé & rangé',
+   amis:['Anna','Ben','Chloé','Nicolas','Marie','Franck','Alexandra']},
+  {type:'group',id:'coloc_poubelles',cat:'coloc',emoji:'🗑️',titre:'Poubelles & tri sortis',
+   amis:['Anna','Ben','Chloé','Nicolas','Marie','Franck','Alexandra']},
+  {type:'group',id:'coloc_plantes',cat:'coloc',emoji:'🪴',titre:'Arrosage des plantes',
+   amis:['Anna','Ben','Chloé','Nicolas','Marie','Franck','Alexandra']}
 ];
 
+// Famille (7 jardiniers dont Papa, Maman, Papi, Mami)
+const FAMILY_JARDINIERS = ['Papa','Maman','Papi','Mami','David','Jonas','Julie'];
 const FAMILY_CHALLENGES = [
-  // 👨‍👩‍👧‍👦 FAMILLE — logistique du foyer
-  {type:'group',id:'fam_courses',cat:'famille',emoji:'🛒',titre:'Courses familiales faites',amis:['Maman','Papa','David','Jonas']},
-  {type:'group',id:'fam_menus',cat:'famille',emoji:'🍲',titre:'Menus & liste planifiés',amis:['Maman','Papa','David','Jonas']},
-  {type:'group',id:'fam_linge',cat:'famille',emoji:'👕',titre:'Linge lavé, séché, plié',amis:['Maman','Papa','David','Jonas']},
-  {type:'group',id:'fam_lave_vaisselle',cat:'famille',emoji:'🍽️',titre:'LV vidé & cuisine rangée',amis:['Maman','Papa','David','Jonas']},
-  {type:'group',id:'fam_nettoyage',cat:'famille',emoji:'🧽',titre:'Surfaces & sols',amis:['Maman','Papa','David','Jonas']},
-  {type:'group',id:'fam_poubelles',cat:'famille',emoji:'♻️',titre:'Tri & poubelles sorties',amis:['Maman','Papa','David','Jonas']},
-  {type:'group',id:'fam_stock',cat:'famille',emoji:'📦',titre:'Stocks (alimentaire/hygiène)',amis:['Maman','Papa','David','Jonas']},
-  {type:'group',id:'fam_rangement',cat:'famille',emoji:'🧺',titre:'Pièces communes rangées',amis:['Maman','Papa','David','Jonas']},
-  {type:'group',id:'fam_entretien',cat:'famille',emoji:'🛠️',titre:'Petites réparations faites',amis:['Maman','Papa','David','Jonas']},
-  {type:'group',id:'fam_securite',cat:'famille',emoji:'🧯',titre:'Détecteurs & trousse OK',amis:['Maman','Papa','David','Jonas']}
+  {type:'group',id:'fam_linge',cat:'famille',emoji:'👕',titre:'Linge lavé, séché, plié',
+   amis:[...FAMILY_JARDINIERS]},
+  {type:'group',id:'fam_poubelles',cat:'famille',emoji:'♻️',titre:'Tri & poubelles sorties',
+   amis:[...FAMILY_JARDINIERS]}
 ];
 
+// Association (15–20 jardiniers, sans Papa/Maman)
+const ASSO_JARDINIERS = ['Alice','Bruno','Camille','Dina','Mehdi','Sarah','Youssef','Léa','Tom','Nina','Quentin','Samir','Eva','Rania','Paul','Julie','Hugo','Clara'];
 const ASSOCIATION_CHALLENGES = [
-  // 🤝 ASSOCIATION — intendance de lieu & événements
-  {type:'group',id:'asso_salle',cat:'asso',emoji:'🏟️',titre:'Salle prête (chaises, sono)',amis:['Alice','Bruno','Camille','Dina']},
-  {type:'group',id:'asso_stock',cat:'asso',emoji:'📦',titre:'Inventaire & réassort',amis:['Alice','Bruno','Camille','Dina']},
-  {type:'group',id:'asso_buvette',cat:'asso',emoji:'🥤',titre:'Buvette & caisse prêts',amis:['Alice','Bruno','Camille','Dina']},
-  {type:'group',id:'asso_proprete',cat:'asso',emoji:'🧽',titre:'Nettoyage avant/après',amis:['Alice','Bruno','Camille','Dina']},
-  {type:'group',id:'asso_affichages',cat:'asso',emoji:'📋',titre:'Affichages & signalétique',amis:['Alice','Bruno','Camille','Dina']},
-  {type:'group',id:'asso_matos',cat:'asso',emoji:'🧰',titre:'Matériel vérifié/chargé',amis:['Alice','Bruno','Camille','Dina']},
-  {type:'group',id:'asso_dechets',cat:'asso',emoji:'🗑️',titre:'Déchets triés & sortis',amis:['Alice','Bruno','Camille','Dina']},
-  {type:'group',id:'asso_clefs',cat:'asso',emoji:'🔑',titre:'Clés & accès gérés',amis:['Alice','Bruno','Camille','Dina']},
-  {type:'group',id:'asso_securite',cat:'asso',emoji:'🦺',titre:'Sécurité : extincteurs/issue',amis:['Alice','Bruno','Camille','Dina']}
+  {type:'group',id:'asso_salle',cat:'asso',emoji:'🏟️',titre:'Salle prête (chaises, sono)',
+   amis:[...ASSO_JARDINIERS]}
 ];
 
+// Bureau (15–20 jardiniers)
+const OFFICE_JARDINIERS = ['Alice','Bob','Carla','Dan','Emma','Lucas','Sophie','Mehdi','Julie','Quentin','Léa','Thomas','Inès','Nicolas','Sarah','Paul','Camille','Hugo'];
 const OFFICE_CHALLENGES = [
-  // 🧑‍💼 BUREAU — logistique & maintenance courante
-  {type:'group',id:'bureau_postes',cat:'bureau',emoji:'🧽',titre:'Bureaux & open-space rangés',amis:['Alice','Bob','Carla','Dan']},
-  {type:'group',id:'bureau_salle_reu',cat:'bureau',emoji:'🏷️',titre:'Salle de réunion prête',amis:['Alice','Bob','Carla','Dan']},
-  {type:'group',id:'bureau_kitchenette',cat:'bureau',emoji:'🍵',titre:'Coin café/vaisselle OK',amis:['Alice','Bob','Carla','Dan']},
-  {type:'group',id:'bureau_consommables',cat:'bureau',emoji:'🖨️',titre:'Papier/toner/lingettes OK',amis:['Alice','Bob','Carla','Dan']},
-  {type:'group',id:'bureau_dechets',cat:'bureau',emoji:'♻️',titre:'Tri & bennes vidées',amis:['Alice','Bob','Carla','Dan']},
-  {type:'group',id:'bureau_nettoyage',cat:'bureau',emoji:'🧹',titre:'Sol & surfaces faits',amis:['Alice','Bob','Carla','Dan']},
-  {type:'group',id:'bureau_stock_it',cat:'bureau',emoji:'💾',titre:'Stock IT (câbles, adapt.)',amis:['Alice','Bob','Carla','Dan']},
-  {type:'group',id:'bureau_plantes',cat:'bureau',emoji:'🪴',titre:'Plantes arrosées',amis:['Alice','Bob','Carla','Dan']},
-  {type:'group',id:'bureau_securite',cat:'bureau',emoji:'🧯',titre:'Affichages & trousse OK',amis:['Alice','Bob','Carla','Dan']}
+  {type:'group',id:'bureau_plantes',cat:'bureau',emoji:'🪴',titre:'Plantes arrosées',
+   amis:[...OFFICE_JARDINIERS]},
+  {type:'group',id:'bureau_salle_reu',cat:'bureau',emoji:'🏢',titre:'Salle de réunion remise en ordre',
+   amis:[...OFFICE_JARDINIERS]}
 ];
 
-// (Optionnel) CLASSE si tu gères un lieu scolaire
+// Classe (15–20 jardiniers)
+const CLASS_JARDINIERS = ['M. Dupont','Emma','Lucas','Lucie','Yanis','Clara','Noa','Lina','Hugo','Manon','Elias','Zoé','Mattéo','Sarah','Nolan','Inès','Léo','Jade'];
 const CLASS_CHALLENGES = [
-  {type:'group',id:'classe_materiel',cat:'classe',emoji:'🧰',titre:'Matériel rangé & complet',amis:['M. Dupont','Emma','Lucas','Lucie','Yanis','Clara']},
-  {type:'group',id:'classe_proprete',cat:'classe',emoji:'🧹',titre:'Sol & tableau propres',amis:['M. Dupont','Emma','Lucas','Lucie','Yanis','Clara']},
-  {type:'group',id:'classe_consos',cat:'classe',emoji:'✏️',titre:'Consommables (craie/feutres)',amis:['M. Dupont','Emma','Lucas','Lucie','Yanis','Clara']},
-  {type:'group',id:'classe_affichages',cat:'classe',emoji:'📜',titre:'Affiches & consignes à jour',amis:['M. Dupont','Emma','Lucas','Lucie','Yanis','Clara']},
-  {type:'group',id:'classe_tri',cat:'classe',emoji:'♻️',titre:'Tri & poubelles sorties',amis:['M. Dupont','Emma','Lucas','Lucie','Yanis','Clara']}
+  {type:'group',id:'classe_tri',cat:'classe',emoji:'♻️',titre:'Tri & poubelles sorties',
+   amis:[...CLASS_JARDINIERS]}
 ];
 
+// Bibliothèque logistique : 20 habitudes non numériques, organisées en 10 catégories
+const LIBRARY_HABITS = [
+  /* =========================
+   * INDIVIDUEL (10)
+   * ========================= */
+  {
+    id:'lib_indiv_lit',
+    cat:'individuel',
+    emoji:'🛏️',
+    titre:'Lit fait au réveil',
+    type:'private',
+    scope:'indiv',
+    modeDefault:'libre',
+    freqDefault:'quotidien',
+    baseMin:5,
+    recurrence:7,
+    desc:"Commence par lisser la couette et aligner les oreillers.\nRègle-toi une mini règle : lit fait avant de sortir de la chambre.\nObserve la différence de sensation le soir en revenant te coucher."
+  },
+  {
+    id:'lib_indiv_sac',
+    cat:'individuel',
+    emoji:'🎒',
+    titre:'Sac / affaires pour demain préparés',
+    type:'private',
+    scope:'indiv',
+    modeDefault:'libre',
+    freqDefault:'quotidien',
+    baseMin:10,
+    recurrence:5,
+    desc:"Prépare ton sac toujours au même endroit (entrée, bureau...).\nVérifie les 3 essentiels : documents, clés, bouteille d’eau.\nTermine en posant le sac là où tu ne pourras pas l’oublier."
+  },
+  {
+    id:'lib_indiv_tenue',
+    cat:'individuel',
+    emoji:'👕',
+    titre:'Tenue du lendemain prête',
+    type:'private',
+    scope:'indiv',
+    modeDefault:'libre',
+    freqDefault:'quotidien',
+    baseMin:8,
+    recurrence:5,
+    desc:"Choisis une tenue adaptée à la météo et à ton agenda.\nPose les vêtements à un endroit visible, prêts à être enfilés.\nDécide une fois pour toutes pour éviter de réfléchir le matin."
+  },
+  {
+    id:'lib_indiv_rangement_10',
+    cat:'individuel',
+    emoji:'🧹',
+    titre:'10 minutes de rangement perso',
+    type:'private',
+    scope:'individuel',
+    modeDefault:'libre',
+    freqDefault:'quotidien',
+    baseMin:10,
+    recurrence:5,
+    desc:"Choisis une mini-zone : bureau, table de chevet, commode.\nMets un timer de 10 minutes et ne fais qu’une seule catégorie d’objets.\nArrête-toi à la sonnerie même si ce n’est pas parfait."
+  },
+  {
+    id:'lib_indiv_lavabo',
+    cat:'individuel',
+    emoji:'🚿',
+    titre:'Lavabo et miroir propres',
+    type:'private',
+    scope:'individuel',
+    modeDefault:'libre',
+    freqDefault:'hebdo',
+    baseMin:8,
+    recurrence:2,
+    desc:"Passe un coup d’éponge rapide sur le lavabo après la douche.\nEssuie les projections sur le miroir avec un chiffon microfibre.\nGarde un produit et un chiffon visibles pour diminuer la friction."
+  },
+  {
+    id:'lib_indiv_papiers',
+    cat:'individuel',
+    emoji:'📂',
+    titre:'Tri express des papiers perso',
+    type:'private',
+    scope:'individuel',
+    modeDefault:'libre',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Sépare en trois piles : à garder, à traiter, à jeter.\nRange uniquement la pile « à garder » dans un classeur simple.\nNote sur un post-it ce qu’il reste à faire pour les papiers « à traiter »."
+  },
+  {
+    id:'lib_indiv_lavage_main',
+    cat:'individuel',
+    emoji:'🧺',
+    titre:'Petite lessive rapide à la main',
+    type:'private',
+    scope:'individuel',
+    modeDefault:'libre',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Repère 2–3 pièces légères à laver (chaussettes, sous-vêtements).\nRemplis un lavabo avec un peu de lessive et de l’eau tiède.\nEssore doucement et suspends tout de suite sur un cintre ou un séchoir."
+  },
+  {
+    id:'lib_indiv_vidange_sac',
+    cat:'individuel',
+    emoji:'👜',
+    titre:'Sac vidé et réorganisé',
+    type:'private',
+    scope:'individuel',
+    modeDefault:'libre',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Vide tout le contenu sur une table.\nJette tickets et papiers inutiles, range les objets par thème.\nDécide d’un emplacement fixe pour clés, portefeuille et téléphone."
+  },
+  {
+    id:'lib_indiv_tiroir',
+    cat:'individuel',
+    emoji:'🗄️',
+    titre:'Un tiroir mis en ordre',
+    type:'private',
+    scope:'individuel',
+    modeDefault:'libre',
+    freqDefault:'mensuel',
+    baseMin:20,
+    recurrence:1,
+    desc:"Choisis un seul tiroir et engage-toi à n’en faire qu’un.\nRegroupe les objets par usage (bureau, salle de bain, cuisine…).\nGarde une petite boîte ou pot pour les petits éléments qui se perdent."
+  },
+  {
+    id:'lib_indiv_don',
+    cat:'individuel',
+    emoji:'🎁',
+    titre:'Un sac pour donner / recycler',
+    type:'private',
+    scope:'individuel',
+    modeDefault:'libre',
+    freqDefault:'mensuel',
+    baseMin:15,
+    recurrence:1,
+    desc:"Prends un sac dédié aux objets à donner.\nChoisis 5 à 10 objets que tu n’utilises plus mais encore en bon état.\nNote un jour précis pour déposer le sac en point de collecte ou association."
+  },
 
+  /* =========================
+   * COLOCATION (10)
+   * ========================= */
+  {
+    id:'lib_coloc_plan_cuisine',
+    cat:'coloc',
+    emoji:'🍲',
+    titre:'Plan rapide de la cuisine partagée',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Ensemble, regardez l’état du plan de travail, de l’évier et du frigo.\nNotez 3 actions simples pour que la cuisine soit « prête à vivre ».\nRépartissez les actions entre vous pour que ça reste léger."
+  },
+  {
+    id:'lib_coloc_entree',
+    cat:'coloc',
+    emoji:'🚪',
+    titre:'Entrée dégagée (chaussures, colis)',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Ramenez toutes les chaussures à un endroit défini.\nEmpilez ou rangez les colis pour libérer l’espace au sol.\nTerminez en vérifiant que la porte s’ouvre sans obstacle."
+  },
+  {
+    id:'lib_coloc_poubelles',
+    cat:'coloc',
+    emoji:'🗑️',
+    titre:'Tour des poubelles et tri',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:2,
+    desc:"Vérifiez toutes les poubelles de l’appartement en une fois.\nSéparez bien recyclables, verre et ordures ménagères.\nDésignez à l’avance qui sort quoi pour éviter les malentendus."
+  },
+  {
+    id:'lib_coloc_lv',
+    cat:'coloc',
+    emoji:'🍽️',
+    titre:'Lave-vaisselle lancé ou vidé',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:10,
+    recurrence:5,
+    desc:"Décidez une règle simple : lancer ou vider avant de se coucher.\nRangez la vaisselle propre à un endroit cohérent pour tous.\nUtilisez un petit magnet « propre / sale » pour éviter les doutes."
+  },
+  {
+    id:'lib_coloc_plantes',
+    cat:'coloc',
+    emoji:'🪴',
+    titre:'Plantes de la coloc arrosées',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Faites un tour rapide de toutes les plantes visibles.\nTouchez la terre pour décider si un arrosage est nécessaire.\nNotez sur un post-it la date du dernier arrosage pour la prochaine fois."
+  },
+  {
+    id:'lib_coloc_surface_salon',
+    cat:'coloc',
+    emoji:'🛋️',
+    titre:'Surfaces du salon dégagées',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Videz la table basse et les accoudoirs de canapé.\nRangez livres, consoles et câbles chacun à leur place.\nFinissez par un coup de chiffon rapide sur la table principale."
+  },
+  {
+    id:'lib_coloc_frigo_commun',
+    cat:'coloc',
+    emoji:'🥫',
+    titre:'Zone « commun » du frigo rangée',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Repérez la partie du frigo dédiée aux produits partagés.\nJetez ce qui est clairement périmé et regroupez par type.\nCollez un petit papier pour noter les produits à racheter bientôt."
+  },
+  {
+    id:'lib_coloc_calendrier',
+    cat:'coloc',
+    emoji:'📅',
+    titre:'Point calendrier coloc de la semaine',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"En 10 minutes, partagez vos gros événements de la semaine.\nNotez les moments où l’appart sera très occupé ou très calme.\nDécidez d’un soir « calme » pour ménage ou temps commun."
+  },
+  {
+    id:'lib_coloc_coin_depot',
+    cat:'coloc',
+    emoji:'📦',
+    titre:'Coin dépôt organisé (livres, colis, prêts)',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Choisissez un coin unique pour tout ce qui doit « repartir ».\nSéparez ce qui est à rendre, à renvoyer, à donner.\nNotez un jour cible pour vider ce coin toutes les 1–2 semaines."
+  },
+  {
+    id:'lib_coloc_bain',
+    cat:'coloc',
+    emoji:'🧴',
+    titre:'Salle de bain prête pour le suivant',
+    type:'group',
+    scope:'coloc',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:8,
+    recurrence:5,
+    desc:"Ramassez cheveux, serviettes et vêtements laissés au sol.\nEssuyez rapidement le lavabo ou la douche s’ils sont très mouillés.\nGardez une éponge ou un chiffon toujours accessible dans la salle de bain."
+  },
 
-const claps={};(()=>{const all=[...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,...CLASS_CHALLENGES,...OFFICE_CHALLENGES,...ASSOCIATION_CHALLENGES];all.forEach(c=>{claps[c.id]={};[...new Set([...c.amis,'Moi'])].forEach(n=>claps[c.id][n]=Math.floor(Math.random()*101));});})();
+  /* =========================
+   * FAMILLE (10)
+   * ========================= */
+  {
+    id:'lib_fam_table',
+    cat:'famille',
+    emoji:'🍽️',
+    titre:'Table mise / débarrassée ensemble',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:15,
+    recurrence:7,
+    desc:"Attribuez à chacun un rôle simple : couverts, assiettes, eau.\nUtilisez toujours le même ordre : mettre, manger, débarrasser, essuyer.\nTerminez par un petit « merci à tous » pour ancrer le rituel."
+  },
+  {
+    id:'lib_fam_cartable',
+    cat:'famille',
+    emoji:'🎒',
+    titre:'Cartables et manteaux à leur place',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:10,
+    recurrence:5,
+    desc:"Fixez une zone d’accrochage unique pour manteaux et sacs.\nVérifiez chaque soir si le cartable est prêt pour le lendemain.\nLaissez les enfants cocher eux-mêmes leur mini check-list."
+  },
+  {
+    id:'lib_fam_pyjama_dent',
+    cat:'famille',
+    emoji:'🪥',
+    titre:'Routine du soir enfants coordonnée',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:15,
+    recurrence:7,
+    desc:"Enchaînez toujours dans le même ordre : douche, pyjama, dents.\nUtilisez un minuteur ludique pour le brossage.\nTerminez par un moment calme pour éviter les allers-retours."
+  },
+  {
+    id:'lib_fam_jouets',
+    cat:'famille',
+    emoji:'🧸',
+    titre:'Jouets rangés dans leur « maison »',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:10,
+    recurrence:6,
+    desc:"Donnez à chaque type de jouet une boîte ou un panier dédié.\nInstallez un jeu : tout doit « rentrer à la maison » avant le dîner.\nValorisez les efforts plutôt que le résultat parfait."
+  },
+  {
+    id:'lib_fam_course_rapide',
+    cat:'famille',
+    emoji:'🛒',
+    titre:'Petite liste de courses en famille',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Parcourez le frigo et les placards avec un carnet.\nDemandez aux enfants de nommer ce qu’ils veulent garder comme habitude saine.\nSéparez clairement « indispensable » et « bonus » sur la liste."
+  },
+  {
+    id:'lib_fam_linge',
+    cat:'famille',
+    emoji:'👕',
+    titre:'Panier à linge vidé ensemble',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:20,
+    recurrence:1,
+    desc:"Choisissez un moment fixe pour lancer les machines en famille.\nLaissez les enfants trier clair / foncé avec votre supervision.\nTransformez le pliage en activité courte avec musique ou histoire."
+  },
+  {
+    id:'lib_fam_frigo',
+    cat:'famille',
+    emoji:'🥦',
+    titre:'Frigo trié et prêt pour la semaine',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:20,
+    recurrence:1,
+    desc:"Regroupez ensemble les restes à finir en priorité.\nJetez ce qui n’est plus consommable sans culpabiliser.\nImaginez un ou deux repas simples à partir de ce qui reste."
+  },
+  {
+    id:'lib_fam_papiers_ecole',
+    cat:'famille',
+    emoji:'📑',
+    titre:'Papiers d’école traités et rangés',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Ouvrez tous les cahiers de liaison en une seule fois.\nRemplissez immédiatement ce qui prend moins de 2 minutes.\nPréparez une chemise dédiée aux papiers à traiter plus tard."
+  },
+  {
+    id:'lib_fam_point_agenda',
+    cat:'famille',
+    emoji:'📆',
+    titre:'Mini point agenda familial',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Notez sur un tableau les grandes activités de la semaine.\nRepérez les soirs chargés pour organiser repas ou trajets.\nLaissez un espace pour que chacun ajoute un souhait ou un besoin."
+  },
+  {
+    id:'lib_fam_dimanche_rgt',
+    cat:'famille',
+    emoji:'🏡',
+    titre:'15 minutes « maison prête pour lundi »',
+    type:'group',
+    scope:'famille',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Choisissez 2 à 3 zones prioritaires : entrée, salon, cuisine.\nMettez un timer et gardez une ambiance légère.\nL’objectif est de rendre le lundi matin plus fluide, pas d’être parfait."
+  },
 
-/* États */
+  /* =========================
+   * ASSOCIATION (10)
+   * ========================= */
+  {
+    id:'lib_asso_stock',
+    cat:'asso',
+    emoji:'📦',
+    titre:'Vérification rapide du stock matériel',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:20,
+    recurrence:1,
+    desc:"Listez les 5 familles d’objets clés (gobelets, feuilles, câbles…).\nComptez de manière approximative et notez ce qui descend vite.\nMettez à jour une liste partagée pour les prochains achats."
+  },
+  {
+    id:'lib_asso_salle_plan',
+    cat:'asso',
+    emoji:'🪑',
+    titre:'Salle remise selon le plan prévu',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:20,
+    recurrence:1,
+    desc:"Gardez une photo ou un schéma de la salle « en ordre ».\nReplacez les chaises et tables comme sur la référence.\nVérifiez sol, tableau et poubelles avant de quitter la salle."
+  },
+  {
+    id:'lib_asso_accueil',
+    cat:'asso',
+    emoji:'🤝',
+    titre:'Zone d’accueil prête pour les membres',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Préparez une table claire pour l’émargement ou l’accueil.\nRangez sacs et cartons derrière un même repère.\nAffichez clairement les infos essentielles de la séance."
+  },
+  {
+    id:'lib_asso_buvette',
+    cat:'asso',
+    emoji:'☕',
+    titre:'Coin boisson / buvette rangé',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Essuyez les surfaces collantes ou tachées.\nRangez gobelets, verres et boissons dans un ordre logique.\nJetez les restes clairement impropres à la consommation."
+  },
+  {
+    id:'lib_asso_com',
+    cat:'asso',
+    emoji:'📣',
+    titre:'Point communication de la semaine',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:20,
+    recurrence:1,
+    desc:"Listez les infos à transmettre aux membres cette semaine.\nDécidez de 1 ou 2 canaux seulement (mail, groupe, affiche).\nNotez qui est responsable d’envoyer chaque message."
+  },
+  {
+    id:'lib_asso_rangement_casier',
+    cat:'asso',
+    emoji:'🗃️',
+    titre:'Casier de l’association trié',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:25,
+    recurrence:1,
+    desc:"Videz le casier sur une table pour tout voir.\nJetez ou recyclez les documents périmés ou inutiles.\nClassez le reste en 3 pochettes : administratif, com, matériel."
+  },
+  {
+    id:'lib_asso_suivi_event',
+    cat:'asso',
+    emoji:'📝',
+    titre:'Mini débrief matériel après événement',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'ponctuelle',
+    baseMin:15,
+    recurrence:1,
+    desc:"Notez à chaud ce qui a manqué ou été en surplus.\nAjoutez ces remarques dans un document partagé.\nDécidez d’un point à tester ou améliorer pour le prochain événement."
+  },
+  {
+    id:'lib_asso_affichage',
+    cat:'asso',
+    emoji:'🧾',
+    titre:'Panneau d’affichage mis à jour',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Retirez les annonces obsolètes ou passées.\nPlacez les infos essentielles à hauteur de regard.\nLaissez un espace clair pour les prochaines affiches."
+  },
+  {
+    id:'lib_asso_clefs',
+    cat:'asso',
+    emoji:'🔑',
+    titre:'Clés et accès contrôlés',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:10,
+    recurrence:1,
+    desc:"Listez qui possède quelles clés ou codes d’accès.\nVérifiez si certaines personnes n’en ont plus besoin.\nNotez un rappel pour récupérer ou changer les accès si nécessaire."
+  },
+  {
+    id:'lib_asso_securite',
+    cat:'asso',
+    emoji:'🧯',
+    titre:'Petit check sécurité de la salle',
+    type:'group',
+    scope:'asso',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:15,
+    recurrence:1,
+    desc:"Vérifiez que les issues de secours sont dégagées.\nRepérez l’emplacement de l’extincteur et de la trousse de secours.\nNotez toute anomalie à signaler au gestionnaire du lieu."
+  },
+
+  /* =========================
+   * CLASSE (10)
+   * ========================= */
+  {
+    id:'lib_classe_tableau',
+    cat:'classe',
+    emoji:'🧽',
+    titre:'Tableau nettoyé et lisible',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:5,
+    recurrence:5,
+    desc:"Effacez complètement le tableau à la fin du cours.\nRangez feutres ou craies à un endroit unique.\nÉcrivez déjà un titre ou la date pour la séance suivante si besoin."
+  },
+  {
+    id:'lib_classe_coin_doc',
+    cat:'classe',
+    emoji:'📚',
+    titre:'Coin documents trié',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:20,
+    recurrence:1,
+    desc:"Séparez documents pour les élèves et pour l’enseignant.\nJetez les photocopies inutiles ou trop abîmées.\nRangez les polycopiés dans des dossiers clairement étiquetés."
+  },
+  {
+    id:'lib_classe_bancs',
+    cat:'classe',
+    emoji:'🪑',
+    titre:'Tables et chaises alignées',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:5,
+    recurrence:5,
+    desc:"Demandez à chaque élève de remettre sa chaise bien en place.\nVérifiez que les tables permettent de circuler facilement.\nFaites un dernier tour pour dégager les sacs des passages."
+  },
+  {
+    id:'lib_classe_materiel_eleve',
+    cat:'classe',
+    emoji:'✏️',
+    titre:'Matériel d’élève prêt pour le prochain cours',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:8,
+    recurrence:5,
+    desc:"Prenez 2 minutes pour vérifier stylos, cahiers, trousse.\nRangez ce qui traîne au fond du sac dans un seul cahier.\nEncouragez les élèves à cocher une mini check-list de matériel."
+  },
+  {
+    id:'lib_classe_etageres',
+    cat:'classe',
+    emoji:'📦',
+    titre:'Étagères de classe rangées',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Assignez à quelques élèves la responsabilité d’une étagère.\nRangez les manuels et cahiers par niveau ou matière.\nGardez une zone « à ranger plus tard » clairement identifiée."
+  },
+  {
+    id:'lib_classe_tech',
+    cat:'classe',
+    emoji:'💻',
+    titre:'Matériel numérique prêt',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Testez rapidement l’ordinateur, le vidéoprojecteur ou les enceintes.\nPréparez le fichier ou le diaporama du début de séance.\nNotez les éventuels soucis techniques dans un carnet."
+  },
+  {
+    id:'lib_classe_affichage',
+    cat:'classe',
+    emoji:'🖼️',
+    titre:'Affichages muraux actualisés',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:20,
+    recurrence:1,
+    desc:"Retirez les affiches qui ne servent plus ou sont abîmées.\nMettez en avant les productions récentes des élèves.\nLaissez un espace libre pour les prochains projets."
+  },
+  {
+    id:'lib_classe_coin_calme',
+    cat:'classe',
+    emoji:'🧘‍♀️',
+    titre:'Petit coin calme rangé',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Définissez une zone fixe pour le coin calme ou lecture.\nRangez coussins, livres et jeux à un endroit clair.\nRappelez en début de semaine à quoi sert cet espace."
+  },
+  {
+    id:'lib_classe_retu',
+    cat:'classe',
+    emoji:'📬',
+    titre:'Pochettes de retours / devoirs organisées',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Séparez clairement devoirs à rendre, devoirs corrigés et à distribuer.\nCollez une étiquette simple sur chaque pochette.\nVérifiez qu’aucune copie ne reste coincée dans le fond d’un sac."
+  },
+  {
+    id:'lib_classe_couloir',
+    cat:'classe',
+    emoji:'🚶‍♂️',
+    titre:'Couloir devant la classe dégagé',
+    type:'group',
+    scope:'classe',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:5,
+    recurrence:1,
+    desc:"Vérifiez qu’aucun cartable ou banc ne bloque l’entrée.\nRangez le matériel de sport ou d’arts plastiques à l’intérieur.\nAssurez-vous que les issues restent faciles à utiliser."
+  },
+
+  /* =========================
+   * BUREAU (10)
+   * ========================= */
+  {
+    id:'lib_bureau_postes',
+    cat:'bureau',
+    emoji:'🧹',
+    titre:'Postes de travail dégagés',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Videz les surfaces des bureaux des papiers inutiles.\nRegroupez câbles et chargeurs dans une boîte ou un tiroir.\nGardez au moins un coin de table totalement libre par poste."
+  },
+  {
+    id:'lib_bureau_salle_reu',
+    cat:'bureau',
+    emoji:'🏢',
+    titre:'Salle de réunion remise en ordre',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:20,
+    recurrence:1,
+    desc:"Rangez chaises et tables comme sur la configuration de base.\nÉvacuez gobelets, papiers et marqueurs usés.\nLaissez le support de présentation prêt pour la prochaine réunion."
+  },
+  {
+    id:'lib_bureau_inbox',
+    cat:'bureau',
+    emoji:'📥',
+    titre:'Inbox papier triée',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Rassemblez toutes les feuilles qui traînent dans une bannette.\nClassez-les en trois piles : à traiter, à archiver, à jeter.\nRangez immédiatement ce qui est à archiver."
+  },
+  {
+    id:'lib_bureau_point_agenda',
+    cat:'bureau',
+    emoji:'🗓️',
+    titre:'Point agenda d’équipe rapide',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Passez les 10 prochaines journées en revue avec l’équipe.\nRepérez les périodes de forte charge ou de réunions serrées.\nDécidez d’une priorité claire pour la semaine."
+  },
+  {
+    id:'lib_bureau_print',
+    cat:'bureau',
+    emoji:'🖨️',
+    titre:'Coin imprimante rangé',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Rangez ramettes de papier, toners et bacs de sortie.\nSupprimez les impressions oubliées et confidentielles.\nAffichez une petite consigne pour éviter le gâchis de papier."
+  },
+  {
+    id:'lib_bureau_snack',
+    cat:'bureau',
+    emoji:'🍏',
+    titre:'Zone snack / café propre',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Essuyez la machine à café, la table et les taches visibles.\nJetez les emballages vides et capsules usagées.\nRangez sucre, thé et tasses dans un ordre simple."
+  },
+  {
+    id:'lib_bureau_casiers',
+    cat:'bureau',
+    emoji:'🗄️',
+    titre:'Casiers ou placards d’équipe triés',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:25,
+    recurrence:1,
+    desc:"Videz un casier à la fois pour éviter le chaos.\nDécidez ce qui sert vraiment encore à l’équipe.\nRangez par thématique : papeterie, informatique, archives."
+  },
+  {
+    id:'lib_bureau_todolist',
+    cat:'bureau',
+    emoji:'✅',
+    titre:'To-do physique mise à jour',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Passez en revue les tâches affichées au mur ou sur un tableau.\nBarrez clairement ce qui est terminé.\nChoisissez 3 tâches maximum à mettre en avant pour la semaine."
+  },
+  {
+    id:'lib_bureau_zone_repos',
+    cat:'bureau',
+    emoji:'🛋️',
+    titre:'Coin pause agréable',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Rassemblez magazines, jeux, coussins ou plantes dans la zone.\nEnlevez les dossiers de travail pour limiter la pollution visuelle.\nAjoutez un petit rappel pour garder l’espace propre après usage."
+  },
+  {
+    id:'lib_bureau_sortie_jour',
+    cat:'bureau',
+    emoji:'🚪',
+    titre:'Bureau prêt pour le lendemain en partant',
+    type:'group',
+    scope:'bureau',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:5,
+    recurrence:5,
+    desc:"Avant de partir, libérez la moitié de votre surface de travail.\nRangez le dossier en cours dans une chemise unique.\nNotez la toute prochaine action sur un post-it visible."
+  },
+
+  /* =========================
+   * CUISINE (10)
+   * ========================= */
+  {
+    id:'lib_cuisine_plan',
+    cat:'cuisine',
+    emoji:'🧽',
+    titre:'Plan de travail vidé & essuyé',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:10,
+    recurrence:7,
+    desc:"Rangez tout ce qui n’a rien à faire sur le plan de travail.\nPassez une éponge ou un chiffon rapidement après le repas.\nGardez un petit panier pour les objets « à ranger plus tard »."
+  },
+  {
+    id:'lib_cuisine_frigo',
+    cat:'cuisine',
+    emoji:'🥦',
+    titre:'Frigo trié (rapide)',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Regroupez devant ce qui est à consommer rapidement.\nJetez ce qui est clairement périmé.\nProfitez-en pour essuyer une étagère si elle est collante."
+  },
+  {
+    id:'lib_cuisine_vaisselle',
+    cat:'cuisine',
+    emoji:'🍽️',
+    titre:'Évier vidé avant de se coucher',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:10,
+    recurrence:7,
+    desc:"Rincez ou lavez la vaisselle avant d’aller dormir.\nRangez ce qui sèche dès que possible pour libérer la place.\nL’objectif : se réveiller avec un évier confortable."
+  },
+  {
+    id:'lib_cuisine_hot',
+    cat:'cuisine',
+    emoji:'🔥',
+    titre:'Plaques et hotte essuyées',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Après une cuisson, laissez refroidir puis essuyez projections et graisse.\nConcentrez-vous sur les zones les plus visibles.\nGardez une éponge dédiée pour éviter d’abîmer la surface."
+  },
+  {
+    id:'lib_cuisine_tiroir_couverts',
+    cat:'cuisine',
+    emoji:'🍴',
+    titre:'Tiroir à couverts organisé',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:15,
+    recurrence:1,
+    desc:"Videz le tiroir et nettoyez le fond si besoin.\nTriez les couverts par type et retirez les doublons inutiles.\nAjoutez un séparateur simple si tout se mélange."
+  },
+  {
+    id:'lib_cuisine_epices',
+    cat:'cuisine',
+    emoji:'🌶️',
+    titre:'Épices et condiments triés',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:20,
+    recurrence:1,
+    desc:"Regroupez les épices au même endroit pour mieux les voir.\nNotez celles que vous utilisez vraiment.\nJetez ou recyclez les anciens pots vides ou cassés."
+  },
+  {
+    id:'lib_cuisine_reserve_seche',
+    cat:'cuisine',
+    emoji:'🥫',
+    titre:'Réserves sèches rangées',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:25,
+    recurrence:1,
+    desc:"Rassemblez pâtes, riz, légumineuses et conserves.\nPlacez devant ce qui est déjà entamé ou à finir.\nCollez une petite note avec 2–3 idées de repas simples."
+  },
+  {
+    id:'lib_cuisine_poubelle',
+    cat:'cuisine',
+    emoji:'♻️',
+    titre:'Poubelles cuisine propres et triées',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Videz toutes les poubelles de la cuisine en une seule fois.\nNettoyez rapidement bac et couvercle si odeur ou traces.\nCollez un rappel des consignes de tri à proximité."
+  },
+  {
+    id:'lib_cuisine_table',
+    cat:'cuisine',
+    emoji:'🍽',
+    titre:'Table de repas prête',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:5,
+    recurrence:7,
+    desc:"Dégagez complètement la table avant de mettre la nourriture.\nPosez couverts, verres et serviettes avant d’appeler tout le monde.\nRangez immédiatement ce qui n’est pas lié au repas."
+  },
+  {
+    id:'lib_cuisine_machine',
+    cat:'cuisine',
+    emoji:'🧼',
+    titre:'Machine (lave-vaisselle ou lave-linge) programmée',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:2,
+    desc:"Regroupez ce que vous voulez laver ou nettoyer.\nLancez ou programmez la machine à un horaire pertinent.\nNotez mentalement un moment pour vider dès la fin du cycle."
+  },
+
+  /* =========================
+   * LINGE (10)
+   * ========================= */
+  {
+    id:'lib_linge_panier',
+    cat:'linge',
+    emoji:'🧺',
+    titre:'Panier à linge vidé',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:25,
+    recurrence:1,
+    desc:"Choisissez un créneau fixe pour lancer les machines.\nRemplissez la machine sans trop la surcharger.\nL’objectif : repartir chaque semaine d’un panier presque vide."
+  },
+  {
+    id:'lib_linge_rangement',
+    cat:'linge',
+    emoji:'👔',
+    titre:'Linge propre plié et rangé',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:25,
+    recurrence:1,
+    desc:"Regroupez les vêtements par personne ou par type.\nPliez tout de suite ce qui est sec pour éviter le froissage.\nRangez dans les placards sans laisser de panier plein à côté."
+  },
+  {
+    id:'lib_linge_lit',
+    cat:'linge',
+    emoji:'🛏️',
+    titre:'Draps changés',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:20,
+    recurrence:1,
+    desc:"Choisissez un jour dédié au changement des draps.\nPréparez le nouveau jeu de linge avant de retirer l’ancien.\nProfitez du lit nu pour secouer oreillers et matelas rapidement."
+  },
+  {
+    id:'lib_linge_serviettes',
+    cat:'linge',
+    emoji:'🧻',
+    titre:'Serviettes de toilette renouvelées',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Récupérez toutes les serviettes humides dans la maison.\nLancez une machine dédiée si possible.\nAccrochez tout de suite les serviettes propres pour qu’elles sèchent bien."
+  },
+  {
+    id:'lib_linge_garde_robe',
+    cat:'linge',
+    emoji:'👗',
+    titre:'Vêtements peu portés remis en avant',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:20,
+    recurrence:1,
+    desc:"Recherchez les vêtements oubliés au fond du placard.\nMettez-en quelques-uns en première ligne pour les porter.\nNotez ce que vous ne mettez vraiment plus pour un futur don."
+  },
+  {
+    id:'lib_linge_cintres',
+    cat:'linge',
+    emoji:'🪝',
+    titre:'Cintres libérés et ordonnés',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:10,
+    recurrence:1,
+    desc:"Enlevez les cintres inutilisés des portes et dossiers de chaise.\nRegroupez-les près du séchoir ou du placard principal.\nGardez un nombre réaliste selon vos habitudes."
+  },
+  {
+    id:'lib_linge_taches',
+    cat:'linge',
+    emoji:'🧴',
+    titre:'Taches traitées avant lavage',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Repérez rapidement les vêtements avec des taches voyantes.\nPassez un détachant simple sur les zones critiques.\nLancez ensuite la machine pour améliorer le résultat."
+  },
+  {
+    id:'lib_linge_paires_chaussettes',
+    cat:'linge',
+    emoji:'🧦',
+    titre:'Chaussettes appairées',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Regroupez toutes les chaussettes propres au même endroit.\nFaites des paires et mettez de côté les « solitaires ».\nDécidez après quelques semaines quoi faire des orphelines."
+  },
+  {
+    id:'lib_linge_produits',
+    cat:'linge',
+    emoji:'🧴',
+    titre:'Produits de lessive vérifiés',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:10,
+    recurrence:1,
+    desc:"Vérifiez le niveau de lessive, adoucissant et détachant.\nNotez ce qu’il faudra racheter avant de tomber à zéro.\nRepérez les bidons vides ou presque pour les recycler."
+  },
+  {
+    id:'lib_linge_planning',
+    cat:'linge',
+    emoji:'📆',
+    titre:'Planning lessive posé',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:15,
+    recurrence:1,
+    desc:"Décidez des jours « machines » en fonction de vos rythmes.\nRépartissez qui lance et qui étend.\nAffichez le planning près du panier ou de la machine."
+  },
+
+  /* =========================
+   * RANGEMENT (10)
+   * ========================= */
+  {
+    id:'lib_rgt_15',
+    cat:'rangement',
+    emoji:'🧹',
+    titre:'15 minutes de rangement ciblé',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Choisissez une seule zone : bureau, étagère, entrée.\nMettez un timer de 15 minutes pour rester concentré.\nL’objectif est de « mieux qu’avant », pas de finir la pièce."
+  },
+  {
+    id:'lib_rgt_papiers',
+    cat:'rangement',
+    emoji:'📂',
+    titre:'Papiers triés dans un classeur',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:25,
+    recurrence:1,
+    desc:"Rassemblez tous les papiers dispersés dans la maison.\nClassez-les par grand thème : maison, santé, travail.\nRangez-les dans un classeur simple avec des intercalaires."
+  },
+  {
+    id:'lib_rgt_chaos_tiroir',
+    cat:'rangement',
+    emoji:'🧰',
+    titre:'Tiroir « fourre-tout » dompté',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:20,
+    recurrence:1,
+    desc:"Videz entièrement le tiroir sur une surface.\nJetez ce qui est clairement inutile ou cassé.\nRangez par petites boîtes ou pots pour retrouver facilement."
+  },
+  {
+    id:'lib_rgt_entree',
+    cat:'rangement',
+    emoji:'🚪',
+    titre:'Entrée désencombrée',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Rangez chaussures, sacs et manteaux à des places dédiées.\nLibérez le chemin jusqu’à la porte.\nAjoutez un panier pour les objets à emporter lors de la prochaine sortie."
+  },
+  {
+    id:'lib_rgt_salon',
+    cat:'rangement',
+    emoji:'🛋️',
+    titre:'Salon visuellement apaisé',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Dégagez la table basse et les surfaces principales.\nRangez câbles, chargeurs et objets électroniques.\nLaissez quelques éléments décoratifs que vous aimez vraiment."
+  },
+  {
+    id:'lib_rgt_placard',
+    cat:'rangement',
+    emoji:'🚪',
+    titre:'Un placard passé en revue',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:25,
+    recurrence:1,
+    desc:"Choisissez un placard précis et évitez d’en ouvrir d’autres.\nRegroupez les objets par fonction.\nPréparez un sac pour ce qui peut être donné ou vendu."
+  },
+  {
+    id:'lib_rgt_jouets_communs',
+    cat:'rangement',
+    emoji:'🧸',
+    titre:'Coin jeux commun rangé',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Mettez les jeux de société complets dans des boîtes fermées.\nRangez les pièces mélangées dans des sachets transparents.\nLaissez les jeux les plus utilisés accessibles en premier."
+  },
+  {
+    id:'lib_rgt_bureau_papier',
+    cat:'rangement',
+    emoji:'📝',
+    titre:'Surface de bureau libérée',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Faites un tas unique avec tout ce qui traîne sur le bureau.\nRangez dans des dossiers ou jetez ce qui ne sert plus.\nGardez seulement les 2–3 choses utiles pour la journée."
+  },
+  {
+    id:'lib_rgt_coins_invisibles',
+    cat:'rangement',
+    emoji:'🧺',
+    titre:'Un coin « qu’on ne voit jamais » traité',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:20,
+    recurrence:1,
+    desc:"Choisissez un coin discret : dessus d’armoire, dessous de lit.\nDépoussiérez et triez ce qui y est stocké.\nDécidez ce qui mérite vraiment d’y rester."
+  },
+  {
+    id:'lib_rgt_don_regulier',
+    cat:'rangement',
+    emoji:'📦',
+    titre:'Sac de dons rempli et sorti',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:20,
+    recurrence:1,
+    desc:"Gardez un sac dédié aux objets à donner.\nAjoutez-y régulièrement vêtements ou objets en bon état.\nPlanifiez un trajet pour le déposer dans un point de collecte."
+  },
+
+  /* =========================
+   * PLANNING / ORGANISATION (10)
+   * ========================= */
+  {
+    id:'lib_org_agenda',
+    cat:'planning',
+    emoji:'🗓️',
+    titre:'Mini point agenda de la semaine',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Passez ensemble les gros rendez-vous de la semaine.\nRepérez les jours les plus chargés.\nChoisissez une seule priorité par jour au lieu de tout faire."
+  },
+  {
+    id:'lib_org_liste_courses',
+    cat:'planning',
+    emoji:'🧾',
+    titre:'Liste de courses commune à jour',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Regardez frigo et placards avec la liste sous la main.\nAjoutez les produits qui manquent vraiment.\nNotez un symbole pour ce qu’il faut acheter en urgence."
+  },
+  {
+    id:'lib_org_retro',
+    cat:'planning',
+    emoji:'🔍',
+    titre:'Petit bilan de la semaine',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:15,
+    recurrence:1,
+    desc:"Notez 3 choses qui ont bien fonctionné cette semaine.\nRepérez 1 point à alléger ou simplifier.\nChoisissez une petite expérimentation pour la semaine suivante."
+  },
+  {
+    id:'lib_org_tache_critique',
+    cat:'planning',
+    emoji:'⚠️',
+    titre:'Tâche critique identifiée et planifiée',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Repérez la tâche qui aura le plus d’impact si elle est faite.\nBloquez un créneau réel dans l’agenda pour la traiter.\nDécoupez-la si nécessaire en deux sous-étapes."
+  },
+  {
+    id:'lib_org_vision_mois',
+    cat:'planning',
+    emoji:'📆',
+    titre:'Vue globale du mois',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:20,
+    recurrence:1,
+    desc:"Affichez votre calendrier sur 4 semaines.\nSurvolez les périodes chargées pour anticiper.\nDécidez d’un week-end ou d’une soirée plus « off »."
+  },
+  {
+    id:'lib_org_recurrences',
+    cat:'planning',
+    emoji:'♻️',
+    titre:'Rituels fixés dans le calendrier',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'mensuel',
+    baseMin:20,
+    recurrence:1,
+    desc:"Listez les habitudes ou rencontres que vous voulez voir revenir.\nProgrammez-les comme événements récurrents.\nVérifiez qu’il reste encore des plages libres."
+  },
+  {
+    id:'lib_org_point_5min',
+    cat:'planning',
+    emoji:'⏱️',
+    titre:'Point 5 minutes en début de journée',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:5,
+    recurrence:5,
+    desc:"Regardez rapidement la journée qui arrive.\nChoisissez une seule chose à absolument terminer.\nNotez-la sur un post-it ou en haut de votre to-do."
+  },
+  {
+    id:'lib_org_mail_batch',
+    cat:'planning',
+    emoji:'📧',
+    titre:'Bloc mails groupés',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:15,
+    recurrence:5,
+    desc:"Choisissez deux créneaux pour traiter les mails plutôt qu’en continu.\nCommencez par supprimer et archiver ce qui n’a pas besoin de réponse.\nRépondez d’abord aux messages qui débloquent d’autres personnes."
+  },
+  {
+    id:'lib_org_delegation',
+    cat:'planning',
+    emoji:'🤝',
+    titre:'Tâches à déléguer identifiées',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'hebdo',
+    baseMin:10,
+    recurrence:1,
+    desc:"Repérez les tâches qui ne nécessitent pas absolument votre présence.\nNotez à qui elles pourraient être confiées.\nClarifiez le résultat attendu plutôt que la manière de faire."
+  },
+  {
+    id:'lib_org_pause_programmee',
+    cat:'planning',
+    emoji:'☕',
+    titre:'Pause réelle planifiée',
+    type:'group',
+    scope:'commun',
+    modeDefault:'commun',
+    freqDefault:'quotidien',
+    baseMin:10,
+    recurrence:5,
+    desc:"Choisissez au moins une pause dans la journée et inscrivez-la.\nÉloignez-vous réellement de l’écran pendant ce temps.\nUtilisez ce moment pour respirer, marcher ou boire un verre d’eau."
+  }
+];
+
+// Catégories lisibles pour le filtre d’ajout
+const LIB_CAT_LABELS = {
+  tous:'Tous',
+  individuel:'Individuel',
+  coloc:'Colocation',
+  famille:'Famille',
+  asso:'Association',
+  classe:'Classe',
+  bureau:'Bureau',
+  cuisine:'Cuisine',
+  linge:'Linge',
+  rangement:'Rangement',
+  planning:'Organisation / planning'
+};
+
+const claps={};
+(()=>{ // "likes" de démo
+  const all=[...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,...CLASS_CHALLENGES,...OFFICE_CHALLENGES,...ASSOCIATION_CHALLENGES,...LIBRARY_HABITS];
+  all.forEach(c=>{
+    claps[c.id]={};
+    [...new Set([...(c.amis||[]),'Moi'])].forEach(n=>claps[c.id][n]=Math.floor(Math.random()*101));
+  });
+})();
+
+/* États / stock */
 const HABIT_DESC={}, HABIT_TITLE_CUSTOM={}, SPACE_DESC_TXT={};
 const BASE_MINUTES={}, HABIT_MODE={}, LOCKED_COMMUN={}, LOCKED_BY={}, DONE_SETS={};
 const HAS_DESC={}, DELETED_HABITS=new Set();
-
-/* Fréquences */
-const FREQ_MODE={};
-function defaultFreqMode(h){if(h.type==='group'){return Math.random()<0.6?{type:'quotidien'}:{type:'tousx',x:2}}return Math.random()<0.4?{type:'quotidien'}:{type:'tousx',x:Math.floor(Math.random()*4)+2}}
+const FREQ_MODE={}, HABIT_REC={};
 
 /* Utils */
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 function fmtDate(d){const M=['01','02','03','04','05','06','07','08','09','10','11','12'][d.getMonth()];const j=String(d.getDate()).padStart(2,'0');const J=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'][d.getDay()];return `${J} ${j}/${M}`;}
+function weekLabel(d){
+  const day=d.getDay(); // 0=dim
+  const monday=new Date(d);monday.setDate(d.getDate()-((day+6)%7));
+  const sunday=new Date(monday);sunday.setDate(monday.getDate()+6);
+  const f=x=>`${String(x.getDate()).padStart(2,'0')}/${String(x.getMonth()+1).padStart(2,'0')}`;
+  return `Semaine du ${f(monday)} au ${f(sunday)}`;
+}
 function genCode(){const c='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';let s='';for(let i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];return s;}
 const round15=m=>Math.round(m/15)*15;function rint(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
 function pickQuarterUpTo75(){return 15*rint(1,5)}
 function lvlEmoji(v){if(v<=7)return'🌰';if(v<=14)return'🌱';if(v<=21)return'🍀';if(v<=28)return'🌼';if(v<=35)return'🌻';if(v<=42)return'🌷';if(v<=49)return'🌹';if(v<=56)return'🪻';if(v<=64)return'💐';return'🎋';}
 function names(xs,m=3){if(xs.length<=m)return xs.join(', ');const s=xs.slice(0,m).join(', ');return `${s}… et ${xs.length-m} autres`;}
 function m2txt(m){const h=Math.floor(m/60),mn=m%60;return `${h}h${String(mn).padStart(2,'0')}`;}
-function m2txtShort(m){if(!m)return'-';const h=(m/60)|0, mn=m%60;return h?`${h}h${String(mn).padStart(2,'0')}`:`${mn}m`;}
-const GENERIC_TIPS=["Commence petit et régulier.","Prépare ton matériel à l’avance.","Bloque un créneau fixe au calendrier.","Annonce ton objectif à un ami.","Trace tes progrès chaque jour.","Célèbre chaque micro-victoire.","Réduis la friction: rends l’action évidente.","Associe l’habitude à un déclencheur simple.","Fais-le même 2 minutes les jours difficiles.","Rends l’environnement compatible.","Supprime une distraction évidente.","Crée une check-list de 3 étapes.","Plan B si tu rates ton horaire.","Ferme la boucle: fais un petit bilan.","Prépare une version ‘voyage’ minimaliste.","Utilise un rappel doux (alarme ou post-it).","Vis au rythme: respire avant de commencer.","Visualise le résultat attendu.","Ralentis pour être précis, puis accélère.","Note une difficulté & une solution.","Partage un retour d’expérience avec un pair.","Automatise ce qui peut l’être.","Range immédiatement après l’action.","Récompense-toi sans culpabilité.","Passe en mode avion 20 minutes."];
+function m2txtShort(m){if(!m)return'0m';const h=(m/60)|0, mn=m%60;return h?`${h}h${String(mn).padStart(2,'0')}`:`${mn}m`;}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function buildDesc(){return shuffle([...GENERIC_TIPS]).slice(0,7).join('\n')}
+const GENERIC_TIPS=["Commence petit et régulier.","Prépare ton matériel à l’avance.","Bloque un créneau fixe au calendrier.","Annonce ton objectif à un ami.","Trace tes progrès chaque jour.","Célèbre chaque micro-victoire.","Réduis la friction: rends l’action évidente.","Associe l’habitude à un déclencheur simple.","Fais-le même 2 minutes les jours difficiles.","Rends l’environnement compatible.","Supprime une distraction évidente.","Crée une check-list de 3 étapes.","Plan B si tu rates ton horaire.","Ferme la boucle: fais un petit bilan.","Prépare une version ‘voyage’ minimaliste.","Utilise un rappel doux (alarme ou post-it).","Vis au rythme: respire avant de commencer.","Visualise le résultat attendu.","Ralentis pour être précis, puis accélère.","Note une difficulté & une solution.","Partage un retour d’expérience avec un pair.","Automatise ce qui peut l’être.","Range immédiatement après l’action.","Récompense-toi sans culpabilité.","Passe en mode avion 20 minutes."];
+
+/* Descriptions 2–8 phrases */
+function buildDesc(min=2,max=8){
+  const n=rint(min,max);
+  return shuffle([...GENERIC_TIPS]).slice(0,n).join('\n');
+}
 function oneLiner(s){return (s||'').replace(/\s*\n\s*/g,' · ')}
 
 /* Global */
 let period='30', spaceId='D0PWE3', userName='Moi', dayOff=0;
 
-/* Spaces */
-const SPACES={'D0PWE3':{emoji:'👤',label:'👤 Individu',type:'private',ch:CHALLENGES,desc:'Jardin personnel.'},'E8D3FS':{emoji:'🏠',label:'🏠 Colocation',type:'group',ch:GROUP_CHALLENGES,desc:'Jardin partagé à la maison.'},'AS50CI':{emoji:'🏛️',label:'🏛️ Association',type:'group',ch:ASSOCIATION_CHALLENGES,desc:'Rituels d’équipe pour une asso.'},'WS32D7':{emoji:'🌞',label:'🌞 Famille',type:'group',ch:FAMILY_CHALLENGES,desc:'Routines familiales au quotidien.'},'SR3S0D':{emoji:'🏫',label:'🏫 Classe',type:'group',ch:CLASS_CHALLENGES,desc:'Vie de classe et rituels pédagogiques.'},'PD03XZ':{emoji:'🏢',label:'🏢 Bureau',type:'group',ch:OFFICE_CHALLENGES,desc:'Rituels simples pour mieux travailler.'}};
+/* Spaces (orgMode: day ou week) */
+const SPACES={
+ 'D0PWE3':{emoji:'👤',label:'👤 Individu',type:'private',orgMode:'day',ch:CHALLENGES,desc:'Jardin personnel.'},
+ 'E8D3FS':{emoji:'🏠',label:'🏠 Colocation',type:'group',orgMode:'day',ch:GROUP_CHALLENGES,desc:'Jardin partagé à la maison.'},
+ 'AS50CI':{emoji:'🏛️',label:'🏛️ Association',type:'group',orgMode:'week',ch:ASSOCIATION_CHALLENGES,desc:'Rituels d’équipe pour une asso.'},
+ 'WS32D7':{emoji:'🌞',label:'🌞 Famille',type:'group',orgMode:'day',ch:FAMILY_CHALLENGES,desc:'Routines familiales au quotidien.'},
+ 'SR3S0D':{emoji:'🏫',label:'🏫 Classe',type:'group',orgMode:'week',ch:CLASS_CHALLENGES,desc:'Vie de classe et rituels pédagogiques.'},
+ 'PD03XZ':{emoji:'🏢',label:'🏢 Bureau',type:'group',orgMode:'week',ch:OFFICE_CHALLENGES,desc:'Rituels simples pour mieux travailler.'}
+};
 const HABIT_TITLE_IS_CUSTOM={};
 
+/* Fréquence : tout = quotidien par défaut (UI conservée) */
+function defaultFreqMode(){return {type:'quotidien'}}
+function isVisibleToday(){return true}
+
 /* Init */
-;[...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,...CLASS_CHALLENGES,...OFFICE_CHALLENGES,...ASSOCIATION_CHALLENGES].forEach(h=>{
-  if(!FREQ_MODE[h.id]) FREQ_MODE[h.id]=defaultFreqMode(h);
+;[...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,...CLASS_CHALLENGES,...OFFICE_CHALLENGES,...ASSOCIATION_CHALLENGES,...LIBRARY_HABITS].forEach(h=>{
+  FREQ_MODE[h.id]={type:(h.freqDefault||'quotidien')};
 });
 
-/* Helpers */
-function ensureHabit(hid){
- if(!BASE_MINUTES[hid]) BASE_MINUTES[hid]=pickQuarterUpTo75();
-// 50% des habitudes sans description
-if(HABIT_DESC[hid]===undefined){
-HABIT_DESC[hid] = (Math.random()<0.5) ? '' : buildDesc();
+/* ===== Helpers visuels encadrés ===== */
+function applyCardClass(card,st,owner,helping,modeType){
+  card.className=card.className.replace(/\bs0shared\b|\bs0\b|\bs1me\b|\bs1help\b|\bs1other\b|\bs2me\b|\bs2other\b/g,'').trim();
+  if(st===0){
+    if(modeType==='commun') card.classList.add('s0shared'); else card.classList.add('s0');
+  }else if(st===1){
+    if(owner==='Moi') card.classList.add('s1me');
+    else if(helping)  card.classList.add('s1help');
+    else              card.classList.add('s1other');
+  }else if(st===2){
+    if(owner==='Moi') card.classList.add('s2me');
+    else              card.classList.add('s2other');
+  }
 }
-  if(!HABIT_DESC[hid]) HABIT_DESC[hid]= HAS_DESC[hid] ? buildDesc() : '';
+
+/* Utils cartes */
+function ensureOwnerBadge(friends,owner,it,btn){
+  let b=friends.querySelector('.owner-badge');
+  if(!owner){ if(b) b.remove(); return; }
+  if(!b){
+    b=document.createElement('button');
+    b.type='button';
+    b.className='badge owner-badge';
+    b.addEventListener('click',(e)=>{e.stopPropagation(); openDetail(it.id,btn); selectDetailTab('members');});
+    friends.appendChild(b);
+  }
+  b.textContent=`🧑‍🌾 ${owner}`;
+}
+function ensureHelperBadge(friends,helpers){
+  helpers=[...new Set(helpers||[])];
+  let b=friends.querySelector('.helper-badge');
+  if(helpers.length===0){ if(b) b.remove(); return; }
+  if(!b){ b=document.createElement('div'); b.className='badge helper-badge'; friends.appendChild(b); }
+  b.textContent=`🤝 ${names(helpers,3)}`;
+}
+function ensureHeartBadge(friends,shouldShow,namesList,btnRef){
+  let b=friends.querySelector('.heart-badge');
+  if(!shouldShow){
+    if(b) b.remove();
+    return;
+  }
+  if(!b){
+    b=document.createElement('button');
+    b.type='button';
+    b.className='badge heart heart-badge';
+    friends.appendChild(b);
+    b.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const arr = JSON.parse(btnRef.dataset.heartList||'[]');
+      const meIdx = arr.indexOf('Moi');
+      if(meIdx>=0) arr.splice(meIdx,1); else arr.unshift('Moi');
+      btnRef.dataset.heartList = JSON.stringify(arr);
+      b.textContent = `❤️ ${arr.length?arr.join(', '):' '}`;
+      b.classList.toggle('liked', arr.includes('Moi'));
+    });
+  }
+  b.textContent=`❤️ ${namesList.length?namesList.join(', '):' '}`;
+  b.classList.toggle('liked', namesList.includes('Moi'));
+}
+
+/* Tag "Chacun" — supprimé */
+function ensureModeTag(){ /* no-op */ }
+
+/* Description open/close */
+let openCard=null;
+function collapseOpenDesc(){
+  if(!openCard) return;
+  const d=openCard.querySelector('.desc');
+  if(d){d.classList.remove('open');d.classList.add('hidden');d.textContent=d.dataset.short||'';}
+  openCard.classList.remove('ready');openCard=null;
+}
+document.addEventListener('click',e=>{if(openCard && !e.target.closest('.card')) collapseOpenDesc();},{capture:true})
+function setupDesc(desc,hid){
+  if(!HABIT_DESC[hid]) HABIT_DESC[hid]=buildDesc(2,8);
+  desc.dataset.full=HABIT_DESC[hid]||'';
+  desc.dataset.short=oneLiner(desc.dataset.full);
+  desc.dataset.has=desc.dataset.full? '1':'0';
+  desc.textContent=desc.dataset.short;
+  desc.classList.add('hidden');
+}
+
+/* Global helpers */
+function curDate(){const t=new Date();t.setHours(0,0,0,0);t.setDate(t.getDate()+dayOff);return t;}
+function getSpace(){return SPACES[spaceId]||SPACES['D0PWE3'];}
+function isWeekMode(){return getSpace().orgMode==='week';}
+function listChallenges(){return getSpace().ch;}
+function findAny(id){
+  return [
+    ...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,
+    ...CLASS_CHALLENGES,...OFFICE_CHALLENGES,...ASSOCIATION_CHALLENGES,
+    ...LIBRARY_HABITS
+  ].find(c=>c.id===id);
+}
+function habitLabel(it){const custom=HABIT_TITLE_CUSTOM[it.id];return custom&&custom.trim()?custom.trim():it.titre;}
+
+/* TodayCount : somme des minutes des tâches non faites + en cours */
+function minutesForTodayCount(base,st){return (st===0||st===1)? round15(base) : 0;}
+function sumTodayMinutes(){return $$('#cards .levelBtn').map(b=>{const st=+b.dataset.state||0, base=+b.dataset.baseMin||0;return minutesForTodayCount(base,st);}).reduce((a,b)=>a+b,0)}
+function renderDateBar(){
+  const d=curDate();
+  if(isWeekMode()){
+    $("#dateLabel").textContent=weekLabel(d);
+  }else{
+    $("#dateLabel").textContent=fmtDate(d);
+  }
+  $("#todayCount").textContent=m2txt(round15(sumTodayMinutes()));
+}
+
+/* Emojis & bouton */
+function currentBigEmoji(btn,tot){return btn.dataset.override|| (tot<=7?'🌰':tot<=14?'🌱':tot<=21?'🍀':tot<=28?'🌼':tot<=35?'🌻':tot<=42?'🌷':tot<=49?'🌹':tot<=56?'🪻':tot<=64?'💐':'🎋');}
+function drawBtn(btn){
+  const p=+btn.dataset.plants||0, s=+btn.dataset.suns||0, tot=p+s;
+  const st=+btn.dataset.state||0, base=+btn.dataset.baseMin||0;
+  const helping = btn.dataset.helping==='1';
+  const isWeek = btn.dataset.week==='1';
+  const R = +btn.dataset.recur||1;
+  const count = +btn.dataset.count||0;
+  const owner = btn.dataset.owner||'';
+  let val='';
+
+  if(st===0){
+    // À faire + durée sur 2 lignes
+    val = `À faire<br>${m2txtShort(base)}`;
+  }else if(st===1){
+    if(owner==='Moi'){
+      // Je fais + durée sur 2 lignes (jour & semaine)
+      val = `Je fais<br>${m2txtShort(base)}`;
+    }else if(isWeek){
+      const label = owner ? 'En cours' : 'À faire';
+      val = `${label} · ${count}/${R}`;
+    }else{
+      val = helping ? "J'aide" : 'En cours';
+    }
+  }else if(st===2){
+    if(isWeek){
+      // Fait + R/R sur 2 lignes (sans "·")
+      val = `Fait<br>${R}/${R}`;
+    }else{
+      val = 'Fait';
+    }
+  }else{
+    val = m2txtShort(base);
+  }
+
+  btn.innerHTML=`<div class="big">${currentBigEmoji(btn,tot)}</div><div class="scoreText">${val}</div>`;
+}
+
+/* Init per habit */
+function ensureHabit(hid){
+  const def=findAny(hid)||{};
+  if(!BASE_MINUTES[hid]) BASE_MINUTES[hid]=def.baseMin || pickQuarterUpTo75();
+  if(HABIT_DESC[hid]===undefined){HABIT_DESC[hid]=def.desc || buildDesc(2,8);}
   if(!HABIT_MODE[hid]){
-    const sp=getSpace();
-    if(sp.type==='private'){HABIT_MODE[hid]={type:'libre',n:2}}
-    else{ // collectif : libre ou commun uniquement
-      HABIT_MODE[hid]= Math.random()<0.8 ? {type:'commun',n:2} : {type:'libre',n:2};
+    if(def.modeDefault){
+      HABIT_MODE[hid]={type:(def.modeDefault==='commun'?'commun':def.modeDefault==='partage'?'commun':'libre'),n:2};
+    }else{
+      const sp=getSpace();
+      if(sp.type==='private'){HABIT_MODE[hid]={type:'libre',n:2}}
+      else{HABIT_MODE[hid]= Math.random()<0.8 ? {type:'commun',n:2} : {type:'libre',n:2};}
     }
   }
   if(!DONE_SETS[hid]) DONE_SETS[hid]=new Set();
   if(LOCKED_COMMUN[hid]===undefined){LOCKED_COMMUN[hid]=false;LOCKED_BY[hid]=null;}
-}
-function daySerial(d){return Math.floor(d.getTime()/86400000)}
-function curDate(){const t=new Date();t.setHours(0,0,0,0);t.setDate(t.getDate()+dayOff);return t;}
-function randDay(hid,serial){let h=0;const s=hid+':'+serial;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return (h%100)/100}
-
-/* visibilité par fréquence */
-function parseDDMMYYYY(str){const m=str.match(/^(\d{2})\/(\d{2})\/(\d{4})$/); if(!m) return null; const d=new Date(+m[3],+m[2]-1,+m[1]); d.setHours(0,0,0,0); return d;}
-function isSameDay(a,b){return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate()}
-function isVisibleToday(hid,d){
-  const fm=FREQ_MODE[hid]||{type:'quotidien'};
-  const serial=daySerial(d);
-  let due=true;
-  if(fm.type==='quotidien'){due=true}
-  else if(fm.type==='tousx'){const x=Math.max(2, fm.x||2); due=((serial % x)===0)}
-  else if(fm.type==='hebdo'){due=(d.getDay()===1)}
-  else if(fm.type==='ponctuelle'){const dd=parseDDMMYYYY(fm.date||''); due=dd?isSameDay(d,dd):false}
-  else if(fm.type==='jours'){const set=fm.days||new Set([1,2,3,4,5]); due=set.has(d.getDay());}
-  const hidden=(randDay(hid,serial)<0.25);
-  return due && !hidden;
+  if(!HABIT_REC[hid]) HABIT_REC[hid]=Math.max(1,Math.min(7,def.recurrence||rint(1,4)));
 }
 
-function getSpace(){return SPACES[spaceId]||SPACES['D0PWE3'];}
-function listChallenges(){return getSpace().ch;}
-function findAny(id){return [...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,...CLASS_CHALLENGES,...OFFICE_CHALLENGES,...ASSOCIATION_CHALLENGES].find(c=>c.id===id);}
-function habitLabel(it){const custom=HABIT_TITLE_CUSTOM[it.id];return custom&&custom.trim()?custom.trim():it.titre;}
-function habitLabelById(id){const it=findAny(id);return it?habitLabel(it):''}
-
-/* Durée par clic: 0 -> base -> base+15 -> 0 */
-function minutesFromState(base,st){if(st===1) return round15(base); if(st===2) return round15(base+15); return 0;}
-function sumTodayMinutes(){return $$('#cards .levelBtn').map(b=>{const st=+b.dataset.state||0, base=+b.dataset.baseMin||0;return minutesFromState(base,st);}).reduce((a,b)=>a+b,0)}
-function renderDateBar(){$("#dateLabel").textContent=fmtDate(curDate());$("#todayCount").textContent=m2txt(round15(sumTodayMinutes()));}
-
-/* Emojis */
-function currentBigEmoji(btn,tot){return btn.dataset.override|| (tot<=7?'🌰':tot<=14?'🌱':tot<=21?'🍀':tot<=28?'🌼':tot<=35?'🌻':tot<=42?'🌷':tot<=49?'🌹':tot<=56?'🪻':tot<=64?'💐':'🎋');}
-function drawBtn(btn){const p=+btn.dataset.plants||0, s=+btn.dataset.suns||0, tot=p+s;const st=+btn.dataset.state||0, base=+btn.dataset.baseMin||0;const val=st===0?'À faire':m2txtShort(minutesFromState(base,st));btn.innerHTML=`<div class="big">${currentBigEmoji(btn,tot)}</div><div class="scoreText">${val}</div>`;}
-
-/* Description open/close */
-let openCard=null;
-function collapseOpenDesc(){if(!openCard) return;const d=openCard.querySelector('.desc');if(d){d.classList.remove('open');d.classList.add('hidden');d.textContent=d.dataset.short||'';}openCard.classList.remove('ready');openCard=null;}
-document.addEventListener('click',e=>{if(openCard && !e.target.closest('.card')) collapseOpenDesc();},{capture:true})
-function setupDesc(desc,hid){
-desc.dataset.full=HABIT_DESC[hid]||'';desc.dataset.short=oneLiner(desc.dataset.full);desc.dataset.has=desc.dataset.full? '1':'0';
-desc.textContent=desc.dataset.short;desc.classList.add('hidden');
-}
-/* Détail */
-let activeId=null, refBtn=null;
-function openDetail(id,btnRef){
-  activeId=id;refBtn=btnRef;hideAll();$("#detail").classList.add('active');$("#daysWrap").classList.add('hide');
-  $$('.tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab="members"]').classList.add('active');
-  $$('#detail .view').forEach(v=>v.classList.remove('active'));$('#tab-members').classList.add('active');
-  const it=findAny(id);$("#detailTitle").textContent=`${it.emoji} ${habitLabel(it)}`;
-  renderRank();populateCalWho();renderCalendar();renderHabitSettings();
-}
-function selectDetailTab(key){
-  const b=[...document.querySelectorAll('#detail .tabs [data-tab]')].find(x=>x.dataset.tab===key); if(!b)return;
-  document.querySelectorAll('#detail .tabs [data-tab]').forEach(x=>x.classList.remove('active')); b.classList.add('active');
-  document.querySelectorAll('#detail .section .view').forEach(v=>v.classList.remove('active'));
-  document.querySelector(`#detail #${'tab-'+key}`)?.classList.add('active');
+/* Sélection quotidienne 4–9 habitudes par espace (déterministe par jour) */
+function dayKey(){const d=curDate();return `${spaceId}:${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;}
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++){h=(h*31 + s.charCodeAt(i))>>>0;}return h>>>0;}
+function rngSeed(seed){let x=seed>>>0;return ()=>{x=(x*1664525+1013904223)>>>0;return (x>>>0)/4294967296;};}
+function pickVisibleList(arr){
+  const seed=hashStr(dayKey());
+  const rand=rngSeed(seed);
+  const count=Math.min(arr.length, 4 + Math.floor(rand()*6)); // 4..9
+  const a=arr.slice();
+  for(let i=0;i<a.length-1;i++){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a.slice(0,count);
 }
 
 /* Cartes */
 function renderCards(){
   const root=$("#cards");root.innerHTML='';const d=curDate();
-  listChallenges().forEach(it=>{
+  const items = pickVisibleList(listChallenges());
+  items.forEach(it=>{
     if(DELETED_HABITS.has(it.id)) return;
     if(!isVisibleToday(it.id,d)) return; ensureHabit(it.id);
 
@@ -545,98 +2070,171 @@ function renderCards(){
     const title=document.createElement('div');title.className='title';
     const left=document.createElement('div');left.className='left';
     const displayTitle=habitLabel(it);
-    left.innerHTML=`<span style="font-size:24px">${it.emoji}</span><span class="base">${displayTitle}</span><span class="hint" id="h-${it.id}"></span>`;
+
+    left.innerHTML=`<span style="font-size:24px">${it.emoji}</span><span class="base">${displayTitle}</span>`;
     title.append(left);
 
-const pen=document.createElement('button');
-pen.className='editPen'; pen.title='Éditer'; pen.textContent='✏️';
-pen.addEventListener('click',(e)=>{
-e.stopPropagation();
-openDetail(it.id,btn);
-selectDetailTab('settings');
-});
-title.appendChild(pen);
+    const pen=document.createElement('button');
+    pen.className='editPen'; pen.title='Éditer'; pen.textContent='✏️';
+    title.appendChild(pen);
 
     const desc=document.createElement('div');desc.className='desc';setupDesc(desc,it.id);
+
     const friends=document.createElement('div');friends.className='friends';
-    // badge "seed" informatif (optionnel)
-    if(Math.random()<.5){const n=rint(1,2);const seed=[...it.amis].sort(()=>Math.random()-.5).slice(0,n);const b=document.createElement('div');b.className='badge seed-badge';b.textContent=`💧 ${names(seed)}`;friends.appendChild(b)}
     cont.append(title,desc,friends);
 
     const col=document.createElement('div');col.className='levelCol';
     const btn=document.createElement('button');btn.className='levelBtn';btn.dataset.cid=it.id;
     const basePlants=Math.floor(Math.random()*65), suns=claps[it.id]?.['Moi']??0;
     btn.dataset.basePlants=String(basePlants);btn.dataset.plants=String(basePlants);btn.dataset.suns=String(suns);
-    btn.dataset.baseMin=String(BASE_MINUTES[it.id]);btn.dataset.state='0';btn.dataset.override='';
+    btn.dataset.baseMin=String(BASE_MINUTES[it.id]);
+    btn.dataset.recur=String(HABIT_REC[it.id]||1);
+    btn.dataset.count='0';
+    btn.dataset.week = isWeekMode() ? '1' : '0';
 
-    /* ne pas déplacer les cartes en fin de liste */
-    const setDoneVisual=(on)=>{const baseEl=title.querySelector('.base'); if(on){card.classList.add('done');baseEl.classList.add('strike');}else{card.classList.remove('done');baseEl.classList.remove('strike');}};
-    const applySunBadge=(on)=>{const existing=friends.querySelector('.sun-badge'); if(existing) existing.remove(); if(!on) return; const b=document.createElement('div');b.className='badge sun-badge';const others=[...it.amis].sort(()=>Math.random()-.5).slice(0,rint(1,3));const who=new Set(others);who.add('Moi');b.textContent=`🌞 ${names(Array.from(who),3)}`;friends.appendChild(b)};
+    const mode=HABIT_MODE[it.id]||{type:'libre'};
+    let st=0, owner='', helpers=[];
+    const r=Math.random();
+    if(r<0.3){
+      st=1;
+      const byMe = Math.random()<1/3;
+      owner = byMe ? 'Moi' : (it.amis && it.amis[Math.floor(Math.random()*it.amis.length)]) || 'Quelqu\'un';
+      if(isWeekMode()) btn.dataset.count=String(rint(1,HABIT_REC[it.id]||1));
+    }else if(r<0.6){
+      st=2;
+      const byMe = Math.random()<1/3;
+      owner = byMe ? 'Moi' : (it.amis && it.amis[Math.floor(Math.random()*it.amis.length)]) || 'Quelqu\'un';
+      if(isWeekMode()) btn.dataset.count=String(HABIT_REC[it.id]||1);
+    }else{
+      st=0;
+    }
+
+    btn.dataset.state=String(st);
+    btn.dataset.owner=owner;
+    btn.dataset.helping='0';
+    btn.dataset.helpers = JSON.stringify(helpers);
+
+    const baseHeartNames = (()=> {
+      if(Math.random()<0.5) return [];
+      const pool=[...new Set(it.amis||[])];
+      shuffle(pool);
+      return pool.slice(0, Math.max(1, Math.min(3, Math.floor(Math.random()*4))));
+    })();
+    btn.dataset.heartList = JSON.stringify(baseHeartNames);
+
+    const setVisualFromState=(stNow)=>{
+      const baseEl=title.querySelector('.base');
+      const ownerNow=btn.dataset.owner||'';
+      const helpingNow=btn.dataset.helping==='1';
+      applyCardClass(card,stNow,ownerNow,helpingNow,(HABIT_MODE[it.id]||{type:'libre'}).type);
+      baseEl.classList.toggle('strike', stNow===2 && ownerNow==='Moi');
+      ensureModeTag();
+    };
+
+    const renderBadges=()=>{
+      const stNow=+btn.dataset.state||0;
+      const ownerNow=btn.dataset.owner||'';
+      const helpingNow=btn.dataset.helping==='1';
+      if(mode.type==='commun'){
+        ensureOwnerBadge(friends, (stNow===1||stNow===2)? ownerNow : '', it, btn);
+        const hlist = (btn.dataset.helpers? JSON.parse(btn.dataset.helpers): [])||[];
+        ensureHelperBadge(friends, hlist);
+      }else{
+        ensureOwnerBadge(friends, stNow===2?'Moi':'', it, btn);
+        ensureHelperBadge(friends, []);
+      }
+      const shouldHeart = (stNow===1) || (stNow===2 && ownerNow!=='Moi');
+      const arr = JSON.parse(btn.dataset.heartList||'[]');
+      ensureHeartBadge(friends, shouldHeart, arr, btn);
+    };
+
+    const ensureOpenDesc=()=>{ if(openCard!==card){ collapseOpenDesc(); openCard=card; }
+      if(!desc.classList.contains('open')){ desc.classList.remove('hidden'); desc.classList.add('open'); desc.textContent=desc.dataset.full||''; }
+    };
+    const hideDescNow=()=>{ desc.classList.remove('open'); desc.classList.add('hidden'); desc.textContent=desc.dataset.short||''; if(openCard===card) openCard=null; };
+
+    const applyState=(nst,{keepOwner=false}={})=>{
+      btn.dataset.state=String(nst);
+      if(!keepOwner && nst===0){ btn.dataset.owner=''; btn.dataset.helping='0'; btn.dataset.helpers='[]'; btn.dataset.count='0'; }
+      if(nst===1 && !btn.dataset.owner){ btn.dataset.owner='Moi'; }
+      if(nst===2 && !btn.dataset.owner){ btn.dataset.owner='Moi'; }
+      drawBtn(btn); setVisualFromState(nst); renderBadges();
+      if(nst===1){ ensureOpenDesc(); } else { hideDescNow(); }
+      renderDateBar();
+    };
+
+    // Clic mode semaine : X/R
+    const clickWeekly = ()=>{
+      let st=+btn.dataset.state||0;
+      let count=+btn.dataset.count||0;
+      const R=+btn.dataset.recur||1;
+
+      if(st===0){
+        st=1; count=1; btn.dataset.owner='Moi';
+      }else if(st===1){
+        if(count < R){ count++; }
+        else{ st=2; }
+      }else if(st===2){
+        st=0; count=0; btn.dataset.owner='';
+      }
+      btn.dataset.count=String(count);
+      applyState(st,{keepOwner:st!==0});
+    };
+
+    const clickCommon = ()=>{
+      if(isWeekMode()){ clickWeekly(); return; }
+      const st=+btn.dataset.state||0;
+      const owner=btn.dataset.owner||'';
+      if(st===0){
+        btn.dataset.owner='Moi';
+        applyState(1);
+        return;
+      }
+      if(st===1){
+        if(owner==='Moi'){
+          applyState(2,{keepOwner:true});
+        }else{
+          const helping = btn.dataset.helping==='1';
+          btn.dataset.helping = helping?'0':'1';
+          let hs = JSON.parse(btn.dataset.helpers||'[]');
+          if(helping){ hs = hs.filter(n=>n!=='Moi'); } else { if(!hs.includes('Moi')) hs.push('Moi'); }
+          btn.dataset.helpers = JSON.stringify(hs);
+          drawBtn(btn); setVisualFromState(1); renderBadges(); renderDateBar();
+        }
+        return;
+      }
+      if(st===2){
+        if(owner==='Moi'){
+          applyState(0);
+        }
+        return;
+      }
+    };
+
+    const clickLibre = ()=>{
+      if(isWeekMode()){ clickWeekly(); return; }
+      const st=+btn.dataset.state||0;
+      const next = st===0?1 : (st===1?2 : 0);
+      if(next===1){ btn.dataset.owner='Moi'; }
+      if(next===2){ btn.dataset.owner='Moi'; }
+      applyState(next);
+    };
+
+    const handleClick=()=>{ (mode.type==='commun') ? clickCommon() : clickLibre(); };
 
     drawBtn(btn);
-    updateHint(it.id, title.querySelector('.hint'));
+    setVisualFromState(st);
+    renderBadges();
 
- const ensureOpenDesc=()=>{ if(openCard!==card){ collapseOpenDesc(); openCard=card; }
-    if(!desc.classList.contains('open')){ desc.classList.remove('hidden'); desc.classList.add('open'); desc.textContent=desc.dataset.full||''; }
- };
-    const hideDescNow=()=>{ if(desc.classList.contains('open')){desc.classList.remove('open');desc.classList.add('hidden');desc.textContent=desc.dataset.short||'';openCard=null;title.querySelector('.editPen')?.remove();} };
-
-    const advanceState=(next)=>{
-      btn.dataset.state=String(next);drawBtn(btn);renderDateBar();
-      if(next>0){ setDoneVisual(true); hideDescNow(); applySunBadge(true); }
-      else{ setDoneVisual(false); applySunBadge(false); }
-    };
-
-    // règles de clic simplifiées :
-    // - si pas de description => 1er clic valide directement (state 1), 2e clic -> state 2, 3e -> 0
-    // - si description => clic1 ouvre desc, clic2 -> state1, clic3 -> state2, clic4 -> 0
-    const handleClick=()=>{
-      const hasDesc = !!(HABIT_DESC[it.id]||'').trim();
-      const isOpen = desc.classList.contains('open');
-      const st = +btn.dataset.state||0;
-
-      if(!hasDesc){
-        // cycle direct 0->1->2->0
-        const next = st===0?1 : st===1?2 : 0;
-        advanceState(next);
-        return;
-      }
-      // Avec description
-      if(st===0 && !isOpen){ // 1er clic = ouvrir
-        ensureOpenDesc();
-        return;
-      }
-      // ensuite on cycle 0->1->2->0
-      const next = st===0?1 : st===1?2 : 0;
-      advanceState(next);
-    };
+    pen.addEventListener('click',(e)=>{ e.stopPropagation(); openDetail(it.id,btn); selectDetailTab('settings'); });
+    if(st===1) ensureOpenDesc();
 
     col.addEventListener('click',handleClick);
     cont.addEventListener('click',(e)=>{ if(e.target.closest('.badge')) return; handleClick(); });
-    friends.addEventListener('click', (e) => {
-  const badge = e.target.closest('.badge');
-  if (!badge) return;
-  e.stopPropagation();
-  openDetail(it.id, btn);       // ouvre la fiche de l’habitude
-  selectDetailTab('members');   // et l’onglet "Jardiniers"
-});
+
     col.append(btn);card.append(col,cont);root.appendChild(card);
   });
   renderDateBar();
-}
-
-/* Hints : uniquement en Collectif */
-function updateHint(hid,el){
-  if(!el) return;
-  const sp=getSpace();
-  if(sp.type!=='group'){ el.textContent=''; return; }
-  const mode=HABIT_MODE[hid]||{type:'libre'};
-  if(mode.type==='commun'){
-    el.textContent = LOCKED_COMMUN[hid] ? `Collectif · terminé` : `Collectif`;
-  }else{
-    // libre en collectif : on affiche quand même "Collectif" (plus discret possible)
-    el.textContent = 'Collectif';
-  }
 }
 
 /* ===== Calendriers ===== */
@@ -652,15 +2250,15 @@ function renderCalendar(){
     const dn=document.createElement('div');dn.className='dayNum';dn.textContent=String(d);c.appendChild(dn);
     if(Math.random()<0.6){
       const min=pickQuarterUpTo75();
-      const mark=document.createElement('div');mark.className='seedMark';mark.textContent='💧';c.appendChild(mark);
+      const mark=document.createElement('div');mark.className='seedMark';mark.textContent='🧑‍🌾';c.appendChild(mark);
       const dur=document.createElement('div');dur.className='dur';dur.textContent=m2txtShort(min);c.appendChild(dur);
       monthMinutes+=min;
     }
-    if(sameMonth&&d===today.getDate()){c.style.outline=`2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--green')}`}
+    if(sameMonth&&d===today.getDate()){c.style.outline=`2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--green')}`;}
     c.onclick=()=>{const b=new Date();b.setDate(1);b.setMonth(b.getMonth()+calOff);const tgt=new Date(b.getFullYear(),b.getMonth(),d),now=new Date();now.setHours(0,0,0,0);dayOff=Math.round((tgt-now)/86400000);showHome();renderCards();renderDateBar();window.scrollTo({top:0,behavior:'smooth'})};
     wrap.appendChild(c);
   }
-  $("#monthLabel").textContent=`${months[m]} ${y}  💧${m2txt(round15(monthMinutes))}`;
+  $("#monthLabel").textContent=`${months[m]} ${y}  🧑‍🌾${m2txt(round15(monthMinutes))}`;
 }
 $("#prevMonth").onclick=()=>{calOff--;renderCalendar()};$("#nextMonth").onclick=()=>{calOff++;renderCalendar()};$("#calWho")?.addEventListener('change',renderCalendar);
 
@@ -669,24 +2267,54 @@ function showHome(){hideAll();$("#home").classList.add('active');$("#daysWrap").
 function hideAll(){$$('#home,#detail,#space').forEach(v=>v.classList.remove('active'))}
 $("#backHome").onclick=showHome;
 
-/* ===== Classement ===== */
+/* ===== Classement (texte simple ❤️🤝) ===== */
 function demoHM(rangeDays){const min=round15(rint(30,25*60));return {min, txt:m2txt(min)}}
 function likeFactorFromMin(min){return 0.5+(min/60)/25}
-function makeLikeBtn(base){const b=document.createElement('button');b.className='btn likeBtn';b.textContent=`🌞 ${base}`;b.dataset.base=String(base);b.dataset.liked='0';b.onclick=()=>{const liked=b.dataset.liked==='1';b.dataset.liked=liked?'0':'1';b.textContent=`🌞 ${liked?b.dataset.base:(+b.dataset.base+1)}`;b.style.outline=liked?'none':'2px solid var(--green)'};return b}
 function renderRank(){
   const it=findAny(activeId);const days=period==='7'?7:period==='30'?30:120;
-  const rows=[...it.amis.map(n=>({n,me:false})),{n:userName||'Moi',me:true}].map(x=>{const v=demoHM(days);const baseLikes=Math.max(0,Math.round(v.min/60*likeFactorFromMin(v.min)));return {...x,totalMin:v.min,txt:v.txt,likes:baseLikes};}).sort((a,b)=>b.totalMin-a.totalMin);
-  const root=$("#rank");root.innerHTML='';rows.forEach(({n,totalMin,txt,me,likes})=>{const row=document.createElement('div');row.className='row';const left=document.createElement('div');left.className='leftRank';const big=document.createElement('span');big.className='scoreEmoji';big.textContent=`${lvlEmoji(Math.min(65,Math.round(totalMin/60)))} ${txt}`;const name=document.createElement('b');name.textContent=`${n}${me?' (toi)':''}`;left.append(big,name);const like=makeLikeBtn(likes);row.append(left,like);root.appendChild(row);});
+  const rows=[...(it?.amis||[]).map(n=>({n,me:false})),{n:userName||'Moi',me:true}].map(x=>{
+    const v=demoHM(days);const baseLikes=Math.max(0,Math.round(v.min/60*likeFactorFromMin(v.min)));const help=rint(2,10);
+    return {...x,totalMin:v.min,txt:v.txt,likes:baseLikes,help};
+  }).sort((a,b)=>b.totalMin-a.totalMin);
+  const root=$("#rank");root.innerHTML='';
+  rows.forEach(({n,totalMin,txt,me,likes,help})=>{
+    const row=document.createElement('div');row.className='row';
+    const left=document.createElement('div');left.className='leftRank';
+    const big=document.createElement('span');big.className='scoreEmoji';big.textContent=`${lvlEmoji(Math.min(65,Math.round(totalMin/60)))} ${txt}`;
+    const name=document.createElement('b');name.textContent=`${n}${me?' (toi)':''}`;
+    left.append(big,name);
+    const right=document.createElement('div');right.style.display='flex';right.style.gap='8px';
+    const helpTxt=document.createElement('span');helpTxt.textContent=`🤝 ${help}h`;
+    const likeTxt=document.createElement('span');likeTxt.textContent=`❤️ ${likes}`;
+    right.append(helpTxt,likeTxt);
+    row.append(left,right);root.appendChild(row);
+  });
 }
 function updPeriodBtns(){$$('#btnP7,#btnP30,#btnPAll').forEach(b=>b.classList.toggle('active',b.dataset.period===period))}
-$('#btnP7').onclick=()=>{period='7';updPeriodBtns();renderRank()};$('#btnP30').onclick=()=>{period='30';updPeriodBtns();renderRank()};$('#btnPAll').onclick=()=>{period='all';updPeriodBtns();renderRank()};
+$('#btnP7').onclick=()=>{period='7';updPeriodBtns();renderRank()};
+$('#btnP30').onclick=()=>{period='30';updPeriodBtns();renderRank()};
+$('#btnPAll').onclick=()=>{period='all';updPeriodBtns();renderRank()};
 
 /* ===== Paramètres habitude ===== */
+let activeId=null, refBtn=null;
+function openDetail(id,btnRef){
+  activeId=id;refBtn=btnRef;hideAll();$("#detail").classList.add('active');$("#daysWrap").classList.add('hide');
+  $$('.tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab="members"]').classList.add('active');
+  $$('#detail .view').forEach(v=>v.classList.remove('active'));$('#tab-members').classList.add('active');
+  const it=findAny(id);$("#detailTitle").textContent=`${it.emoji} ${habitLabel(it)}`;
+  renderRank();populateCalWho();renderCalendar();renderHabitSettings();
+}
+function selectDetailTab(key){
+  const b=[...document.querySelectorAll('#detail .tabs [data-tab]')].find(x=>x.dataset.tab===key); if(!b)return;
+  document.querySelectorAll('#detail .tabs [data-tab]').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+  document.querySelectorAll('#detail .section .view').forEach(v=>v.classList.remove('active'));
+  document.querySelector(`#detail #${'tab-'+key}`)?.classList.add('active');
+}
+
 function renderHabitSettings(){
   if(!activeId)return; ensureHabit(activeId);
   const it=findAny(activeId);
 
-  // titre
   const titleInput=$("#habitTitleInput"), emojiEl=$("#habitTitleEmoji");
   if(it&&titleInput&&emojiEl){
     emojiEl.textContent=it.emoji||'🌱';
@@ -696,11 +2324,15 @@ function renderHabitSettings(){
       titleInput.dataset.bound='1';
     }
   }
-  // description
   const desc=$("#habitDesc");
-  if(desc){ desc.value=HABIT_DESC[activeId]||''; if(!desc.dataset.bound){ desc.addEventListener('input',()=>{HABIT_DESC[activeId]=desc.value;HAS_DESC[activeId]=!!desc.value.trim();renderCards();}); desc.dataset.bound='1'; } }
+  if(desc){
+    desc.value=HABIT_DESC[activeId]||'';
+    if(!desc.dataset.bound){
+      desc.addEventListener('input',()=>{HABIT_DESC[activeId]=desc.value;HAS_DESC[activeId]=!!desc.value.trim();renderCards();});
+      desc.dataset.bound='1';
+    }
+  }
 
-  // mode de réalisation (libre / commun)
   const modeSel=$("#modeSelect");
   if(modeSel){
     const m=HABIT_MODE[activeId]||{type:'libre',n:2};
@@ -708,47 +2340,75 @@ function renderHabitSettings(){
     modeSel.onchange=()=>{const t=modeSel.value;HABIT_MODE[activeId]={type:t,n:2};renderCards();};
   }
 
-  // fréquence
   const ft=$("#freqType"), fx=$("#freqX"), fDate=$("#freqDate"), fJ=$("#freqSubJours");
   if(ft&&fx&&fDate&&fJ){
-    const fm=FREQ_MODE[activeId]||(FREQ_MODE[activeId]=defaultFreqMode(it));
-    const setUI=()=>{
-      ft.value=fm.type||'quotidien';
-      $("#freqSubTousx").classList.toggle('hide',ft.value!=='tousx');
-      $("#freqSubPonctuelle").classList.toggle('hide',ft.value!=='ponctuelle');
-      fJ.classList.toggle('hide',ft.value!=='jours'); // jours visibles uniquement si "jours"
-      if(fm.type==='tousx'){fx.value=String(fm.x||2)}
-      if(fm.type==='ponctuelle'){fDate.value=fm.date||''}
-      if(fm.type==='jours'){fJ.querySelectorAll('input[type=checkbox]').forEach(cb=>{cb.checked = fm.days?fm.days.has(+cb.value):false;});}
-    };
-    setUI();
-    if(!ft.dataset.bound){
-      ft.onchange=()=>{const v=ft.value; if(v==='tousx')FREQ_MODE[activeId]={type:'tousx',x:parseInt(fx.value||'2',10)}; else if(v==='ponctuelle')FREQ_MODE[activeId]={type:'ponctuelle',date:(fDate.value||'')}; else if(v==='jours')FREQ_MODE[activeId]={type:'jours',days:new Set()}; else if(v==='hebdo')FREQ_MODE[activeId]={type:'hebdo'}; else FREQ_MODE[activeId]={type:'quotidien'}; setUI(); renderCards(); };
-      fx.onchange=()=>{const x=parseInt(fx.value||'2',10);FREQ_MODE[activeId]={...(FREQ_MODE[activeId]||{}),type:'tousx',x}; renderCards();};
-      fDate.oninput=()=>{FREQ_MODE[activeId]={...(FREQ_MODE[activeId]||{}),type:'ponctuelle',date:fDate.value}; renderCards();};
-      fJ.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',()=>{const days=new Set(FREQ_MODE[activeId]?.days||[]); if(cb.checked)days.add(+cb.value); else days.delete(+cb.value); FREQ_MODE[activeId]={type:'jours',days}; renderCards();}));
-      ft.dataset.bound='1';
-    }
+    ft.value='quotidien';
+    $("#freqSubTousx").classList.add('hide');
+    $("#freqSubPonctuelle").classList.add('hide');
+    fJ.classList.add('hide');
   }
 
-  // supprimer
+  const defaultDurSel=$("#mockDefaultDur");
+  if(defaultDurSel && !defaultDurSel.dataset.bound){
+    defaultDurSel.dataset.bound='1';
+    defaultDurSel.addEventListener('change',()=>{
+      const v=defaultDurSel.value.trim();
+      let mins=15;
+      if(v.startsWith('5 ')) mins=5;
+      else if(v.startsWith('15')) mins=15;
+      else if(v.startsWith('30')) mins=30;
+      else if(v.startsWith('45')) mins=45;
+      else if(v.startsWith('60')) mins=60;
+      BASE_MINUTES[activeId]=mins;
+      renderCards();
+    });
+  }
+
   const del=$("#deleteHabitBtn");
   if(del && !del.dataset.bound){
     del.onclick=()=>{ if(confirm('Supprimer cette habitude ?')){ DELETED_HABITS.add(activeId); showHome(); renderCards(); } };
     del.dataset.bound='1';
   }
+
+  const save=$("#saveHabitBtn");
+  if(save && !save.dataset.bound){
+    save.onclick=()=>{ alert('Habitude sauvegardée (mock)'); };
+    save.dataset.bound='1';
+  }
 }
 
 /* ===== Espace ===== */
 function openSpacePage(){hideAll();$("#space").classList.add('active');$("#daysWrap").classList.add('hide');updSpaceHeader();renderSpaceRank();setupSpaceInfo();populateSpaceWho();renderSpaceCalendar();maybeTogglePrivateAdd();}
-function updSpaceHeader(){const sp=getSpace();$("#spaceHeaderTitle").textContent=sp.label;$("#paramSpaceLabel").value=sp.label;$("#paramName").value=userName||'Moi'}
-function setupSpaceInfo(){const sp=getSpace();const t=$("#spaceDescInfo");t.value=SPACE_DESC_TXT[spaceId]??(sp.desc||'');t.classList.add('editing');t.oninput=()=>{SPACE_DESC_TXT[spaceId]=t.value;sp.desc=t.value}}
-function allMembersOfSpace(){const ch=listChallenges();const set=new Set(['Moi']);ch.forEach(c=>c.amis.forEach(a=>set.add(a)));return Array.from(set)}
+function updSpaceHeader(){
+  const sp=getSpace();
+  $("#spaceHeaderTitle").textContent=sp.label;
+  $("#paramSpaceLabel").value=sp.label;
+  $("#paramName").value=userName||'Moi';
+  const orgSel=$("#spaceOrgMode");
+  if(orgSel) orgSel.value=sp.orgMode||'day';
+}
+function setupSpaceInfo(){
+  const sp=getSpace();const t=$("#spaceDescInfo");
+  t.value=SPACE_DESC_TXT[spaceId]??(sp.desc||'');t.classList.add('editing');
+  t.oninput=()=>{SPACE_DESC_TXT[spaceId]=t.value;sp.desc=t.value}
+}
+function allMembersOfSpace(){const ch=listChallenges();const set=new Set(['Moi']);ch.forEach(c=>(c.amis||[]).forEach(a=>set.add(a)));return Array.from(set)}
 function renderSpaceRank(){
   const root = $("#spaceRank"); root.innerHTML = '';
   const days = sPeriod==='7' ? 7 : (sPeriod==='30' ? 30 : 120);
-  const rows = allMembersOfSpace().map(n=>{const v = demoHM(days);const baseLikes = Math.max(0, Math.round(v.min/60 * likeFactorFromMin(v.min)));return { n, txt:v.txt, min:v.min, me:(n===userName||n==='Moi'), likes:baseLikes };}).sort((a,b)=>b.min-a.min);
-  rows.forEach(({n,txt,min,me,likes})=>{const row=document.createElement('div'); row.className='row';const left=document.createElement('div'); left.className='leftRank';const big=document.createElement('span'); big.className='scoreEmoji';big.textContent = `${lvlEmoji(Math.min(65,Math.round(min/60)))} ${txt}`;const name=document.createElement('b'); name.textContent = `${n}${me?' (toi)':''}`;left.append(big,name);const like = makeLikeBtn(likes);row.append(left, like);root.appendChild(row);});
+  const rows = allMembersOfSpace().map(n=>{const v = demoHM(days);const baseLikes = Math.max(0, Math.round(v.min/60 * likeFactorFromMin(v.min)));return { n, txt:v.txt, min:v.min, me:(n===userName||n==='Moi'), likes:baseLikes, help:rint(2,10) };}).sort((a,b)=>b.min-a.min);
+  rows.forEach(({n,txt,min,me,likes,help})=>{
+    const row=document.createElement('div'); row.className='row';
+    const left=document.createElement('div'); left.className='leftRank';
+    const big=document.createElement('span'); big.className='scoreEmoji';big.textContent = `${lvlEmoji(Math.min(65,Math.round(min/60)))} ${txt}`;
+    const name=document.createElement('b'); name.textContent = `${n}${me?' (toi)':''}`;
+    left.append(big,name);
+    const right=document.createElement('div'); right.style.display='flex'; right.style.gap='8px';
+    const helpTxt=document.createElement('span'); helpTxt.textContent=`🤝 ${help}h`;
+    const likeTxt=document.createElement('span'); likeTxt.textContent=`❤️ ${likes}`;
+    right.append(helpTxt,likeTxt);
+    row.append(left, right);root.appendChild(row);
+  });
 }
 let sPeriod = '30';
 function updSpacePeriodBtns(){$$('#sBtnP7,#sBtnP30,#sBtnPAll').forEach(b=>b.classList.toggle('active', b.dataset.speriod===sPeriod));}
@@ -760,75 +2420,195 @@ let sCalOff=0;
 function populateSpaceWho(){const sel=$("#sCalWho");sel.innerHTML='';sel.add(new Option('Tous','__all__'));allMembersOfSpace().forEach(n=>sel.add(new Option(n,n)));sel.value='__all__';}
 function renderSpaceCalendar(){
   const wrap=$("#sCal");wrap.innerHTML='';const {y,m,fd,days}=minfo(sCalOff);const months=['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'];let monthMinutes=0;
-  for(let d=1,i=0;i<fd;i++){const c=document.createElement('div');c.className='cell';c.style.opacity=.35;wrap.appendChild(c)}
+  for(let i=0;i<fd;i++){const c=document.createElement('div');c.className='cell';c.style.opacity=.35;wrap.appendChild(c)}
   for(let d=1;d<=days;d++){
     const c=document.createElement('div');c.className='cell';const dn=document.createElement('div');dn.className='dayNum';dn.textContent=String(d);c.appendChild(dn);
-    if(Math.random()<0.65){const mins=pickQuarterUpTo75();const mark=document.createElement('div');mark.className='seedMark';mark.textContent='💧';c.appendChild(mark);const dur=document.createElement('div');dur.className='dur';dur.textContent=m2txtShort(mins);c.appendChild(dur);monthMinutes+=mins;}
+    if(Math.random()<0.65){const mins=pickQuarterUpTo75();const mark=document.createElement('div');mark.className='seedMark';mark.textContent='🧑‍🌾';c.appendChild(mark);const dur=document.createElement('div');dur.className='dur';dur.textContent=m2txtShort(mins);c.appendChild(dur);monthMinutes+=mins;}
     wrap.appendChild(c);
   }
-  $("#sMonthLabel").textContent=`${months[m]} ${y}  💧${m2txt(round15(monthMinutes))}`;
+  $("#sMonthLabel").textContent=`${months[m]} ${y}  🧑‍🌾${m2txt(round15(monthMinutes))}`;
 }
 $("#sPrevMonth").onclick=()=>{sCalOff--;renderSpaceCalendar()};$("#sNextMonth").onclick=()=>{sCalOff++;renderSpaceCalendar()};$("#sCalWho").addEventListener('change',renderSpaceCalendar);
 
 /* Sélecteur d’espace */
-function updSel(){const sel=$("#spaceSel");sel.innerHTML='';const order=['E8D3FS','AS50CI','D0PWE3','WS32D7','SR3S0D','PD03XZ'];order.forEach(id=>{if(SPACES[id]){const o=document.createElement('option');o.value=id;o.textContent=SPACES[id].label;sel.appendChild(o)}});Object.keys(SPACES).forEach(id=>{if(!order.includes(id)){const o=document.createElement('option');o.value=id;o.textContent=SPACES[id].label;sel.appendChild(o)}});sel.value=spaceId;}
+function updSel(){
+  const sel=$("#spaceSel");sel.innerHTML='';
+  const order=['E8D3FS','AS50CI','D0PWE3','WS32D7','SR3S0D','PD03XZ'];
+  order.forEach(id=>{if(SPACES[id]){const o=document.createElement('option');o.value=id;o.textContent=SPACES[id].label;sel.appendChild(o)}});
+  Object.keys(SPACES).forEach(id=>{if(!order.includes(id)){const o=document.createElement('option');o.value=id;o.textContent=SPACES[id].label;sel.appendChild(o)}});
+  sel.value=spaceId;
+}
 const selSpace=$("#spaceSel");selSpace.addEventListener('change',()=>{spaceId=selSpace.value;renderCards();showHome();});
 $("#openSpace").onclick=openSpacePage;$("#backFromSpace").onclick=showHome;
 
 /* Modales */
 const mAdd=$("#modalAdd"),mHabit=$("#modalHabit"),mInvite=$("#modalInvite"),mSpace=$("#modalSpace"),mWizard=$("#modalWizard");
 const open=m=>m.classList.add('on'), close=m=>m.classList.remove('on');
-$("#addBtn").onclick=()=>{open(mAdd);maybeTogglePrivateAdd();};$("#closeAdd").onclick=()=>close(mAdd);
+$("#addBtn").onclick=()=>{open(mAdd);maybeTogglePrivateAdd();};
+$("#closeAdd").onclick=()=>close(mAdd);
 $("#addHabit").onclick=()=>{close(mAdd);open(mHabit);step1()}
 function maybeTogglePrivateAdd(){ const isPrivate=getSpace().type==='private'; $("#addPrivateHabit").classList.toggle('hide',!isPrivate); }
 $("#addPrivateHabit").onclick=()=>{
   close(mAdd);
   const id='priv_'+genCode();
-  const h={type:'private',id,cat:'sante',emoji:'✨',titre:'Nouvelle habitude privée ✨',amis:[]};
+  const h={type:'private',id,cat:'individuel',emoji:'✨',titre:'Nouvelle habitude privée ✨',amis:[]};
   CHALLENGES.unshift(h);
-  HAS_DESC[id]=Math.random()<0.5; HABIT_DESC[id]=HAS_DESC[id]?buildDesc():'';
+  HAS_DESC[id]=true; HABIT_DESC[id]=buildDesc(2,8);
   FREQ_MODE[id]={type:'quotidien'}; HABIT_MODE[id]={type:'libre',n:2};
   activeId=id; renderCards(); openDetail(id,null); selectDetailTab('settings');
 };
-$("#inviteFriend").onclick=()=>{close(mAdd);openInvite()};$("#joinSpace").onclick=()=>{close(mAdd);open(mSpace)};
+$("#inviteFriend").onclick=()=>{close(mAdd);openInvite()};
+$("#joinSpace").onclick=()=>{close(mAdd);open(mSpace)};
 function openInvite(){const code=spaceId;$("#inviteLink").value=`https://habitu.be/?code=${code}`;open(mInvite)}
-$("#closeInvite").onclick=()=>close(mInvite);$("#copyInvite").onclick=async()=>{try{await navigator.clipboard.writeText($("#inviteLink").value);alert("Lien copié !")}catch(e){alert("Copie impossible")}}
-$("#spaceGen").onclick=()=>{$("#spaceCode").value=genCode()};$("#spaceCancel").onclick=()=>close(mSpace);$("#closeSpace").onclick=()=>close(mSpace);
+$("#closeInvite").onclick=()=>close(mInvite);
+$("#copyInvite").onclick=async()=>{try{await navigator.clipboard.writeText($("#inviteLink").value);alert("Lien copié !")}catch(e){alert("Copie impossible")}}
+$("#spaceGen").onclick=()=>{$("#spaceCode").value=genCode()};
+$("#spaceCancel").onclick=()=>close(mSpace);
+$("#closeSpace").onclick=()=>close(mSpace);
 
-/* Space join/wizard */
-$("#spaceSave").onclick=()=>{const code=($("#spaceCode").value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6), name=($("#spaceName").value||'').trim()||'Moi'; if(!code){alert("Entre un code de jardin.");return} if(SPACES[code]){spaceId=code;userName=name;updSel();renderCards();close(mSpace)} else{close(mSpace);launchWizard(code,name)}};
+/* Space join/wizard (démo) */
+$("#spaceSave").onclick=()=>{
+  const code=($("#spaceCode").value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6),
+        name=($("#spaceName").value||'').trim()||'Moi';
+  if(!code){alert("Entre un code de jardin.");return}
+  if(SPACES[code]){spaceId=code;userName=name;updSel();renderCards();close(mSpace)}
+  else{close(mSpace);launchWizard(code,name)}
+};
 let wiz={code:'',name:'',type:'private',profile:'Autre'};
 function launchWizard(code,name){wiz={code,name,type:'private',profile:'Autre'};open(mWizard);wizProfileStep()}
-function wizProfileStep(){const root=$("#wizStep");$("#wizTitle").textContent="Type de profil";root.innerHTML='';[
-  {emoji:'👤',label:'Individu',apply:()=>({emoji:'👤',label:'👤 Individu',type:'private',ch:CHALLENGES,desc:'Jardin personnel.'})},
-  {emoji:'🏠',label:'Colocation',apply:()=>({emoji:'🏠',label:'🏠 Colocation',type:'group',ch:GROUP_CHALLENGES,desc:'Jardin partagé à la maison.'})},
-  {emoji:'🏛️',label:'Association',apply:()=>({emoji:'🏛️',label:'🏛️ Association',type:'group',ch:ASSOCIATION_CHALLENGES,desc:'Rituels d’équipe pour une asso.'})},
-  {emoji:'🌞',label:'Famille',apply:()=>({emoji:'🌞',label:'🌞 Famille',type:'group',ch:FAMILY_CHALLENGES,desc:'Routines familiales au quotidien.'})},
-  {emoji:'🏫',label:'Classe',apply:()=>({emoji:'🏫',label:'🏫 Classe',type:'group',ch:CLASS_CHALLENGES,desc:'Vie de classe.'})},
-  {emoji:'🏢',label:'Bureau',apply:()=>({emoji:'🏢',label:'🏢 Bureau',type:'group',ch:OFFICE_CHALLENGES,desc:'Rituels simples pour mieux travailler.'})},
-  {emoji:'✨',label:'Autre',apply:()=>({emoji:'✨',label:'✨ Autre',type:'group',ch:GROUP_CHALLENGES,desc:'Jardin partagé.'})}
-].forEach(o=>{const el=document.createElement('div');el.className='opt';el.innerHTML=`<div class="emoji">${o.emoji}</div><div><b>${o.label}</b></div>`;el.onclick=()=>{const d=o.apply();SPACES[wiz.code]=d;spaceId=wiz.code;userName=wiz.name;updSel();renderCards();close(mWizard);};root.appendChild(el);});}
-$("#closeWizard").onclick=()=>close(mWizard);
-$("#quitSpaceBtn").onclick=()=>{const sp=getSpace();if(confirm(`Quitter ${sp.label} ?`)){spaceId='D0PWE3';updSel();renderCards();showHome()}}
+function wizProfileStep(){
+  const root=$("#wizStep");$("#wizTitle").textContent="Type de profil";root.innerHTML='';
+  [
+    {emoji:'👤',label:'Individu',apply:()=>({emoji:'👤',label:'👤 Individu',type:'private',orgMode:'day',ch:CHALLENGES,desc:'Jardin personnel.'})},
+    {emoji:'🏠',label:'Colocation',apply:()=>({emoji:'🏠',label:'🏠 Colocation',type:'group',orgMode:'day',ch:GROUP_CHALLENGES,desc:'Jardin partagé à la maison.'})},
+    {emoji:'🏛️',label:'🏛️ Association',apply:()=>({emoji:'🏛️',label:'🏛️ Association',type:'group',orgMode:'week',ch:ASSOCIATION_CHALLENGES,desc:'Rituels d’équipe pour une asso.'})},
+    {emoji:'🌞',label:'Famille',apply:()=>({emoji:'🌞',label:'🌞 Famille',type:'group',orgMode:'day',ch:FAMILY_CHALLENGES,desc:'Routines familiales au quotidien.'})},
+    {emoji:'🏫',label:'Classe',apply:()=>({emoji:'🏫',label:'🏫 Classe',type:'group',orgMode:'week',ch:CLASS_CHALLENGES,desc:'Vie de classe et rituels pédagogiques.'})},
+    {emoji:'🏢',label:'🏢 Bureau',apply:()=>({emoji:'🏢',label:'🏢 Bureau',type:'group',orgMode:'week',ch:OFFICE_CHALLENGES,desc:'Rituels simples pour mieux travailler.'})}
+  ].forEach(opt=>{
+    const el=document.createElement('div');el.className='opt';
+    el.innerHTML=`<div class="emoji">${opt.emoji}</div><div><b>${opt.label}</b></div>`;
+    el.onclick=()=>{SPACES[wiz.code]=opt.apply();spaceId=wiz.code;userName=wiz.name;updSel();renderCards();close(mWizard);};
+    root.appendChild(el);
+  });
+}
 
-/* Ajout habitude (catalogue) */
-let pickedCat=null;
-function step1(){const root=$("#step1");$("#step1").style.display='grid';$("#step2").style.display='none';root.innerHTML='';CATS.forEach(c=>{const el=document.createElement('div');el.className='opt';el.innerHTML=`<div class="emoji">${c.emoji}</div><div><b>${c.nom}</b></div>`;el.onclick=()=>{pickedCat=c.id;step2()};root.appendChild(el)})}
-function step2(){const root=$("#step2");$("#step1").style.display='none';$("#step2").style.display='grid';root.innerHTML='';CHALLENGES.filter(x=>x.cat===pickedCat).forEach(x=>{const el=document.createElement('div');el.className='opt';el.innerHTML=`<div class="emoji">${x.emoji}</div><div><b>${x.titre}</b></div>`;el.onclick=()=>{alert("Habitude ajoutée (démo)");close(mHabit)};root.appendChild(el)})}
+/* Wizard bibliothèque multi-sélection */
+function step1(){
+  const root=$("#step1");const step2=$("#step2");
+  $("#habitTitle").textContent="Nouvelle(s) habitude(s)";
+  if(step2) step2.style.display='none';
+  root.innerHTML='';
+
+  // Barre sticky : filtre + bouton à droite
+  const bar=document.createElement('div');
+  bar.className='addBar';
+
+  const sel=document.createElement('select');
+  sel.id='addCatFilter'; sel.className='select';
+  Object.entries(LIB_CAT_LABELS).forEach(([id,label])=>{
+    const opt=document.createElement('option');
+    opt.value=id; opt.textContent=label;
+    sel.appendChild(opt);
+  });
+  sel.value='tous';
+
+  const btn=document.createElement('button');
+  btn.className='btn primary';
+  btn.id='addHabitsBtn';
+  btn.textContent='Ajouter (0) habitude(s)';
+
+  bar.appendChild(sel);
+  bar.appendChild(btn);
+  root.appendChild(bar);
+
+  const list=document.createElement('div');
+  list.id='habitChoiceList'; list.className='grid';
+  root.appendChild(list);
+
+  function updateAddLabel(){
+    const count=[...list.querySelectorAll('input[type="checkbox"]:checked')].length;
+    btn.textContent=`Ajouter (${count}) habitude(s)`;
+  }
+
+  function rebuild(){
+    const cat=sel.value;
+    const space=getSpace();
+    const presentIds=new Set((space.ch||[]).map(h=>h.id));
+    let items=LIBRARY_HABITS.filter(h=>{
+      const okCat = (cat==='tous') || h.cat===cat;
+      const notPresent=!presentIds.has(h.id);
+      return okCat && notPresent;
+    });
+    items = items.slice().sort((a,b)=>a.titre.localeCompare(b.titre,'fr'));
+    list.innerHTML='';
+    if(!items.length){
+      const empty=document.createElement('div');
+      empty.className='miniInfo';
+      empty.textContent="Aucune habitude disponible dans cette catégorie.";
+      list.appendChild(empty);
+      updateAddLabel();
+      return;
+    }
+    items.forEach(h=>{
+      const el=document.createElement('label');
+      el.className='opt';
+      const cb=document.createElement('input');
+      cb.type='checkbox'; cb.value=h.id; cb.style.marginRight='8px';
+      const inner=document.createElement('div');
+      inner.innerHTML=`<div class="emoji">${h.emoji}</div><div><b>${h.titre}</b><div style="font-size:11px;color:#666">${oneLiner(h.desc)}</div></div>`;
+      el.appendChild(cb);
+      el.appendChild(inner);
+      cb.addEventListener('change',updateAddLabel);
+      list.appendChild(el);
+    });
+    updateAddLabel();
+  }
+
+  rebuild();
+  sel.onchange=rebuild;
+
+  btn.onclick=()=>{
+    const checked=[...list.querySelectorAll('input[type="checkbox"]:checked')].map(x=>x.value);
+    if(!checked.length){alert("Sélectionne au moins une habitude.");return;}
+    const sp=getSpace();
+    checked.forEach(id=>{
+      const h=LIBRARY_HABITS.find(x=>x.id===id);
+      if(!h) return;
+      if(!(sp.ch||[]).some(x=>x.id===id)){
+        (sp.ch || (sp.ch=[])).push(h);
+        ensureHabit(id);
+      }
+    });
+    close(mHabit);
+    renderCards();
+  };
+}
 $("#closeHabit").onclick=()=>close(mHabit);
 
 /* Jour +/- */
-$("#prevDay").onclick=()=>{dayOff--;renderCards();renderDateBar()};$("#nextDay").onclick=()=>{dayOff++;renderCards();renderDateBar()};
+$("#prevDay").onclick=()=>{dayOff+= isWeekMode() ? -7 : -1;renderCards();renderDateBar()};
+$("#nextDay").onclick=()=>{dayOff+= isWeekMode() ? 7 : 1;renderCards();renderDateBar()};
 
 /* Lancement */
 function renderCalendarAndKeepMonth(){renderCalendar()}
 let dayInit=false;function renderDateOnce(){if(!dayInit){dayOff=0;renderDateBar();dayInit=true}}
-function updAll(){renderCards();renderCalendarAndKeepMonth();renderDateOnce();updSel();maybeTogglePrivateAdd()}
+function updAll(){renderCards();renderCalendarAndKeepMonth();renderDateOnce();updSel();maybeTogglePrivateAdd();updSpaceHeader()}
 updAll();
 
 /* Tabs util */
-function switchViews(btn,groupAttr,prefix){const key=btn.getAttribute(groupAttr);document.querySelectorAll(`.tabs [${groupAttr}]`).forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll(`#${prefix} .view`).forEach(v=>v.classList.remove('active'));const target=document.querySelector(`#${prefix} #${(groupAttr==='data-tab'?'tab-':'')}${key}`);if(target)target.classList.add('active');if(key==='history'){populateCalWho?.();renderCalendar?.()}if(key==='shistory'){populateSpaceWho?.();renderSpaceCalendar?.()}}
-document.querySelectorAll('#detail .tabs [data-tab]').forEach(btn=>{btn.addEventListener('click',()=>switchViews(btn,'data-tab','detail').bind(null))});
-document.querySelectorAll('#space .tabs [data-stab]').forEach(btn=>{btn.addEventListener('click',()=>switchViews(btn,'data-stab','space').bind(null))});
+function switchViews(btn,groupAttr,prefix){
+  const key=btn.getAttribute(groupAttr);
+  document.querySelectorAll(`.tabs [${groupAttr}]`).forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll(`#${prefix} .view`).forEach(v=>v.classList.remove('active'));
+  const target=document.querySelector(`#${prefix} #${(groupAttr==='data-tab'?'tab-':'')}${key}`);
+  if(target)target.classList.add('active');
+  if(key==='history'){populateCalWho?.();renderCalendar?.()}
+  if(key==='shistory'){populateSpaceWho?.();renderSpaceCalendar?.()}
+}
+document.querySelectorAll('#detail .tabs [data-tab]').forEach(btn=>{btn.addEventListener('click',()=>switchViews(btn,'data-tab','detail'))});
+document.querySelectorAll('#space .tabs [data-stab]').forEach(btn=>{btn.addEventListener('click',()=>switchViews(btn,'data-stab','space'))});
 </script>
-</body></html>
+</body>
+</html>

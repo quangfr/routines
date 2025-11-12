@@ -1,0 +1,110 @@
+--- a/index.html
++++ b/index.html
+@@ -1,6 +1,6 @@
+ <!doctype html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>Habitu.be — Prototype (simplifié)</title>
+ <style>
+-:root{--bg:#f7f3ea;--card:#fffdf8;--text:#1e1f1a;--green:#2a7a57;--border:#c6beae;--r:4px;--gap:8px;--fs:13px}
++:root{--bg:#f7f3ea;--card:#fffdf8;--text:#1e1f1a;--green:#2a7a57;--border:#c6beae;--r:4px;--gap:8px;--fs:13px}
+ *{box-sizing:border-box}html,body{height:100%}body{margin:0;font:400 var(--fs)/1.35 system-ui,-apple-system,Roboto,sans-serif;color:var(--text);background:var(--bg)}
+ #app{max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;position:relative}
+-button,.select,.tab,.stab,.btn,.btnToggle,.navbtn,.calBtn,.backMini{font:600 13px/1.2 system-ui,-apple-system,Roboto,sans-serif;padding:6px 10px;border-radius:var(--r);cursor:pointer;border:1px solid var(--border);background:var(--card)}
++button,.select,.tab,.stab,.btn,.btnToggle,.navbtn,.calBtn,.backMini{font:600 13px/1.2 system-ui,-apple-system,Roboto,sans-serif;padding:6px 10px;border-radius:var(--r);cursor:pointer;border:1px solid var(--border);background:var(--card)}
+ .btn.primary{background:var(--green);color:#fff;border-color:transparent}.btn.danger{border-color:#d99;color:#600;background:#fff5f5}
+ .btnToggle.active,.tab.active,.stab.active{outline:2px solid var(--green)}.select{appearance:none}
+ .top{position:sticky;top:0;background:var(--bg);z-index:6;border-bottom:1px solid var(--border);padding:6px var(--gap);display:flex;align-items:center;gap:8px}
+@@ -70,7 +70,7 @@
+ .cell .dur{position:absolute;bottom:2px;left:4px;right:4px;text-align:center;font:800 12px/1 system-ui}
+-.modal{position:fixed;inset:0;display:none;background:rgba(0,0,0,.2);padding:0;z-index:10}
++.modal{position:fixed;inset:0;display:none;background:rgba(0,0,0,.2);padding:0;z-index:10}
+ .modal.on{display:flex;align-items:stretch;justify-content:stretch}
+ .sheet{position:absolute;inset:0;background:var(--card)}
+ .sheetHeader{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px var(--gap);border-bottom:1px solid var(--border);background:var(--bg)}
+@@ -220,13 +220,13 @@
+ function getSpace(){return SPACES[spaceId]||SPACES['D0PWE3'];}
+ function listChallenges(){return getSpace().ch;}
+- function findAny(id){return [.CHALLENGES,GROUP_CHALLENGES,FAMILY_CHALLENGES,CLASS_CHALLENGES,OFFICE_CHALLENGES,ASSOCIATION_CHALLENGES].find(c=>c.id===id);}
++ function findAny(id){return [...CHALLENGES,...GROUP_CHALLENGES,...FAMILY_CHALLENGES,...CLASS_CHALLENGES,...OFFICE_CHALLENGES,...ASSOCIATION_CHALLENGES].find(c=>c.id===id);}
+ function habitLabel(it){const custom=HABIT_TITLE_CUSTOM[it.id];return custom&&custom.trim()?custom.trim():it.titre;}
+ function habitLabelById(id){const it=findAny(id);return it?habitLabel(it):''}
+ 
+ /* Nouvelle règle minutes: seul l'état 2 (réalisé) compte la durée */
+ function minutesFromState(base,st){return st===2 ? round15(base) : 0;}
+ function sumTodayMinutes(){return $$('#cards .levelBtn').map(b=>{const st=+b.dataset.state||0, base=+b.dataset.baseMin||0;return minutesFromState(base,st);}).reduce((a,b)=>a+b,0)}
+ function renderDateBar(){$("#dateLabel").textContent=fmtDate(curDate());$("#todayCount").textContent=m2txt(round15(sumTodayMinutes()));}
+ 
+ /* Emojis */
+ function currentBigEmoji(btn,tot){return btn.dataset.override|| (tot<=7?'🌰':tot<=14?'🌱':tot<=21?'🍀':tot<=28?'🌼':tot<=35?'🌻':tot<=42?'🌷':tot<=49?'🌹':tot<=56?'🪻':tot<=64?'💐':'🎋');}
+ function drawBtn(btn){
+   const p=+btn.dataset.plants||0, s=+btn.dataset.suns||0, tot=p+s;const st=+btn.dataset.state||0, base=+btn.dataset.baseMin||0;
+-  const val = st===0 ? `(${m2txtShort(base)})` : (st===1 ? 'À faire' : 'Fait');
++  /* state 0: (durée) · state 1: À faire (desc ouverte) · state 2: Fait */
++  const val = st===0 ? `(${m2txtShort(base)})` : (st===1 ? 'À faire' : 'Fait');
+   btn.innerHTML=`<div class="big">${currentBigEmoji(btn,tot)}</div><div class="scoreText">${val}</div>`;
+ }
+ 
+-/* Description open/close */
+-let openCard=null;
+-
+ /* Description open/close */
+ let openCard=null;
+ function collapseOpenDesc(){if(!openCard) return;const d=openCard.querySelector('.desc');if(d){d.classList.remove('open');d.classList.add('hidden');d.textContent=d.dataset.short||'';}openCard.classList.remove('ready');openCard=null;}
+ document.addEventListener('click',e=>{if(openCard && !e.target.closest('.card')) collapseOpenDesc();},{capture:true})
+@@ -255,7 +255,7 @@
+   const desc=document.createElement('div');desc.className='desc';setupDesc(desc,it.id);
+   const friends=document.createElement('div');friends.className='friends';
+   // badge "seed" informatif (optionnel)
+-  if(Math.random()<.5){const n=rint(1,2);const seed=[.it.amis].sort(()=>Math.random()-.5).slice(0,n);const b=document.createElement('div');b.className='badge seed-badge';b.textContent=`💧 ${names(seed)}`;friends.appendChild(b)}
++  if(Math.random()<.5){const n=rint(1,2);const seed=[...it.amis].sort(()=>Math.random()-.5).slice(0,n);const b=document.createElement('div');b.className='badge seed-badge';b.textContent=`💧 ${names(seed)}`;friends.appendChild(b)}
+   cont.append(title,desc,friends);
+ 
+   const col=document.createElement('div');col.className='levelCol';
+@@ -268,6 +268,7 @@
+   const setVisualFromState=(st)=>{
+     const baseEl=title.querySelector('.base');
+     // état 1: bordure jaune, desc ouverte, pas de barré
++    // état 2: titre barré, bordure grise par défaut
+     card.classList.toggle('progress', st===1);
+     if(st===2){ baseEl.classList.add('strike'); } else { baseEl.classList.remove('strike'); }
+   };
+@@ -289,31 +290,12 @@
+   updateHint(it.id, title.querySelector('.hint'));
+ 
+   const ensureOpenDesc=()=>{ if(openCard!==card){ collapseOpenDesc(); openCard=card; }
+     if(!desc.classList.contains('open')){ desc.classList.remove('hidden'); desc.classList.add('open'); desc.textContent=desc.dataset.full||''; }
+   };
+   const hideDescNow=()=>{ desc.classList.remove('open'); desc.classList.add('hidden'); desc.textContent=desc.dataset.short||''; if(openCard===card) openCard=null; };
+ 
+   const applyState=(st)=>{
+     btn.dataset.state=String(st);
+     drawBtn(btn); setVisualFromState(st);
+     if(st===1){ ensureOpenDesc(); ensureSeedBadgeHasMe(false); }
+     else if(st===2){ hideDescNow(); ensureSeedBadgeHasMe(true); }
+     else{ hideDescNow(); ensureSeedBadgeHasMe(false); }
+     renderDateBar();
+   }
+ 
+-  // ====== (ancien bloc obsolète — supprimé) ======
+-  // Anciennes règles avec advanceState/hasDesc/isOpen et 3e clic durées.
+-  // Elles provoquaient des erreurs et des doublons d'écouteurs.
+-  // =================================================
+-
+   // nouveau cycle strict : 0 -> 1 -> 2 -> 0
+   const handleClick=()=>{
+     const st=+btn.dataset.state||0;
+     const next = st===0?1 : (st===1?2 : 0);
+     applyState(next);
+   };
+ 
+   col.addEventListener('click',handleClick);
+   cont.addEventListener('click',(e)=>{ if(e.target.closest('.badge')) return; handleClick(); });
+-  // (supprimer vieux listeners/logic en double)
+-  // bloc commençant par "if(!hasDesc){" et se terminant avant friends.addEventListener a été retiré
+-  // pour ne garder que le cycle 0>1>2>0 et l'ouverture unique de la description.
+ 
+   friends.addEventListener('click', (e) => {
+     const badge = e.target.closest('.badge');
+     if (!badge) return;
+     e.stopPropagation();
+     openDetail(it.id, btn);       // ouvre la fiche de l’habitude
+     selectDetailTab('members');   // et l’onglet "Jardiniers"
+   });
