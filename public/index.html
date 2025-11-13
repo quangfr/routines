@@ -4,6 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4f7fb" />
+  <link rel="manifest" href="/manifest.webmanifest" />
   <title>Habitu.be — Les petites habitudes qui changent tout </title>
   <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth-compat.js"></script>
@@ -3048,6 +3050,33 @@
     }
     document.querySelectorAll('#detail .tabs [data-tab]').forEach(btn => { btn.addEventListener('click', () => switchViews(btn, 'data-tab', 'detail')) });
     document.querySelectorAll('#space .tabs [data-stab]').forEach(btn => { btn.addEventListener('click', () => switchViews(btn, 'data-stab', 'space')) });
+    if ('serviceWorker' in navigator) {
+      const registerServiceWorker = async () => {
+        try {
+          const registration = await navigator.serviceWorker.register('/service-worker.js', { scope: './' });
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+              }
+            });
+          });
+        } catch (err) {
+          console.warn('SW registration failed', err);
+        }
+      };
+
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      });
+
+      window.addEventListener('load', registerServiceWorker);
+    }
   </script>
 </body>
 
