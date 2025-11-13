@@ -1342,97 +1342,16 @@
     /* ===== Données ===== */
 
     // Habitudes existantes (démo) — espace individuel
-    const CHALLENGES = [
-      {
-        type: 'private', id: 'screenoff', cat: 'sante', emoji: '🛌', titre: 'Sans écran avant le coucher',
-        amis: ['Anna', 'Ben', 'Chloé', 'Nicolas', 'Marie', 'David', 'Jonas', 'Julie', 'Alicia', 'Franck']
-      },
-      {
-        type: 'private', id: 'repas', cat: 'sante', emoji: '🥗', titre: 'Repas sain fait maison',
-        amis: ['Ben', 'Duc', 'Nicolas', 'David', 'Jonas', 'Julie', 'Alicia', 'Franck']
-      },
-      {
-        type: 'private', id: 'lire', cat: 'esprit', emoji: '📖', titre: 'Lire un livre ou un roman',
-        amis: ['Chloé', 'Nicolas', 'David', 'Jonas', 'Julie', 'Alicia', 'Franck']
-      },
-
-    ];
-
-    // Colocation
-    const GROUP_CHALLENGES = [
-      {
-        type: 'group', id: 'coloc_lv_range', cat: 'coloc', emoji: '🍽️', titre: 'Lave-vaisselle vidé & rangé',
-        amis: ['Anna', 'Ben', 'Chloé', 'Nicolas', 'Marie', 'Franck', 'Alexandra']
-      },
-      {
-        type: 'group', id: 'coloc_poubelles', cat: 'coloc', emoji: '🗑️', titre: 'Poubelles & tri sortis',
-        amis: ['Anna', 'Ben', 'Chloé', 'Nicolas', 'Marie', 'Franck', 'Alexandra']
-      },
-      {
-        type: 'group', id: 'coloc_plantes', cat: 'coloc', emoji: '🪴', titre: 'Arrosage des plantes',
-        amis: ['Anna', 'Ben', 'Chloé', 'Nicolas', 'Marie', 'Franck', 'Alexandra']
-      }
-    ];
-
-    // Famille (7 jardiniers dont Papa, Maman, Papi, Mami)
-    const FAMILY_JARDINIERS = ['Papa', 'Maman', 'Papi', 'Mami', 'David', 'Jonas', 'Julie'];
-    const FAMILY_CHALLENGES = [
-      {
-        type: 'group', id: 'fam_linge', cat: 'famille', emoji: '👕', titre: 'Linge lavé, séché, plié',
-        amis: [...FAMILY_JARDINIERS]
-      },
-      {
-        type: 'group', id: 'fam_poubelles', cat: 'famille', emoji: '♻️', titre: 'Tri & poubelles sorties',
-        amis: [...FAMILY_JARDINIERS]
-      }
-    ];
-
-    // Association (15–20 jardiniers, sans Papa/Maman)
-    const ASSO_JARDINIERS = ['Alice', 'Bruno', 'Camille', 'Dina', 'Mehdi', 'Sarah', 'Youssef', 'Léa', 'Tom', 'Nina', 'Quentin', 'Samir', 'Eva', 'Rania', 'Paul', 'Julie', 'Hugo', 'Clara'];
-    const ASSOCIATION_CHALLENGES = [
-      {
-        type: 'group', id: 'asso_salle', cat: 'asso', emoji: '🏟️', titre: 'Salle prête (chaises, sono)',
-        amis: [...ASSO_JARDINIERS]
-      }
-    ];
-
-    // Bureau (15–20 jardiniers)
-    const OFFICE_JARDINIERS = ['Alice', 'Bob', 'Carla', 'Dan', 'Emma', 'Lucas', 'Sophie', 'Mehdi', 'Julie', 'Quentin', 'Léa', 'Thomas', 'Inès', 'Nicolas', 'Sarah', 'Paul', 'Camille', 'Hugo'];
-    const OFFICE_CHALLENGES = [
-      {
-        type: 'group', id: 'bureau_plantes', cat: 'bureau', emoji: '🪴', titre: 'Plantes arrosées',
-        amis: [...OFFICE_JARDINIERS]
-      },
-      {
-        type: 'group', id: 'bureau_salle_reu', cat: 'bureau', emoji: '🏢', titre: 'Salle de réunion remise en ordre',
-        amis: [...OFFICE_JARDINIERS]
-      }
-    ];
-
-    // Classe (15–20 jardiniers)
-    const CLASS_JARDINIERS = ['M. Dupont', 'Emma', 'Lucas', 'Lucie', 'Yanis', 'Clara', 'Noa', 'Lina', 'Hugo', 'Manon', 'Elias', 'Zoé', 'Mattéo', 'Sarah', 'Nolan', 'Inès', 'Léo', 'Jade'];
-    const CLASS_CHALLENGES = [
-      {
-        type: 'group', id: 'classe_tri', cat: 'classe', emoji: '♻️', titre: 'Tri & poubelles sorties',
-        amis: [...CLASS_JARDINIERS]
-      }
-    ];
+    const CHALLENGES = [];
+    const GROUP_CHALLENGES = [];
+    const FAMILY_CHALLENGES = [];
+    const ASSOCIATION_CHALLENGES = [];
+    const OFFICE_CHALLENGES = [];
+    const CLASS_CHALLENGES = [];
 
     // Bibliothèque logistique : 20 habitudes non numériques, organisées en 10 catégories
 
     const LIBRARY_HABITS = [];
-    const LIBRARY_DEFAULT_ENTRIES = [
-      { nom: 'Routine respiration', émoji: '🌬️', durée: '5 min', note: '', catégorie: 'individuel' },
-      { nom: 'Rotation de corvées', émoji: '🧹', durée: '10 min', note: '', catégorie: 'coloc' },
-      { nom: 'Bilan famille', émoji: '🪞', durée: '15 min', note: '', catégorie: 'famille' },
-      { nom: 'Briefing associatif', émoji: '🗣️', durée: '20 min', note: '', catégorie: 'asso' },
-      { nom: 'Rituels de classe', émoji: '📚', durée: '12 min', note: '', catégorie: 'classe' },
-      { nom: 'Pause stand-up', émoji: '💼', durée: '8 min', note: '', catégorie: 'bureau' },
-      { nom: 'Prépa cuisine', émoji: '🍳', durée: '25 min', note: '', catégorie: 'cuisine' },
-      { nom: 'Triage linge', émoji: '🧺', durée: '15 min', note: '', catégorie: 'linge' },
-      { nom: 'Rangement express', émoji: '📦', durée: '10 min', note: '', catégorie: 'rangement' },
-      { nom: 'Planif rétro', émoji: '🗓️', durée: '18 min', note: '', catégorie: 'planning' }
-    ];
 
     // Catégories lisibles pour le filtre d’ajout
     const LIB_CAT_LABELS = {
@@ -1448,74 +1367,6 @@
       rangement: 'Rangement',
       planning: 'Planning'
     };
-
-    const claps = {};
-
-    function pickField(raw, ...keys) {
-      for (const key of keys) { if (raw && raw[key] !== undefined) return raw[key]; }
-      return undefined;
-    }
-    function slugify(value) {
-      return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'habitude';
-    }
-    function parseDuration(value) {
-      if (!value) return null;
-      const match = String(value).match(/(\d+)/);
-      if (!match) return null;
-      return Math.max(1, parseInt(match[1], 10));
-    }
-    function buildLibraryHabit(raw, idx) {
-      const nom = pickField(raw, 'nom', 'Nom') || 'Nouvelle habitude';
-      const emoji = pickField(raw, 'emoji', 'émoji', 'Emoji') || '🌱';
-      const categorie = (String(pickField(raw, 'categorie', 'catégorie', 'Categorie') || 'individuel').toLowerCase() || 'individuel');
-      const duration = parseDuration(pickField(raw, 'durée', 'duree')) || 15;
-      const note = pickField(raw, 'note', 'Note') || '';
-      const slug = slugify(nom);
-      const id = `lib_${categorie}_${slug}_${idx}`;
-      return {
-        type: 'library',
-        id,
-        cat: categorie,
-        emoji,
-        titre: nom,
-        desc: note,
-        baseMin: duration,
-        freqDefault: 'quotidien',
-        modeDefault: 'libre',
-        recurrence: 1,
-        amis: []
-      };
-    }
-    function initializeLibraryHabits(entries) {
-      LIBRARY_HABITS.length = 0;
-      if (!Array.isArray(entries)) return;
-      entries.forEach((raw, idx) => LIBRARY_HABITS.push(buildLibraryHabit(raw, idx + 1)));
-    }
-    function initializeLibraryDependents() {
-      Object.keys(claps).forEach(k => delete claps[k]);
-      Object.keys(FREQ_MODE).forEach(k => delete FREQ_MODE[k]);
-      const all = [...CHALLENGES, ...GROUP_CHALLENGES, ...FAMILY_CHALLENGES, ...CLASS_CHALLENGES, ...OFFICE_CHALLENGES, ...ASSOCIATION_CHALLENGES, ...LIBRARY_HABITS];
-      all.forEach(c => {
-        claps[c.id] = {};
-        [...new Set([...(c.amis || []), 'Moi'])].forEach(n => claps[c.id][n] = Math.floor(Math.random() * 101));
-        FREQ_MODE[c.id] = { type: (c.freqDefault || 'quotidien') };
-      });
-    }
-    async function loadLibraryJson() {
-      if (window.fetch) {
-        try {
-          const res = await fetch('library.json');
-          if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data) && data.length) {
-              initializeLibraryHabits(data);
-              return;
-            }
-          }
-        } catch (e) { }
-      }
-      initializeLibraryHabits(LIBRARY_DEFAULT_ENTRIES);
-    }
 
     /* États / stock */
     const HABIT_DESC = {}, HABIT_TITLE_CUSTOM = {}, SPACE_DESC_TXT = {};
@@ -1535,7 +1386,6 @@
     }
     function genCode() { const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; let s = ''; for (let i = 0; i < 6; i++)s += c[Math.floor(Math.random() * c.length)]; return s; }
     const round15 = m => Math.round(m / 15) * 15; function rint(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
-    function pickQuarterUpTo75() { return 15 * rint(1, 5) }
     function lvlEmoji(v) { if (v <= 7) return '🌰'; if (v <= 14) return '🌱'; if (v <= 21) return '🍀'; if (v <= 28) return '🌼'; if (v <= 35) return '🌻'; if (v <= 42) return '🌷'; if (v <= 49) return '🌹'; if (v <= 56) return '🪻'; if (v <= 64) return '💐'; return '🎋'; }
     function names(xs, m = 3) { if (xs.length <= m) return xs.join(', '); const s = xs.slice(0, m).join(', '); return `${s}… et ${xs.length - m} autres`; }
     function m2txt(m) {
@@ -1568,17 +1418,10 @@
     let period = '30', spaceId = 'D0PWE3', userName = 'Moi', dayOff = 0;
 
     /* Spaces (orgMode: day ou week) */
-    const SPACES = {
-      'D0PWE3': { emoji: '👤', label: '👤 Individu', type: 'private', orgMode: 'day', ch: CHALLENGES, desc: 'Jardin personnel.' },
-      'E8D3FS': { emoji: '🏠', label: '🏠 Colocation', type: 'group', orgMode: 'day', ch: GROUP_CHALLENGES, desc: 'Jardin partagé à la maison.' },
-      'AS50CI': { emoji: '🏛️', label: '🏛️ Association', type: 'group', orgMode: 'week', ch: ASSOCIATION_CHALLENGES, desc: 'Rituels d’équipe pour une asso.' },
-      'WS32D7': { emoji: '🌞', label: '🌞 Famille', type: 'group', orgMode: 'day', ch: FAMILY_CHALLENGES, desc: 'Routines familiales au quotidien.' },
-      'SR3S0D': { emoji: '🏫', label: '🏫 Classe', type: 'group', orgMode: 'week', ch: CLASS_CHALLENGES, desc: 'Vie de classe et rituels pédagogiques.' },
-      'PD03XZ': { emoji: '🏢', label: '🏢 Bureau', type: 'group', orgMode: 'week', ch: OFFICE_CHALLENGES, desc: 'Rituels simples pour mieux travailler.' }
-    };
+    const SPACES = {};
+    const SPACE_ACTIVITIES = {};
+    const INVITE_CACHE = {};
     const STORAGE_USER_PROFILE = 'habitu-user-profile';
-    const STORAGE_USER_SPACES = 'habitu-user-spaces';
-    const STORAGE_INVITES = 'habitu-invites';
     const GARDEN_TYPES = [
       { emoji: '👤', label: '👤 Individu', type: 'private', orgMode: 'day', desc: 'Jardin solo pour prendre soin de soi.' },
       { emoji: '🏠', label: '🏠 Colocation', type: 'group', orgMode: 'day', desc: 'Petites routines partagées à la maison.' },
@@ -1587,49 +1430,285 @@
       { emoji: '🏫', label: '🏫 Classe', type: 'group', orgMode: 'week', desc: 'Rituels pédagogiques simples.' },
       { emoji: '🏢', label: '🏢 Bureau', type: 'group', orgMode: 'week', desc: 'Rituels collaboratifs pro.' }
     ];
-    let allowedSpaces = Object.keys(SPACES);
+    let allowedSpaces = [];
     let currentProfile = loadStoredProfile();
     let pendingInviteToken = new URLSearchParams(window.location.search).get('invite');
-    let pendingInviteInfo = loadPendingInviteInfo();
-    const STORAGE_SPACE_META = 'habitu-space-meta';
+    let pendingInviteInfo = null;
     const HABITU_FIREBASE_DB = window.HABITU_FIREBASE_DB;
     const ACTIVITY_BUFFER_MS = 30e3;
     const activityQueue = new Map();
     function loadStoredProfile() { try { return JSON.parse(localStorage.getItem(STORAGE_USER_PROFILE) || 'null') } catch (e) { return null } }
-    function persistProfile(profile) { if (!profile) return; localStorage.setItem(STORAGE_USER_PROFILE, JSON.stringify(profile)); currentProfile = profile }
-    function getStoredSpaces() { try { return JSON.parse(localStorage.getItem(STORAGE_USER_SPACES) || '{}') } catch (e) { return {} } }
-    function setStoredSpaces(map) { localStorage.setItem(STORAGE_USER_SPACES, JSON.stringify(map || {})) }
-    function getSpacesForEmail(email) { if (!email) return []; const map = getStoredSpaces(); return map[email.toLowerCase()] || [] }
-    function setSpacesForEmail(email, list) { if (!email) return; const map = getStoredSpaces(); map[email.toLowerCase()] = [...new Set(list || [])]; setStoredSpaces(map) }
-    function addSpaceForEmail(email, id) { if (!email || !id) return; const list = getSpacesForEmail(email); if (!list.includes(id)) { list.push(id); setSpacesForEmail(email, list) } }
-    function updateAllowedSpaces(email) { allowedSpaces = getSpacesForEmail(email); return allowedSpaces }
-    function getInviteMap() { try { return JSON.parse(localStorage.getItem(STORAGE_INVITES) || '{}') } catch (e) { return {} } }
-    function setInviteMap(map) { localStorage.setItem(STORAGE_INVITES, JSON.stringify(map || {})) }
-    function loadPendingInviteInfo() { if (!pendingInviteToken) return null; const invite = getInviteMap()[pendingInviteToken]; return invite ? { ...invite } : null }
-    function acceptPendingInvite(email) { if (!pendingInviteToken || !email) return null; const invites = getInviteMap(); const invite = invites[pendingInviteToken]; if (!invite) return null; addSpaceForEmail(email, invite.spaceId); delete invites[pendingInviteToken]; setInviteMap(invites); deleteInviteDoc(pendingInviteToken); pendingInviteInfo = invite; pendingInviteToken = null; renderInviteList(); if (window.history.replaceState) { const url = new URL(window.location); url.searchParams.delete('invite'); window.history.replaceState({}, '', url.pathname); } return invite }
-    function loadSpaceMeta() { try { return JSON.parse(localStorage.getItem(STORAGE_SPACE_META) || '{}') } catch (e) { return {} } }
-    function saveSpaceMeta(meta) { localStorage.setItem(STORAGE_SPACE_META, JSON.stringify(meta || {})) }
-    function getSpaceOwner(spaceId) { const meta = loadSpaceMeta(); return meta[spaceId] || {} }
-    function setSpaceOwner(spaceId, email) { if (!spaceId || !email) return; const meta = loadSpaceMeta(); meta[spaceId] = { ...(meta[spaceId] || {}), ownerEmail: email }; saveSpaceMeta(meta) }
-    function isCurrentSpaceAdmin() { if (!currentProfile?.email) return false; const ownerEmail = getSpaceOwner(spaceId).ownerEmail; return ownerEmail && ownerEmail.toLowerCase() === currentProfile.email.toLowerCase() }
+    function persistProfile(profile) {
+      if (!profile) {
+        localStorage.removeItem(STORAGE_USER_PROFILE);
+        currentProfile = null;
+        return;
+      }
+      localStorage.setItem(STORAGE_USER_PROFILE, JSON.stringify(profile));
+      currentProfile = profile;
+    }
+    function clearObject(obj) { Object.keys(obj).forEach(k => delete obj[k]); }
+    function clearLocalState() {
+      clearObject(HABIT_DESC);
+      clearObject(HABIT_TITLE_CUSTOM);
+      clearObject(SPACE_DESC_TXT);
+      clearObject(BASE_MINUTES);
+      clearObject(HABIT_MODE);
+      clearObject(LOCKED_COMMUN);
+      clearObject(LOCKED_BY);
+      clearObject(DONE_SETS);
+      clearObject(HAS_DESC);
+      clearObject(HABIT_REC);
+      clearObject(FREQ_MODE);
+      DELETED_HABITS.clear();
+      allowedSpaces = [];
+      Object.keys(SPACE_ACTIVITIES).forEach(k => delete SPACE_ACTIVITIES[k]);
+      Object.keys(INVITE_CACHE).forEach(k => delete INVITE_CACHE[k]);
+      Object.keys(SPACES).forEach(k => delete SPACES[k]);
+      spaceId = null;
+    }
+    function normalizeEmail(email) {
+      return String(email || '').trim().toLowerCase();
+    }
+    function displayNameFromEmail(email) {
+      const normalized = normalizeEmail(email);
+      if (!normalized) return '';
+      if (currentProfile && normalizeEmail(currentProfile.email) === normalized) {
+        return currentProfile.name || 'Moi';
+      }
+      const candidate = (email || '').trim();
+      return candidate.includes('@') ? candidate.split('@')[0] : candidate;
+    }
+    function timestampToDate(value) {
+      if (!value) return null;
+      if (value?.toDate) return value.toDate();
+      return new Date(value);
+    }
+    function dayKeyFromDate(date) {
+      return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    }
+    function getSpaceOwnerEmail(spaceId) {
+      return normalizeEmail(SPACES[spaceId]?.ownerEmail || '');
+    }
+    function isCurrentSpaceAdmin() {
+      if (!currentProfile?.email) return false;
+      const ownerEmail = getSpaceOwnerEmail(spaceId);
+      return ownerEmail && ownerEmail === normalizeEmail(currentProfile.email);
+    }
     function requireAdmin(action = 'modifier') { if (!isCurrentSpaceAdmin()) { alert(`Seul le créateur du jardin peut ${action}.`); return false; } return true }
-    function persistUserProfile(profile) { if (!HABITU_FIREBASE_DB || !profile?.uid) return; HABITU_FIREBASE_DB.collection('users').doc(profile.uid).set({ name: profile.name, email: profile.email, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(e => console.warn('persistUserProfile', e)) }
-    function persistSpaceDoc(spaceId, data = {}) { if (!HABITU_FIREBASE_DB || !spaceId) return; const space = SPACES[spaceId] || {}; const owner = getSpaceOwner(spaceId).ownerEmail; HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).set({ ownerEmail: owner || null, ...space, ...data, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(e => console.warn('persistSpaceDoc', e)) }
-    function persistHabit(spaceId, habitData) { if (!HABITU_FIREBASE_DB || !spaceId || !habitData?.id) return; HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).collection('habits').doc(habitData.id).set({ ...habitData, spaceId, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(e => console.warn('persistHabit', e)) }
-    function persistInviteDoc(token, payload) { if (!HABITU_FIREBASE_DB || !token) return; HABITU_FIREBASE_DB.collection('invites').doc(token).set({ ...payload, token, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(e => console.warn('persistInvite', e)) }
-    function deleteInviteDoc(token) { if (!HABITU_FIREBASE_DB || !token) return; HABITU_FIREBASE_DB.collection('invites').doc(token).delete().catch(e => console.warn('deleteInvite', e)) }
-    function sendActivityToServer(payload) { if (!HABITU_FIREBASE_DB) return; HABITU_FIREBASE_DB.collection('activities').add(payload).catch(e => console.warn('sendActivity', e)) }
-    function scheduleHabitActivity(habitId, payload) { if (!habitId) return; const key = `${habitId}:${payload.type}`; if (activityQueue.has(key)) { clearTimeout(activityQueue.get(key)); } const eventData = { ...payload, habitId, spaceId, userEmail: currentProfile?.email || null, userId: currentProfile?.uid || null, recordedAt: firebase.firestore.FieldValue.serverTimestamp() }; const timer = setTimeout(() => { sendActivityToServer(eventData); activityQueue.delete(key); }, ACTIVITY_BUFFER_MS); activityQueue.set(key, timer) }
+    function persistUserProfile(profile) {
+      if (!HABITU_FIREBASE_DB || !profile?.uid) return Promise.resolve();
+      return HABITU_FIREBASE_DB.collection('users').doc(profile.uid)
+        .set({ name: profile.name, email: profile.email, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+        .catch(e => console.warn('persistUserProfile', e));
+    }
+    function persistSpaceDoc(spaceId, data = {}) {
+      if (!HABITU_FIREBASE_DB || !spaceId) return Promise.resolve();
+      const space = SPACES[spaceId] || {};
+      const payload = {
+        ownerEmail: normalizeEmail(space.ownerEmail),
+        members: Array.isArray(space.members) ? [...new Set(space.members.map(normalizeEmail))] : [],
+        ...space,
+        ...data,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      return HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).set(payload, { merge: true }).catch(e => console.warn('persistSpaceDoc', e));
+    }
+    function persistHabit(spaceId, habitData) {
+      if (!HABITU_FIREBASE_DB || !spaceId || !habitData?.id) return Promise.resolve();
+      ensureHabitMetadata(habitData);
+      return HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).collection('habits').doc(habitData.id)
+        .set({ ...habitData, spaceId, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+        .catch(e => console.warn('persistHabit', e));
+    }
+    function persistInviteDoc(token, payload) {
+      if (!HABITU_FIREBASE_DB || !token) return Promise.resolve();
+      const ownerEmail = normalizeEmail(payload.ownerEmail || currentProfile?.email);
+      return HABITU_FIREBASE_DB.collection('invites').doc(token)
+        .set({ ...payload, ownerEmail, token, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+        .catch(e => console.warn('persistInvite', e));
+    }
+    function deleteInviteDoc(token) {
+      if (!HABITU_FIREBASE_DB || !token) return Promise.resolve();
+      delete INVITE_CACHE[token];
+      return HABITU_FIREBASE_DB.collection('invites').doc(token).delete().catch(e => console.warn('deleteInvite', e));
+    }
+    function sendActivityToServer(payload) {
+      if (!HABITU_FIREBASE_DB) return Promise.resolve();
+      return HABITU_FIREBASE_DB.collection('activities').add(payload).catch(e => console.warn('sendActivity', e));
+    }
+    function scheduleHabitActivity(habitId, payload) {
+      if (!habitId) return;
+      const key = `${habitId}:${payload.type}`;
+      if (activityQueue.has(key)) {
+        clearTimeout(activityQueue.get(key));
+      }
+      const actorName = currentProfile?.name || 'Moi';
+      const eventData = {
+        ...payload,
+        habitId,
+        spaceId,
+        userEmail: currentProfile?.email || null,
+        userId: currentProfile?.uid || null,
+        actorName,
+        recordedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      const timer = setTimeout(() => {
+        sendActivityToServer(eventData);
+        activityQueue.delete(key);
+      }, ACTIVITY_BUFFER_MS);
+      activityQueue.set(key, timer);
+    }
+    function ensureHabitMetadata(habit) {
+      if (!habit?.id) return;
+      if (habit.baseMin) BASE_MINUTES[habit.id] = habit.baseMin;
+      if (habit.desc) HABIT_DESC[habit.id] = habit.desc;
+      if (habit.customTitle) HABIT_TITLE_CUSTOM[habit.id] = habit.customTitle;
+      if (habit.mode) HABIT_MODE[habit.id] = habit.mode;
+      if (habit.recurrence) HABIT_REC[habit.id] = habit.recurrence;
+      if (habit.freqDefault) FREQ_MODE[habit.id] = { type: habit.freqDefault };
+    }
+    async function fetchSpacesForEmail(email) {
+      if (!HABITU_FIREBASE_DB || !email) return [];
+      const normalized = normalizeEmail(email);
+      try {
+        const snapshot = await HABITU_FIREBASE_DB.collection('spaces').get();
+        const spaces = [];
+        snapshot.forEach(doc => {
+          const data = { id: doc.id, ...(doc.data() || {}) };
+          const ownerEmail = normalizeEmail(data.ownerEmail);
+          const members = Array.isArray(data.members) ? [...new Set(data.members.map(normalizeEmail))] : [];
+          if (ownerEmail === normalized || members.includes(normalized)) {
+            spaces.push({ ...data, members });
+          }
+        });
+        return spaces;
+      } catch (err) {
+        console.warn('fetchSpacesForEmail', err);
+        return [];
+      }
+    }
+    async function loadHabitsForSpace(spaceId) {
+      if (!HABITU_FIREBASE_DB || !spaceId) return [];
+      try {
+        const snapshot = await HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).collection('habits').get();
+        const habits = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        habits.forEach(ensureHabitMetadata);
+        SPACES[spaceId] = { ...(SPACES[spaceId] || {}), ch: habits };
+        return habits;
+      } catch (err) {
+        console.warn('loadHabitsForSpace', err);
+        return SPACES[spaceId]?.ch || [];
+      }
+    }
+    async function loadActivitiesForSpace(spaceId, days = 120) {
+      if (!HABITU_FIREBASE_DB || !spaceId) return [];
+      const since = new Date();
+      since.setDate(since.getDate() - days);
+      try {
+        const snapshot = await HABITU_FIREBASE_DB.collection('activities')
+          .where('spaceId', '==', spaceId)
+          .where('recordedAt', '>=', since)
+          .orderBy('recordedAt', 'desc')
+          .get();
+        const events = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        SPACE_ACTIVITIES[spaceId] = events;
+        return events;
+      } catch (err) {
+        console.warn('loadActivitiesForSpace', err);
+        SPACE_ACTIVITIES[spaceId] = SPACE_ACTIVITIES[spaceId] || [];
+        return SPACE_ACTIVITIES[spaceId];
+      }
+    }
+    async function loadInvitesForOwner(email) {
+      if (!HABITU_FIREBASE_DB || !email) return;
+      const normalized = normalizeEmail(email);
+      try {
+        const snapshot = await HABITU_FIREBASE_DB.collection('invites').where('ownerEmail', '==', normalized).get();
+        Object.keys(INVITE_CACHE).forEach(key => delete INVITE_CACHE[key]);
+        snapshot.forEach(doc => { INVITE_CACHE[doc.id] = { token: doc.id, ...doc.data() }; });
+      } catch (err) {
+        console.warn('loadInvitesForOwner', err);
+      }
+    }
+    async function refreshPendingInviteInfo() {
+      if (!pendingInviteToken || !HABITU_FIREBASE_DB) {
+        pendingInviteInfo = null;
+        return null;
+      }
+      try {
+        const doc = await HABITU_FIREBASE_DB.collection('invites').doc(pendingInviteToken).get();
+        pendingInviteInfo = doc.exists ? { token: doc.id, ...doc.data() } : null;
+      } catch (err) {
+        console.warn('refreshPendingInviteInfo', err);
+        pendingInviteInfo = null;
+      }
+      return pendingInviteInfo;
+    }
+    async function acceptPendingInvite(email) {
+      if (!pendingInviteToken || !email) return null;
+      const invite = await refreshPendingInviteInfo();
+      if (!invite) return null;
+      await joinSpace(invite.spaceId, email);
+      await deleteInviteDoc(invite.token);
+      pendingInviteToken = null;
+      if (window.history.replaceState) {
+        const url = new URL(window.location);
+        url.searchParams.delete('invite');
+        window.history.replaceState({}, '', url.pathname);
+      }
+      pendingInviteInfo = invite;
+      return invite;
+    }
+    async function joinSpace(spaceId, email) {
+      if (!HABITU_FIREBASE_DB || !spaceId || !email) return;
+      const normalized = normalizeEmail(email);
+      try {
+        await HABITU_FIREBASE_DB.collection('spaces').doc(spaceId)
+          .update({ members: firebase.firestore.FieldValue.arrayUnion(normalized) });
+      } catch (err) {
+        if (err?.code === 'not-found') {
+          console.warn('joinSpace space not found', spaceId);
+        } else {
+          console.warn('joinSpace', err);
+        }
+      }
+      if (SPACES[spaceId]) {
+        const members = new Set([...(SPACES[spaceId].members || []).map(normalizeEmail)]);
+        members.add(normalized);
+        SPACES[spaceId].members = Array.from(members);
+      }
+    }
+    async function loadLibraryData() {
+      if (!HABITU_FIREBASE_DB) { LIBRARY_HABITS.length = 0; return; }
+      try {
+        const snapshot = await HABITU_FIREBASE_DB.collection('libraryHabits').get();
+        LIBRARY_HABITS.length = 0;
+        snapshot.docs.forEach(doc => LIBRARY_HABITS.push({ id: doc.id, ...doc.data() }));
+      } catch (err) {
+        console.warn('loadLibraryData', err);
+        LIBRARY_HABITS.length = 0;
+      }
+    }
+    async function resetFirestoreState(email) {
+      clearLocalState();
+      if (!email) { return; }
+      await loadLibraryData();
+      const spaces = await fetchSpacesForEmail(email);
+      allowedSpaces = spaces.map(space => space.id);
+      spaces.forEach(space => { SPACES[space.id] = { ...space, members: space.members || [], ch: [] }; });
+      await Promise.all(spaces.map(space => loadHabitsForSpace(space.id)));
+      await Promise.all(spaces.map(space => loadActivitiesForSpace(space.id)));
+      await loadInvitesForOwner(email);
+      renderInviteList();
+      if (!spaceId && allowedSpaces.length) { spaceId = allowedSpaces[0]; }
+      if (spaceId && !allowedSpaces.includes(spaceId)) { spaceId = allowedSpaces[0] || null; }
+    }
     const HABIT_TITLE_IS_CUSTOM = {};
 
     /* Fréquence : tout = quotidien par défaut (UI conservée) */
     function defaultFreqMode() { return { type: 'quotidien' } }
     function isVisibleToday() { return true }
-
-    /* Init */
-    ;[...CHALLENGES, ...GROUP_CHALLENGES, ...FAMILY_CHALLENGES, ...CLASS_CHALLENGES, ...OFFICE_CHALLENGES, ...ASSOCIATION_CHALLENGES, ...LIBRARY_HABITS].forEach(h => {
-      FREQ_MODE[h.id] = { type: (h.freqDefault || 'quotidien') };
-    });
 
     /* ===== Helpers visuels encadrés ===== */
     function applyCardClass(card, st, owner, helping, modeType) {
@@ -1721,15 +1800,14 @@
 
     /* Global helpers */
     function curDate() { const t = new Date(); t.setHours(0, 0, 0, 0); t.setDate(t.getDate() + dayOff); return t; }
-    function getSpace() { return SPACES[spaceId] || SPACES['D0PWE3']; }
-    function isWeekMode() { return getSpace().orgMode === 'week'; }
-    function listChallenges() { return getSpace().ch; }
+    function getSpace() { return (spaceId && SPACES[spaceId]) || null; }
+    function isWeekMode() { return getSpace()?.orgMode === 'week'; }
+    function listChallenges() { return getSpace()?.ch || []; }
     function findAny(id) {
-      return [
-        ...CHALLENGES, ...GROUP_CHALLENGES, ...FAMILY_CHALLENGES,
-        ...CLASS_CHALLENGES, ...OFFICE_CHALLENGES, ...ASSOCIATION_CHALLENGES,
-        ...LIBRARY_HABITS
-      ].find(c => c.id === id);
+      const map = new Map();
+      Object.values(SPACES).forEach(space => { (space.ch || []).forEach(h => { if (h?.id) map.set(h.id, h); }); });
+      if (map.has(id)) return map.get(id);
+      return LIBRARY_HABITS.find(h => h.id === id);
     }
     function habitLabel(it) { const custom = HABIT_TITLE_CUSTOM[it.id]; return custom && custom.trim() ? custom.trim() : it.titre; }
 
@@ -1744,6 +1822,70 @@
         $("#dateLabel").textContent = fmtDate(d);
       }
       $("#todayCount").textContent = m2txt(round15(sumTodayMinutes()));
+    }
+
+    function getOwnerNameFromEvent(event) {
+      return event.owner || event.actorName || event.ownerName || displayNameFromEmail(event.userEmail) || 'Moi';
+    }
+    function getSpaceEvents(spaceId, since = null) {
+      if (!spaceId) return [];
+      return (SPACE_ACTIVITIES[spaceId] || []).map(evt => {
+        const recordedAt = timestampToDate(evt.recordedAt);
+        if (!recordedAt) return null;
+        return { ...evt, recordedAt };
+      }).filter(evt => !!evt && (!since || evt.recordedAt >= since));
+    }
+    function getHabitRecords(spaceId, habitId, since = null, ownerFilter = '__all__') {
+      if (!habitId) return [];
+      const events = getSpaceEvents(spaceId, since).filter(ev => ev.type === 'realization' && ev.habitId === habitId);
+      const map = new Map();
+      events.forEach(event => {
+        const owner = getOwnerNameFromEvent(event);
+        if (ownerFilter !== '__all__' && owner !== ownerFilter) return;
+        const key = `${owner}:${event.habitId}:${dayKeyFromDate(event.recordedAt)}`;
+        const prev = map.get(key);
+        if (!prev || event.recordedAt > prev.recordedAt) {
+          map.set(key, { ...event, owner });
+        }
+      });
+      return Array.from(map.values());
+    }
+    function getSpaceRecords(spaceId, since = null) {
+      const events = getSpaceEvents(spaceId, since).filter(ev => ev.type === 'realization');
+      const map = new Map();
+      events.forEach(event => {
+        const owner = getOwnerNameFromEvent(event);
+        const key = `${owner}:${event.habitId}:${dayKeyFromDate(event.recordedAt)}`;
+        const prev = map.get(key);
+        if (!prev || event.recordedAt > prev.recordedAt) {
+          map.set(key, { ...event, owner });
+        }
+      });
+      return Array.from(map.values());
+    }
+    function summarizeSocials(spaceId, since = null) {
+      const events = getSpaceEvents(spaceId, since);
+      const likes = new Map();
+      const helps = new Map();
+      events.forEach(event => {
+        const actor = getOwnerNameFromEvent(event);
+        if (event.type === 'like' && event.liked) {
+          likes.set(actor, (likes.get(actor) || 0) + 1);
+        }
+        if (event.type === 'support') {
+          (event.helpers || []).forEach(helper => {
+            helps.set(helper, (helps.get(helper) || 0) + 1);
+          });
+        }
+      });
+      return { likes, helps };
+    }
+    function getLikeListForHabit(habitId) {
+      if (!spaceId) return [];
+      const events = getSpaceEvents(spaceId).filter(ev => ev.type === 'like' && ev.habitId === habitId && ev.liked);
+      if (!events.length) return [];
+      const latest = events.reduce((best, event) => (!best || event.recordedAt > best.recordedAt) ? event : best, null);
+      return Array.isArray(latest?.recipients) ? latest.recipients : [];
     }
 
     /* Emojis & bouton */
@@ -1792,20 +1934,23 @@
     /* Init per habit */
     function ensureHabit(hid) {
       const def = findAny(hid) || {};
-      if (!BASE_MINUTES[hid]) BASE_MINUTES[hid] = def.baseMin || pickQuarterUpTo75();
+      if (!BASE_MINUTES[hid]) BASE_MINUTES[hid] = def.baseMin || 15;
       if (HABIT_DESC[hid] === undefined) { HABIT_DESC[hid] = def.desc || buildDesc(2, 8); }
       if (!HABIT_MODE[hid]) {
         if (def.modeDefault) {
-          HABIT_MODE[hid] = { type: (def.modeDefault === 'commun' ? 'commun' : def.modeDefault === 'partage' ? 'commun' : 'libre'), n: 2 };
+          HABIT_MODE[hid] = { type: (def.modeDefault === 'commun' ? 'commun' : (def.modeDefault === 'partage' ? 'commun' : 'libre')), n: 2 };
         } else {
           const sp = getSpace();
-          if (sp.type === 'private') { HABIT_MODE[hid] = { type: 'libre', n: 2 } }
-          else { HABIT_MODE[hid] = Math.random() < 0.8 ? { type: 'commun', n: 2 } : { type: 'libre', n: 2 }; }
+          const fallbackType = sp?.type === 'private' ? 'libre' : 'commun';
+          HABIT_MODE[hid] = { type: fallbackType, n: 2 };
         }
       }
       if (!DONE_SETS[hid]) DONE_SETS[hid] = new Set();
       if (LOCKED_COMMUN[hid] === undefined) { LOCKED_COMMUN[hid] = false; LOCKED_BY[hid] = null; }
-      if (!HABIT_REC[hid]) HABIT_REC[hid] = Math.max(1, Math.min(7, def.recurrence || rint(1, 4)));
+      if (!HABIT_REC[hid]) {
+        const recurrence = def.recurrence || 1;
+        HABIT_REC[hid] = Math.max(1, Math.min(7, recurrence));
+      }
     }
 
     /* Sélection quotidienne 4–9 habitudes par espace (déterministe par jour) */
@@ -1823,70 +1968,73 @@
 
     /* Cartes */
     function renderCards() {
-      const root = $("#cards"); root.innerHTML = ''; const d = curDate();
+      const root = $("#cards");
+      root.innerHTML = '';
+      if (!spaceId) return;
+      const today = curDate();
+      today.setHours(0, 0, 0, 0);
       const items = pickVisibleList(listChallenges());
       items.forEach(it => {
         if (DELETED_HABITS.has(it.id)) return;
-        if (!isVisibleToday(it.id, d)) return; ensureHabit(it.id);
+        if (!isVisibleToday(it.id, today)) return;
+        ensureHabit(it.id);
 
-        const card = document.createElement('article'); card.className = 'card';
-        const cont = document.createElement('div'); cont.className = 'content';
-        const title = document.createElement('div'); title.className = 'title';
-        const left = document.createElement('div'); left.className = 'left';
+        const card = document.createElement('article');
+        card.className = 'card';
+        const cont = document.createElement('div');
+        cont.className = 'content';
+        const title = document.createElement('div');
+        title.className = 'title';
+        const left = document.createElement('div');
+        left.className = 'left';
         const displayTitle = habitLabel(it);
-
         left.innerHTML = `<span style="font-size:24px">${it.emoji}</span><span class="base">${displayTitle}</span>`;
         title.append(left);
 
         const pen = document.createElement('button');
-        pen.className = 'editPen'; pen.title = 'Éditer'; pen.textContent = '✏️';
+        pen.className = 'editPen';
+        pen.title = 'Éditer';
+        pen.textContent = '✏️';
         title.appendChild(pen);
 
-        const desc = document.createElement('div'); desc.className = 'desc'; setupDesc(desc, it.id);
+        const desc = document.createElement('div');
+        desc.className = 'desc';
+        setupDesc(desc, it.id);
 
-        const friends = document.createElement('div'); friends.className = 'friends';
+        const friends = document.createElement('div');
+        friends.className = 'friends';
         cont.append(title, desc, friends);
 
-        const col = document.createElement('div'); col.className = 'levelCol';
-        const btn = document.createElement('button'); btn.className = 'levelBtn'; btn.dataset.cid = it.id;
-        const basePlants = Math.floor(Math.random() * 65), suns = claps[it.id]?.['Moi'] ?? 0;
-        btn.dataset.basePlants = String(basePlants); btn.dataset.plants = String(basePlants); btn.dataset.suns = String(suns);
-        btn.dataset.baseMin = String(BASE_MINUTES[it.id]);
-        btn.dataset.recur = String(HABIT_REC[it.id] || 1);
-        btn.dataset.count = '0';
-        btn.dataset.week = isWeekMode() ? '1' : '0';
+        const col = document.createElement('div');
+        col.className = 'levelCol';
+        const btn = document.createElement('button');
+        btn.className = 'levelBtn';
+        btn.dataset.cid = it.id;
 
+        const records = getHabitRecords(spaceId, it.id, today);
+        const record = records.find(r => r.owner === 'Moi') || records[0] || null;
+        const baseMin = BASE_MINUTES[it.id] || 15;
         const mode = HABIT_MODE[it.id] || { type: 'libre' };
-        let st = 0, owner = '', helpers = [];
-        const r = Math.random();
-        if (r < 0.3) {
-          st = 1;
-          const byMe = Math.random() < 1 / 3;
-          owner = byMe ? 'Moi' : (it.amis && it.amis[Math.floor(Math.random() * it.amis.length)]) || 'Quelqu\'un';
-          if (isWeekMode()) btn.dataset.count = String(rint(1, HABIT_REC[it.id] || 1));
-        } else if (r < 0.6) {
-          st = 2;
-          const byMe = Math.random() < 1 / 3;
-          owner = byMe ? 'Moi' : (it.amis && it.amis[Math.floor(Math.random() * it.amis.length)]) || 'Quelqu\'un';
-          if (isWeekMode()) btn.dataset.count = String(HABIT_REC[it.id] || 1);
-        } else {
-          st = 0;
-        }
-
-        btn.dataset.state = String(st);
+        const state = record?.state ?? 0;
+        const owner = state > 0 ? (record?.owner || '') : '';
+        const helpers = state > 0 ? (record?.helpers || []) : [];
+        const helping = state > 0 && record?.helping ? '1' : '0';
+        const countValue = isWeekMode() ? (record?.count ?? HABIT_REC[it.id] || 1) : 0;
+        const vipList = getLikeListForHabit(it.id);
+        btn.dataset.state = String(state);
         btn.dataset.owner = owner;
-        btn.dataset.helping = '0';
+        btn.dataset.helping = helping;
         btn.dataset.helpers = JSON.stringify(helpers);
+        btn.dataset.count = state === 0 ? '0' : String(countValue);
+        btn.dataset.baseMin = String(baseMin);
+        btn.dataset.recur = String(HABIT_REC[it.id] || 1);
+        btn.dataset.week = isWeekMode() ? '1' : '0';
+        btn.dataset.basePlants = String(state >= 1 ? baseMin : 0);
+        btn.dataset.plants = btn.dataset.basePlants;
+        btn.dataset.suns = String(vipList.length);
+        btn.dataset.heartList = JSON.stringify(vipList);
 
-        const baseHeartNames = (() => {
-          if (Math.random() < 0.5) return [];
-          const pool = [...new Set(it.amis || [])];
-          shuffle(pool);
-          return pool.slice(0, Math.max(1, Math.min(3, Math.floor(Math.random() * 4))));
-        })();
-        btn.dataset.heartList = JSON.stringify(baseHeartNames);
-
-        const setVisualFromState = (stNow) => {
+        const setVisualFromState = stNow => {
           const baseEl = title.querySelector('.base');
           const ownerNow = btn.dataset.owner || '';
           const helpingNow = btn.dataset.helping === '1';
@@ -1899,13 +2047,8 @@
           const stNow = +btn.dataset.state || 0;
           const ownerNow = btn.dataset.owner || '';
           const helpingNow = btn.dataset.helping === '1';
-          let ownerToShow = '';
-          if (mode.type === 'commun') {
-            ownerToShow = (stNow === 1 || stNow === 2) ? ownerNow : '';
-          } else {
-            ownerToShow = stNow >= 1 ? 'Moi' : '';
-          }
-          ensureOwnerBadge(friends, ownerToShow, it, btn);
+          const shouldShowOwner = (mode.type === 'commun') ? ((stNow === 1 || stNow === 2) ? ownerNow : '') : (stNow >= 1 ? 'Moi' : '');
+          ensureOwnerBadge(friends, shouldShowOwner, it, btn);
           if (mode.type === 'commun') {
             const hlist = (btn.dataset.helpers ? JSON.parse(btn.dataset.helpers) : []) || [];
             ensureHelperBadge(friends, hlist);
@@ -1918,35 +2061,64 @@
         };
 
         const ensureOpenDesc = () => {
-          if (openCard !== card) { collapseOpenDesc(); openCard = card; }
-          if (!desc.classList.contains('open')) { desc.classList.remove('hidden'); desc.classList.add('open'); desc.textContent = desc.dataset.full || ''; }
+          if (openCard !== card) {
+            collapseOpenDesc();
+            openCard = card;
+          }
+          if (!desc.classList.contains('open')) {
+            desc.classList.remove('hidden');
+            desc.classList.add('open');
+            desc.textContent = desc.dataset.full || '';
+          }
         };
-        const hideDescNow = () => { desc.classList.remove('open'); desc.classList.add('hidden'); desc.textContent = desc.dataset.short || ''; if (openCard === card) openCard = null; };
+        const hideDescNow = () => {
+          desc.classList.remove('open');
+          desc.classList.add('hidden');
+          desc.textContent = desc.dataset.short || '';
+          if (openCard === card) openCard = null;
+        };
 
         const applyState = (nst, { keepOwner = false } = {}) => {
           btn.dataset.state = String(nst);
-          if (!keepOwner && nst === 0) { btn.dataset.owner = ''; btn.dataset.helping = '0'; btn.dataset.helpers = '[]'; btn.dataset.count = '0'; }
-          if (nst === 1 && !btn.dataset.owner) { btn.dataset.owner = 'Moi'; }
-          if (nst === 2 && !btn.dataset.owner) { btn.dataset.owner = 'Moi'; }
-          drawBtn(btn); setVisualFromState(nst); renderBadges();
-          if (nst === 1) { ensureOpenDesc(); } else { hideDescNow(); }
+          if (!keepOwner && nst === 0) {
+            btn.dataset.owner = '';
+            btn.dataset.helping = '0';
+            btn.dataset.helpers = '[]';
+            btn.dataset.count = '0';
+          }
+          if (nst >= 1 && !btn.dataset.owner) {
+            btn.dataset.owner = 'Moi';
+          }
+          drawBtn(btn);
+          setVisualFromState(nst);
+          renderBadges();
+          if (nst === 1) {
+            ensureOpenDesc();
+          } else {
+            hideDescNow();
+          }
           scheduleHabitActivity(it.id, { type: 'realization', state: nst, owner: btn.dataset.owner, helping: btn.dataset.helping === '1' });
           renderDateBar();
         };
 
-        // Clic mode semaine : X/R
         const clickWeekly = () => {
           let st = +btn.dataset.state || 0;
           let count = +btn.dataset.count || 0;
           const R = +btn.dataset.recur || 1;
-
           if (st === 0) {
-            st = 1; count = 1; btn.dataset.owner = 'Moi';
+            st = 1;
+            count = 1;
+            btn.dataset.owner = 'Moi';
           } else if (st === 1) {
-            if (count < R) { count++; }
-            else { st = 2; }
+            if (count < R) {
+              count++;
+            } else {
+              st = 2;
+            }
           } else if (st === 2) {
-            st = 0; count = 0; btn.dataset.owner = '';
+            st = 0;
+            count = 0;
+            btn.dataset.owner = '';
           }
           btn.dataset.count = String(count);
           applyState(st, { keepOwner: st !== 0 });
@@ -1955,28 +2127,35 @@
         const clickCommon = () => {
           if (isWeekMode()) { clickWeekly(); return; }
           const st = +btn.dataset.state || 0;
-          const owner = btn.dataset.owner || '';
+          const ownerNow = btn.dataset.owner || '';
           if (st === 0) {
             btn.dataset.owner = 'Moi';
             applyState(1);
             return;
           }
           if (st === 1) {
-            if (owner === 'Moi') {
+            if (ownerNow === 'Moi') {
               applyState(2, { keepOwner: true });
             } else {
               const helping = btn.dataset.helping === '1';
               btn.dataset.helping = helping ? '0' : '1';
               let hs = JSON.parse(btn.dataset.helpers || '[]');
-              if (helping) { hs = hs.filter(n => n !== 'Moi'); } else { if (!hs.includes('Moi')) hs.push('Moi'); }
+              if (helping) {
+                hs = hs.filter(n => n !== 'Moi');
+              } else {
+                if (!hs.includes('Moi')) hs.push('Moi');
+              }
               btn.dataset.helpers = JSON.stringify(hs);
-              drawBtn(btn); setVisualFromState(1); renderBadges(); renderDateBar();
+              drawBtn(btn);
+              setVisualFromState(1);
+              renderBadges();
+              renderDateBar();
               scheduleHabitActivity(it.id, { type: 'support', helping: btn.dataset.helping === '1', helpers: hs });
             }
             return;
           }
           if (st === 2) {
-            if (owner === 'Moi') {
+            if (ownerNow === 'Moi') {
               applyState(0);
             }
             return;
@@ -1987,24 +2166,23 @@
           if (isWeekMode()) { clickWeekly(); return; }
           const st = +btn.dataset.state || 0;
           const next = st === 0 ? 1 : (st === 1 ? 2 : 0);
-          if (next === 1) { btn.dataset.owner = 'Moi'; }
-          if (next === 2) { btn.dataset.owner = 'Moi'; }
+          if (next === 1) btn.dataset.owner = 'Moi';
+          if (next === 2) btn.dataset.owner = 'Moi';
           applyState(next);
         };
 
         const handleClick = () => { (mode.type === 'commun') ? clickCommon() : clickLibre(); };
 
         drawBtn(btn);
-        setVisualFromState(st);
+        setVisualFromState(state);
         renderBadges();
-
-        pen.addEventListener('click', (e) => { e.stopPropagation(); openDetail(it.id, btn); selectDetailTab('settings'); });
-        if (st === 1) ensureOpenDesc();
-
+        pen.addEventListener('click', e => { e.stopPropagation(); openDetail(it.id, btn); selectDetailTab('settings'); });
+        if (state === 1) ensureOpenDesc();
         col.addEventListener('click', handleClick);
         cont.addEventListener('click', (e) => { if (e.target.closest('.badge')) return; handleClick(); });
-
-        col.append(btn); card.append(col, cont); root.appendChild(card);
+        col.append(btn);
+        card.append(col, cont);
+        root.appendChild(card);
       });
       renderDateBar();
     }
@@ -2012,22 +2190,79 @@
     /* ===== Calendriers ===== */
     let calOff = 0;
     function minfo(off = 0) { const b = new Date(); b.setDate(1); b.setMonth(b.getMonth() + off); const y = b.getFullYear(), m = b.getMonth(); return { y, m, fd: (new Date(y, m, 1).getDay() + 6) % 7, days: new Date(y, m + 1, 0).getDate() } }
-    function populateCalWho() { const sel = $("#calWho"); sel.innerHTML = ''; sel.add(new Option('Tous', '__all__')); sel.add(new Option('Moi', 'Moi')); (findAny(activeId)?.amis || []).forEach(n => sel.add(new Option(n, n))); sel.value = '__all__'; }
+    function populateCalWho() {
+      const sel = $("#calWho");
+      sel.innerHTML = '';
+      sel.add(new Option('Tous', '__all__'));
+      allMembersOfSpace().forEach(name => {
+        if (!name || name === '__all__') return;
+        const option = new Option(name, name);
+        sel.add(option);
+      });
+      sel.value = '__all__';
+    }
     function renderCalendar() {
-      const wrap = $("#cal"); wrap.innerHTML = ''; const { y, m, fd, days } = minfo(calOff); const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc']; let monthMinutes = 0;
-      for (let i = 0; i < fd; i++) { const c = document.createElement('div'); c.className = 'cell'; c.style.opacity = .35; wrap.appendChild(c) }
-      const today = new Date(), sameMonth = (calOff === 0);
-      for (let d = 1; d <= days; d++) {
-        const c = document.createElement('div'); c.className = 'cell';
-        const dn = document.createElement('div'); dn.className = 'dayNum'; dn.textContent = String(d); c.appendChild(dn);
-        if (Math.random() < 0.6) {
-          const min = pickQuarterUpTo75();
-          const mark = document.createElement('div'); mark.className = 'seedMark'; mark.textContent = '🧑‍🌾'; c.appendChild(mark);
-          const dur = document.createElement('div'); dur.className = 'dur'; dur.textContent = m2txtShort(min); c.appendChild(dur);
-          monthMinutes += min;
+      const wrap = $("#cal");
+      wrap.innerHTML = '';
+      if (!spaceId || !activeId) return;
+      const { y, m, fd, days } = minfo(calOff);
+      const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
+      const ownerFilter = $("#calWho")?.value || '__all__';
+      const records = getHabitRecords(spaceId, activeId, null, ownerFilter);
+      const dayMap = new Map();
+      records.forEach(rec => {
+        if (rec.recordedAt.getFullYear() !== y || rec.recordedAt.getMonth() !== m) return;
+        const day = rec.recordedAt.getDate();
+        const current = dayMap.get(day);
+        if (!current || rec.state > current.state || rec.recordedAt > current.recordedAt) {
+          dayMap.set(day, rec);
         }
-        if (sameMonth && d === today.getDate()) { c.style.outline = `2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--green')}`; }
-        c.onclick = () => { const b = new Date(); b.setDate(1); b.setMonth(b.getMonth() + calOff); const tgt = new Date(b.getFullYear(), b.getMonth(), d), now = new Date(); now.setHours(0, 0, 0, 0); dayOff = Math.round((tgt - now) / 86400000); showHome(); renderCards(); renderDateBar(); window.scrollTo({ top: 0, behavior: 'smooth' }) };
+      });
+      const today = new Date();
+      const sameMonth = calOff === 0;
+      let monthMinutes = 0;
+      for (let i = 0; i < fd; i++) {
+        const c = document.createElement('div');
+        c.className = 'cell';
+        c.style.opacity = .35;
+        wrap.appendChild(c);
+      }
+      for (let d = 1; d <= days; d++) {
+        const c = document.createElement('div');
+        c.className = 'cell';
+        const dn = document.createElement('div');
+        dn.className = 'dayNum';
+        dn.textContent = String(d);
+        c.appendChild(dn);
+        const rec = dayMap.get(d);
+        if (rec && rec.state >= 1) {
+          const mark = document.createElement('div');
+          mark.className = 'seedMark';
+          mark.textContent = '🧑‍🌾';
+          c.appendChild(mark);
+          const dur = document.createElement('div');
+          dur.className = 'dur';
+          const minutes = BASE_MINUTES[rec.habitId] || 15;
+          dur.textContent = m2txtShort(minutes);
+          c.appendChild(dur);
+          monthMinutes += minutes;
+        }
+        if (sameMonth && d === today.getDate()) {
+          c.style.outline = `2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--green')}`;
+        }
+        c.onclick = () => {
+          const b = new Date();
+          b.setDate(1);
+          b.setMonth(b.getMonth() + calOff);
+          const tgt = new Date(b.getFullYear(), b.getMonth(), d);
+          const now = new Date();
+          now.setHours(0, 0, 0, 0);
+          dayOff = Math.round((tgt - now) / 86400000);
+          showHome();
+          renderCards();
+          renderDateBar();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
         wrap.appendChild(c);
       }
       $("#monthLabel").textContent = `${months[m]} ${y}  🧑‍🌾${m2txt(round15(monthMinutes))}`;
@@ -2040,26 +2275,57 @@
     $("#backHome").onclick = showHome;
 
     /* ===== Classement (texte simple ❤️🤝) ===== */
-    function demoHM(rangeDays) { const min = round15(rint(30, 25 * 60)); return { min, txt: m2txt(min) } }
-    function likeFactorFromMin(min) { return 0.5 + (min / 60) / 25 }
     function renderRank() {
-      const it = findAny(activeId); const days = period === '7' ? 7 : period === '30' ? 30 : 120;
-      const rows = [...(it?.amis || []).map(n => ({ n, me: false })), { n: userName || 'Moi', me: true }].map(x => {
-        const v = demoHM(days); const baseLikes = Math.max(0, Math.round(v.min / 60 * likeFactorFromMin(v.min))); const help = rint(2, 10);
-        return { ...x, totalMin: v.min, txt: v.txt, likes: baseLikes, help };
-      }).sort((a, b) => b.totalMin - a.totalMin);
-      const root = $("#rank"); root.innerHTML = '';
+      const root = $("#rank");
+      root.innerHTML = '';
+      if (!spaceId || !activeId) return;
+      const days = period === '7' ? 7 : period === '30' ? 30 : 120;
+      const since = period === 'all' ? null : (() => {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        date.setDate(date.getDate() - days + 1);
+        return date;
+      })();
+      const records = getHabitRecords(spaceId, activeId, since);
+      const totals = new Map();
+      records.forEach(rec => {
+        if ((rec.state || 0) >= 1) {
+          const minutes = BASE_MINUTES[activeId] || 15;
+          totals.set(rec.owner, (totals.get(rec.owner) || 0) + minutes);
+        }
+      });
+      const { likes, helps } = summarizeSocials(spaceId, since);
+      const members = new Set(allMembersOfSpace());
+      members.add(userName || 'Moi');
+      const rows = Array.from(members).map(name => ({
+        n: name,
+        me: name === (userName || 'Moi'),
+        totalMin: totals.get(name) || 0,
+        likes: likes.get(name) || 0,
+        help: Math.round(((helps.get(name) || 0) * 15) / 60),
+        txt: m2txt(totals.get(name) || 0)
+      })).sort((a, b) => b.totalMin - a.totalMin);
       rows.forEach(({ n, totalMin, txt, me, likes, help }) => {
-        const row = document.createElement('div'); row.className = 'row';
-        const left = document.createElement('div'); left.className = 'leftRank';
-        const big = document.createElement('span'); big.className = 'scoreEmoji'; big.textContent = `${lvlEmoji(Math.min(65, Math.round(totalMin / 60)))} ${txt}`;
-        const name = document.createElement('b'); name.textContent = `${n}${me ? ' (toi)' : ''}`;
+        const row = document.createElement('div');
+        row.className = 'row';
+        const left = document.createElement('div');
+        left.className = 'leftRank';
+        const big = document.createElement('span');
+        big.className = 'scoreEmoji';
+        big.textContent = `${lvlEmoji(Math.min(65, Math.round(totalMin / 60)))} ${txt}`;
+        const name = document.createElement('b');
+        name.textContent = `${n}${me ? ' (toi)' : ''}`;
         left.append(big, name);
-        const right = document.createElement('div'); right.style.display = 'flex'; right.style.gap = '8px';
-        const helpTxt = document.createElement('span'); helpTxt.textContent = `🤝 ${help}h`;
-        const likeTxt = document.createElement('span'); likeTxt.textContent = `❤️ ${likes}`;
+        const right = document.createElement('div');
+        right.style.display = 'flex';
+        right.style.gap = '8px';
+        const helpTxt = document.createElement('span');
+        helpTxt.textContent = `🤝 ${help}h`;
+        const likeTxt = document.createElement('span');
+        likeTxt.textContent = `❤️ ${likes}`;
         right.append(helpTxt, likeTxt);
-        row.append(left, right); root.appendChild(row);
+        row.append(left, right);
+        root.appendChild(row);
       });
     }
     function updPeriodBtns() { $$('#btnP7,#btnP30,#btnPAll').forEach(b => b.classList.toggle('active', b.dataset.period === period)) }
@@ -2199,22 +2465,68 @@
         autoWeekSelect.dataset.bound = '1';
       }
     }
-    function allMembersOfSpace() { const ch = listChallenges(); const set = new Set(['Moi']); ch.forEach(c => (c.amis || []).forEach(a => set.add(a))); return Array.from(set) }
+    function allMembersOfSpace() {
+      const sp = getSpace();
+      const members = new Set(['Moi']);
+      (sp?.members || []).forEach(email => {
+        const name = displayNameFromEmail(email);
+        if (name) members.add(name);
+      });
+      return Array.from(members);
+    }
     function renderSpaceRank() {
-      const root = $("#spaceRank"); root.innerHTML = '';
+      const root = $("#spaceRank");
+      root.innerHTML = '';
+      if (!spaceId) return;
       const days = sPeriod === '7' ? 7 : (sPeriod === '30' ? 30 : 120);
-      const rows = allMembersOfSpace().map(n => { const v = demoHM(days); const baseLikes = Math.max(0, Math.round(v.min / 60 * likeFactorFromMin(v.min))); return { n, txt: v.txt, min: v.min, me: (n === userName || n === 'Moi'), likes: baseLikes, help: rint(2, 10) }; }).sort((a, b) => b.min - a.min);
-      rows.forEach(({ n, txt, min, me, likes, help }) => {
-        const row = document.createElement('div'); row.className = 'row';
-        const left = document.createElement('div'); left.className = 'leftRank';
-        const big = document.createElement('span'); big.className = 'scoreEmoji'; big.textContent = `${lvlEmoji(Math.min(65, Math.round(min / 60)))} ${txt}`;
-        const name = document.createElement('b'); name.textContent = `${n}${me ? ' (toi)' : ''}`;
+      const since = sPeriod === 'all' ? null : (() => {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        date.setDate(date.getDate() - days + 1);
+        return date;
+      })();
+      const records = getSpaceRecords(spaceId, since);
+      const totals = new Map();
+      records.forEach(rec => {
+        if ((rec.state || 0) >= 1) {
+          const minutes = BASE_MINUTES[rec.habitId] || 15;
+          totals.set(rec.owner, (totals.get(rec.owner) || 0) + minutes);
+        }
+      });
+      const { likes, helps } = summarizeSocials(spaceId, since);
+      const members = new Set(allMembersOfSpace());
+      members.add(userName || 'Moi');
+      const rows = Array.from(members).map(name => {
+        return {
+          n: name,
+          me: name === (userName || 'Moi'),
+          totalMin: totals.get(name) || 0,
+          likes: likes.get(name) || 0,
+          help: Math.round(((helps.get(name) || 0) * 15) / 60),
+          txt: m2txt(totals.get(name) || 0)
+        };
+      }).sort((a, b) => b.totalMin - a.totalMin);
+      rows.forEach(({ n, txt, totalMin, me, likes, help }) => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        const left = document.createElement('div');
+        left.className = 'leftRank';
+        const big = document.createElement('span');
+        big.className = 'scoreEmoji';
+        big.textContent = `${lvlEmoji(Math.min(65, Math.round(totalMin / 60)))} ${txt}`;
+        const name = document.createElement('b');
+        name.textContent = `${n}${me ? ' (toi)' : ''}`;
         left.append(big, name);
-        const right = document.createElement('div'); right.style.display = 'flex'; right.style.gap = '8px';
-        const helpTxt = document.createElement('span'); helpTxt.textContent = `🤝 ${help}h`;
-        const likeTxt = document.createElement('span'); likeTxt.textContent = `❤️ ${likes}`;
+        const right = document.createElement('div');
+        right.style.display = 'flex';
+        right.style.gap = '8px';
+        const helpTxt = document.createElement('span');
+        helpTxt.textContent = `🤝 ${help}h`;
+        const likeTxt = document.createElement('span');
+        likeTxt.textContent = `❤️ ${likes}`;
         right.append(helpTxt, likeTxt);
-        row.append(left, right); root.appendChild(row);
+        row.append(left, right);
+        root.appendChild(row);
       });
     }
     let sPeriod = '30';
@@ -2226,9 +2538,11 @@
     let sCalOff = 0;
     function populateSpaceWho() { const sel = $("#sCalWho"); sel.innerHTML = ''; sel.add(new Option('Tous', '__all__')); allMembersOfSpace().forEach(n => sel.add(new Option(n, n))); sel.value = '__all__'; }
     function renderSpaceCalendar() {
-      const wrap = $("#sCal"); wrap.innerHTML = '';
+      const wrap = $("#sCal");
+      wrap.innerHTML = '';
+      if (!spaceId) return;
       const space = getSpace();
-      const isWeekSpace = space.orgMode === 'week';
+      const isWeekSpace = space?.orgMode === 'week';
       const { y, m, fd, days } = minfo(sCalOff);
       const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
       const cellHeight = 55;
@@ -2237,26 +2551,71 @@
       const rows = Math.max(1, Math.ceil(totalCells / 7));
       wrap.style.position = 'relative';
       wrap.style.minHeight = `${rows * (cellHeight + gap) - gap}px`;
-      let monthMinutes = 0;
-      const today = new Date(), sameMonth = (sCalOff === 0);
-      for (let i = 0; i < fd; i++) { const c = document.createElement('div'); c.className = 'cell'; c.style.opacity = .35; wrap.appendChild(c); }
-      for (let d = 1; d <= days; d++) {
-        const c = document.createElement('div'); c.className = 'cell'; const dn = document.createElement('div'); dn.className = 'dayNum'; dn.textContent = String(d); c.appendChild(dn);
-        if (!isWeekSpace && Math.random() < 0.65) {
-          const mins = pickQuarterUpTo75();
-          const mark = document.createElement('div'); mark.className = 'seedMark'; mark.textContent = '🧑‍🌾'; c.appendChild(mark);
-          const dur = document.createElement('div'); dur.className = 'dur'; dur.textContent = m2txtShort(mins); c.appendChild(dur);
-          monthMinutes += mins;
+      const ownerFilter = $("#sCalWho")?.value || '__all__';
+      const weekTotals = Array(rows).fill(0);
+      const records = getSpaceRecords(spaceId);
+      const monthMap = new Map();
+      records.forEach(rec => {
+        if (rec.recordedAt.getFullYear() !== y || rec.recordedAt.getMonth() !== m) return;
+        if (ownerFilter !== '__all__' && ownerFilter !== rec.owner) return;
+        const day = rec.recordedAt.getDate();
+        const minutes = BASE_MINUTES[rec.habitId] || 15;
+        monthMap.set(day, (monthMap.get(day) || 0) + minutes);
+        const dayIndex = Math.floor((fd + day - 1) / 7);
+        if (dayIndex >= 0 && dayIndex < rows) {
+          weekTotals[dayIndex] += minutes;
         }
-        if (sameMonth && d === today.getDate()) { c.style.outline = `2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--green')}`; }
-        c.onclick = () => { const b = new Date(); b.setDate(1); b.setMonth(b.getMonth() + sCalOff); const tgt = new Date(b.getFullYear(), b.getMonth(), d), now = new Date(); now.setHours(0, 0, 0, 0); dayOff = Math.round((tgt - now) / 86400000); showHome(); renderCards(); renderDateBar(); window.scrollTo({ top: 0, behavior: 'smooth' }) };
+      });
+      const today = new Date();
+      const sameMonth = sCalOff === 0;
+      let monthMinutes = 0;
+      for (let i = 0; i < fd; i++) {
+        const c = document.createElement('div');
+        c.className = 'cell';
+        c.style.opacity = .35;
+        wrap.appendChild(c);
+      }
+      for (let d = 1; d <= days; d++) {
+        const c = document.createElement('div');
+        c.className = 'cell';
+        const dn = document.createElement('div');
+        dn.className = 'dayNum';
+        dn.textContent = String(d);
+        c.appendChild(dn);
+        const minutes = monthMap.get(d) || 0;
+        if (minutes > 0) {
+          const mark = document.createElement('div');
+          mark.className = 'seedMark';
+          mark.textContent = '🧑‍🌾';
+          c.appendChild(mark);
+          const dur = document.createElement('div');
+          dur.className = 'dur';
+          dur.textContent = m2txtShort(minutes);
+          c.appendChild(dur);
+          monthMinutes += minutes;
+        }
+        if (sameMonth && d === today.getDate()) {
+          c.style.outline = `2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--green')}`;
+        }
+        c.onclick = () => {
+          const b = new Date();
+          b.setDate(1);
+          b.setMonth(b.getMonth() + sCalOff);
+          const tgt = new Date(b.getFullYear(), b.getMonth(), d);
+          const now = new Date();
+          now.setHours(0, 0, 0, 0);
+          dayOff = Math.round((tgt - now) / 86400000);
+          showHome();
+          renderCards();
+          renderDateBar();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
         wrap.appendChild(c);
       }
       if (isWeekSpace) {
         const summaryHeight = 24;
         for (let row = 0; row < rows; row++) {
-          const summaryMinutes = round15(rint(30, 360));
-          monthMinutes += summaryMinutes;
+          const summaryMinutes = weekTotals[row];
           const summary = document.createElement('div');
           summary.className = 'weekSummary';
           summary.textContent = `🧑‍🌾 ${m2txt(summaryMinutes)}`;
@@ -2357,6 +2716,7 @@
         authNameInput.value = '';
       }
     }
+    refreshPendingInviteInfo().then(updateAuthMessage);
 
     function openGardenFlow() {
       gardenProfileSelect.innerHTML = '';
@@ -2372,7 +2732,7 @@
       open(mGarden);
     }
 
-    function createGarden() {
+    async function createGarden() {
       if (!currentProfile?.email) {
         gardenStatus.textContent = 'Tu dois être connecté pour créer un jardin.';
         return;
@@ -2381,13 +2741,27 @@
       const title = (gardenNameInput.value || profile.label).trim() || profile.label;
       const mode = gardenModeSelect.value || profile.orgMode;
       const id = `G${genCode()}`;
-      SPACES[id] = { emoji: profile.emoji, label: title, type: profile.type, orgMode: mode, ch: [] };
-      setSpaceOwner(id, currentProfile?.email || '');
-      persistSpaceDoc(id, { createdBy: currentProfile?.email || '', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-      addSpaceForEmail(currentProfile.email, id);
-      updateAllowedSpaces(currentProfile.email);
+      const ownerEmail = normalizeEmail(currentProfile.email);
+      SPACES[id] = {
+        emoji: profile.emoji,
+        label: title,
+        type: profile.type,
+        orgMode: mode,
+        ch: [],
+        ownerEmail,
+        members: [ownerEmail]
+      };
       spaceId = id;
       userName = currentProfile.name;
+      allowedSpaces = [...new Set([...allowedSpaces, id])];
+      try {
+        await persistSpaceDoc(id, { createdBy: currentProfile.email, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        await loadHabitsForSpace(id);
+        await loadActivitiesForSpace(id);
+        gardenStatus.textContent = 'Ton jardin est prêt !';
+      } catch (err) {
+        gardenStatus.textContent = 'Erreur lors de la création du jardin.';
+      }
       updSel();
       renderCards();
       close(mGarden);
@@ -2397,8 +2771,7 @@
 
     function renderInviteList() {
       inviteList.innerHTML = '';
-      const invites = getInviteMap();
-      const entries = Object.entries(invites).sort((a, b) => b[1].created - a[1].created);
+      const entries = Object.values(INVITE_CACHE).sort((a, b) => (b.created || 0) - (a.created || 0));
       if (!entries.length) {
         const help = document.createElement('div');
         help.className = 'miniInfo';
@@ -2406,11 +2779,12 @@
         inviteList.appendChild(help);
         return;
       }
-      entries.forEach(([token, invite]) => {
+      entries.forEach((invite) => {
+        const token = invite.token;
         const row = document.createElement('div');
         row.className = 'invite-row';
         const info = document.createElement('div');
-        info.innerHTML = `<strong>${invite.invitedName}</strong> · ${invite.gardenLabel}`;
+        info.innerHTML = `<strong>${invite.invitedName}</strong> · ${invite.gardenLabel || invite.label || 'ton jardin'}`;
         const link = `${window.location.origin}${window.location.pathname}?invite=${token}`;
         const actions = document.createElement('div');
         actions.style.display = 'flex';
@@ -2422,13 +2796,11 @@
         const removeBtn = document.createElement('button');
         removeBtn.className = 'btn danger';
         removeBtn.textContent = 'Supprimer';
-        removeBtn.onclick = () => {
-          const map = getInviteMap();
-          delete map[token];
-          setInviteMap(map);
-          deleteInviteDoc(token);
+        removeBtn.onclick = async () => {
+          await deleteInviteDoc(token);
           renderInviteList();
           inviteStatus.textContent = 'Invitation supprimée.';
+          inviteStatus.style.color = '#2a7a57';
         };
         actions.append(copyBtn, removeBtn);
         const linkEl = document.createElement('div');
@@ -2439,23 +2811,28 @@
       });
     }
 
-    function generateInviteLink() {
+    async function generateInviteLink() {
       if (!requireAdmin('générer une invitation')) return;
       const name = (inviteName.value || '').trim();
       inviteStatus.textContent = '';
       if (!name) { inviteStatus.textContent = 'Entre un prénom.'; inviteStatus.style.color = '#d33'; return; }
       if (!spaceId) { inviteStatus.textContent = 'Sélectionne d’abord un jardin.'; inviteStatus.style.color = '#d33'; return; }
-      const invites = getInviteMap();
-      if (Object.values(invites).some(inv => inv.invitedName.toLowerCase() === name.toLowerCase())) {
+      if (Object.values(INVITE_CACHE).some(inv => (inv.invitedName || '').toLowerCase() === name.toLowerCase())) {
         inviteStatus.textContent = 'Ce prénom est déjà utilisé pour une invitation.'; inviteStatus.style.color = '#d33'; return;
       }
       const token = genCode();
       const link = `${window.location.origin}${window.location.pathname}?invite=${token}`;
       const ownerName = currentProfile?.name || userName || 'Un jardinier';
-      const inviteData = { ownerName, invitedName: name, spaceId, label: SPACES[spaceId]?.label || 'ton jardin', created: Date.now() };
-      invites[token] = inviteData;
-      setInviteMap(invites);
-      persistInviteDoc(token, inviteData);
+      const inviteData = {
+        ownerName,
+        invitedName: name,
+        spaceId,
+        gardenLabel: SPACES[spaceId]?.label || 'ton jardin',
+        created: Date.now(),
+        ownerEmail: currentProfile?.email
+      };
+      await persistInviteDoc(token, inviteData);
+      INVITE_CACHE[token] = { token, ...inviteData };
       inviteLinkField.value = link;
       inviteStatus.textContent = 'Lien généré !';
       inviteStatus.style.color = '#2a7a57';
@@ -2632,8 +3009,10 @@
     function hideAuthOverlay() { authOverlay.classList.add('hide') }
     function showAuthOverlay() { authOverlay.classList.remove('hide') }
 
-    HABITU_FIREBASE_AUTH.onAuthStateChanged(user => {
+    HABITU_FIREBASE_AUTH.onAuthStateChanged(async user => {
       if (!user) {
+        persistProfile(null);
+        clearLocalState();
         showAuthOverlay();
         setAuthMode(pendingInviteInfo ? 'signup' : 'login');
         updateAuthMessage();
@@ -2642,20 +3021,19 @@
       const email = (user.email || '').toLowerCase();
       const name = user.displayName || currentProfile?.name || 'Moi';
       persistProfile({ uid: user.uid, email, name });
-      persistUserProfile({ uid: user.uid, email, name });
-      const invite = acceptPendingInvite(email);
+      await persistUserProfile({ uid: user.uid, email, name });
+      const invite = await acceptPendingInvite(email);
       if (invite) {
         pendingInviteInfo = invite;
         updateAuthMessage();
       }
-      updateAllowedSpaces(email);
+      await resetFirestoreState(email);
       userName = name;
       hideAuthOverlay();
-      if (allowedSpaces.length === 0) { openGardenFlow(); return }
+      if (allowedSpaces.length === 0) { openGardenFlow(); return; }
       updAll();
       showHome();
     });
-    loadLibraryJson().then(() => { initializeLibraryDependents(); updAll(); });
 
     /* Tabs util */
     function switchViews(btn, groupAttr, prefix) {
