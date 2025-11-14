@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "emoji": "🧹",
     "title": "Ranger plusieurs surfaces communes",
     "duration": "15",
@@ -22,6 +23,7 @@
     ]
   },
   {
+    "id": 2,
     "emoji": "🧺",
     "title": "Plier le linge propre",
     "duration": "15",
@@ -42,6 +44,7 @@
     ]
   },
   {
+    "id": 3,
     "emoji": "💧",
     "title": "Remplir toutes les bouteilles d’eau",
     "duration": "15",
@@ -63,6 +66,7 @@
     ]
   },
   {
+    "id": 4,
     "emoji": "🍵",
     "title": "Préparer une boisson chaude",
     "duration": "15",
@@ -84,6 +88,7 @@
     ]
   },
   {
+    "id": 5,
     "emoji": "🎧",
     "title": "Écouter une chanson favorite",
     "duration": "5",
@@ -103,6 +108,7 @@
     ]
   },
   {
+    "id": 6,
     "emoji": "🧽",
     "title": "Nettoyer plusieurs petits objets",
     "duration": "15",
@@ -124,6 +130,7 @@
     ]
   },
   {
+    "id": 7,
     "emoji": "🕯️",
     "title": "Allumer une bougie parfumée",
     "duration": "5",
@@ -144,6 +151,7 @@
     ]
   },
   {
+    "id": 8,
     "emoji": "📚",
     "title": "Lire cinq pages d’un livre",
     "duration": "15",
@@ -164,6 +172,7 @@
     ]
   },
   {
+    "id": 9,
     "emoji": "👟",
     "title": "Faire une marche courte",
     "duration": "15",
@@ -185,6 +194,7 @@
     ]
   },
   {
+    "id": 10,
     "emoji": "🧘",
     "title": "Respirer trois minutes",
     "duration": "5",
@@ -205,6 +215,7 @@
     ]
   },
   {
+    "id": 11,
     "emoji": "🍎",
     "title": "Préparer un fruit à partager",
     "duration": "5",
@@ -220,12 +231,13 @@
       "famille"
     ],
     "needs": [
-      "Nutrition",
+      "Énergie",
       "Lien",
       "Affection"
     ]
   },
   {
+    "id": 12,
     "emoji": "📅",
     "title": "Planifier une tâche simple",
     "duration": "5",
@@ -246,6 +258,7 @@
     ]
   },
   {
+    "id": 13,
     "emoji": "🌿",
     "title": "Arroser une plante",
     "duration": "5",
@@ -267,6 +280,7 @@
     ]
   },
   {
+    "id": 14,
     "emoji": "📝",
     "title": "Noter un souvenir du jour",
     "duration": "5",
@@ -286,6 +300,7 @@
     ]
   },
   {
+    "id": 15,
     "emoji": "🗂️",
     "title": "Classer trois papiers",
     "duration": "5",
@@ -305,6 +320,7 @@
     ]
   },
   {
+    "id": 16,
     "emoji": "🍝",
     "title": "Cuisiner un plat simple",
     "duration": "30",
@@ -320,12 +336,13 @@
       "amis"
     ],
     "needs": [
-      "Nutrition",
+      "Énergie",
       "Lien",
       "Joie"
     ]
   },
   {
+    "id": 17,
     "emoji": "🧦",
     "title": "Trier les vêtements propres",
     "duration": "15",
@@ -346,6 +363,7 @@
     ]
   },
   {
+    "id": 18,
     "emoji": "📞",
     "title": "Appeler une personne aimée",
     "duration": "15",
@@ -365,6 +383,7 @@
     ]
   },
   {
+    "id": 19,
     "emoji": "🕺",
     "title": "Danser une minute",
     "duration": "5",
@@ -386,6 +405,7 @@
     ]
   },
   {
+    "id": 20,
     "emoji": "🌄",
     "title": "Observer le ciel",
     "duration": "5",
@@ -405,7 +425,9 @@
       "Sommeil"
     ]
   },
+
   {
+    "id": 21,
     "emoji": "🥗",
     "title": "Préparer une salade rapide",
     "duration": "15",
@@ -420,12 +442,13 @@
       "colocation"
     ],
     "needs": [
-      "Nutrition",
+      "Énergie",
       "Organisation",
       "Affection"
     ]
   },
   {
+    "id": 22,
     "emoji": "📦",
     "title": "Organiser un tiroir",
     "duration": "15",
@@ -446,6 +469,7 @@
     ]
   },
   {
+    "id": 23,
     "emoji": "🚲",
     "title": "Faire un petit tour à vélo",
     "duration": "15",
@@ -466,6 +490,7 @@
     ]
   },
   {
+    "id": 24,
     "emoji": "🧴",
     "title": "Prendre soin de sa peau",
     "duration": "5",
@@ -485,6 +510,7 @@
     ]
   },
   {
+    "id": 25,
     "emoji": "🪑",
     "title": "Réaménager un petit espace",
     "duration": "15",
@@ -506,6 +532,7 @@
     ]
   },
   {
+    "id": 26,
     "emoji": "📨",
     "title": "Répondre à un message",
     "duration": "5",
@@ -525,6 +552,7 @@
     ]
   },
   {
+    "id": 27,
     "emoji": "🎨",
     "title": "Dessiner un petit croquis",
     "duration": "15",
@@ -544,6 +572,7 @@
     ]
   },
   {
+    "id": 28,
     "emoji": "🪥",
     "title": "Nettoyer la zone salle de bain",
     "duration": "15",
@@ -564,6 +593,7 @@
     ]
   },
   {
+    "id": 29,
     "emoji": "🎁",
     "title": "Préparer une petite surprise",
     "duration": "15",
@@ -585,6 +615,7 @@
     ]
   },
   {
+    "id": 30,
     "emoji": "🔄",
     "title": "Mettre en route plusieurs machines",
     "duration": "15",
@@ -604,7 +635,9 @@
       "Sens"
     ]
   },
+
   {
+    "id": 31,
     "emoji": "🧴",
     "title": "Nettoyer toutes les poignées principales",
     "duration": "15",
@@ -626,6 +659,7 @@
     ]
   },
   {
+    "id": 32,
     "emoji": "🌞",
     "title": "Sortir prendre la lumière",
     "duration": "15",
@@ -646,6 +680,7 @@
     ]
   },
   {
+    "id": 33,
     "emoji": "💬",
     "title": "Faire un compliment sincère",
     "duration": "5",
@@ -667,6 +702,7 @@
     ]
   },
   {
+    "id": 34,
     "emoji": "🔧",
     "title": "Réparer un petit objet",
     "duration": "15",
@@ -687,6 +723,7 @@
     ]
   },
   {
+    "id": 35,
     "emoji": "🛏️",
     "title": "Aérer et rafraîchir la chambre",
     "duration": "15",
@@ -707,6 +744,7 @@
     ]
   },
   {
+    "id": 36,
     "emoji": "🪟",
     "title": "Nettoyer une vitre",
     "duration": "15",
@@ -728,6 +766,7 @@
     ]
   },
   {
+    "id": 37,
     "emoji": "🍋",
     "title": "Boire un verre vitaminé",
     "duration": "5",
@@ -742,12 +781,13 @@
       "voyage"
     ],
     "needs": [
-      "Nutrition",
+      "Énergie",
       "Sommeil",
       "Calme"
     ]
   },
   {
+    "id": 38,
     "emoji": "🎶",
     "title": "Mettre une musique douce",
     "duration": "5",
@@ -769,6 +809,7 @@
     ]
   },
   {
+    "id": 39,
     "emoji": "📦",
     "title": "Préparer un sac léger",
     "duration": "15",
@@ -789,6 +830,7 @@
     ]
   },
   {
+    "id": 40,
     "emoji": "❤️",
     "title": "Envoyer un mot tendre",
     "duration": "5",
@@ -808,7 +850,9 @@
       "Joie"
     ]
   },
+
   {
+    "id": 41,
     "emoji": "🪴",
     "title": "Déplacer plusieurs plantes au soleil",
     "duration": "15",
@@ -830,6 +874,7 @@
     ]
   },
   {
+    "id": 42,
     "emoji": "🤝",
     "title": "Proposer une aide rapide",
     "duration": "5",
@@ -851,6 +896,7 @@
     ]
   },
   {
+    "id": 43,
     "emoji": "🔍",
     "title": "Chercher une info utile",
     "duration": "5",
@@ -872,6 +918,7 @@
     ]
   },
   {
+    "id": 44,
     "emoji": "🛒",
     "title": "Mettre à jour la liste courses",
     "duration": "5",
@@ -887,11 +934,12 @@
     ],
     "needs": [
       "Organisation",
-      "Nutrition",
+      "Énergie",
       "Lien"
     ]
   },
   {
+    "id": 45,
     "emoji": "🧑‍🍳",
     "title": "Couper légumes pour tous",
     "duration": "15",
@@ -906,12 +954,13 @@
       "amis"
     ],
     "needs": [
-      "Nutrition",
+      "Énergie",
       "Affection",
       "Lien"
     ]
   },
   {
+    "id": 46,
     "emoji": "🧴",
     "title": "Désinfecter poignées et interrupteurs",
     "duration": "15",
@@ -932,6 +981,7 @@
     ]
   },
   {
+    "id": 47,
     "emoji": "💌",
     "title": "Écrire un mot positif",
     "duration": "5",
@@ -953,6 +1003,7 @@
     ]
   },
   {
+    "id": 48,
     "emoji": "🤸",
     "title": "Étirements rapides debout",
     "duration": "5",
@@ -974,6 +1025,7 @@
     ]
   },
   {
+    "id": 49,
     "emoji": "🌬️",
     "title": "Ouvrir et aérer toute la pièce",
     "duration": "15",
@@ -995,6 +1047,7 @@
     ]
   },
   {
+    "id": 50,
     "emoji": "☕",
     "title": "Partager une pause boisson",
     "duration": "15",
@@ -1014,7 +1067,9 @@
       "Joie"
     ]
   },
+
   {
+    "id": 51,
     "emoji": "📎",
     "title": "Distribuer et collecter les feuilles",
     "duration": "15",
@@ -1035,6 +1090,7 @@
     ]
   },
   {
+    "id": 52,
     "emoji": "🪑",
     "title": "Aligner toutes les chaises de la salle",
     "duration": "15",
@@ -1055,6 +1111,7 @@
     ]
   },
   {
+    "id": 53,
     "emoji": "📘",
     "title": "Sortir et ranger les manuels",
     "duration": "15",
@@ -1073,6 +1130,7 @@
     ]
   },
   {
+    "id": 54,
     "emoji": "🖼️",
     "title": "Décorer un tableau",
     "duration": "15",
@@ -1093,6 +1151,7 @@
     ]
   },
   {
+    "id": 55,
     "emoji": "🖊️",
     "title": "Répartir et tester les stylos",
     "duration": "15",
@@ -1113,6 +1172,7 @@
     ]
   },
   {
+    "id": 56,
     "emoji": "🔑",
     "title": "Vérifier et ranger toutes les clés",
     "duration": "15",
@@ -1133,6 +1193,7 @@
     ]
   },
   {
+    "id": 57,
     "emoji": "📋",
     "title": "Installer un support affiches",
     "duration": "15",
@@ -1153,6 +1214,7 @@
     ]
   },
   {
+    "id": 58,
     "emoji": "🧃",
     "title": "Distribuer les boissons",
     "duration": "15",
@@ -1172,6 +1234,7 @@
     ]
   },
   {
+    "id": 59,
     "emoji": "📏",
     "title": "Ranger le matériel scolaire",
     "duration": "15",
@@ -1190,6 +1253,7 @@
     ]
   },
   {
+    "id": 60,
     "emoji": "🗳️",
     "title": "Organiser un mini vote",
     "duration": "15",
@@ -1208,7 +1272,9 @@
       "Joie"
     ]
   },
+
   {
+    "id": 61,
     "emoji": "📣",
     "title": "Accueillir les participants",
     "duration": "5",
@@ -1229,6 +1295,7 @@
     ]
   },
   {
+    "id": 62,
     "emoji": "🧭",
     "title": "Montrer le chemin",
     "duration": "5",
@@ -1248,6 +1315,7 @@
     ]
   },
   {
+    "id": 63,
     "emoji": "🗂️",
     "title": "Installer un coin dossiers",
     "duration": "15",
@@ -1267,6 +1335,7 @@
     ]
   },
   {
+    "id": 64,
     "emoji": "😄",
     "title": "Lancer une blague simple",
     "duration": "5",
@@ -1287,6 +1356,7 @@
     ]
   },
   {
+    "id": 65,
     "emoji": "🫗",
     "title": "Remplir et disposer les carafes",
     "duration": "15",
@@ -1306,6 +1376,7 @@
     ]
   },
   {
+    "id": 66,
     "emoji": "📑",
     "title": "Préparer les dossiers",
     "duration": "15",
@@ -1326,6 +1397,7 @@
     ]
   },
   {
+    "id": 67,
     "emoji": "🔌",
     "title": "Brancher et tester les appareils",
     "duration": "15",
@@ -1346,6 +1418,7 @@
     ]
   },
   {
+    "id": 68,
     "emoji": "📡",
     "title": "Tester la connexion",
     "duration": "5",
@@ -1365,6 +1438,7 @@
     ]
   },
   {
+    "id": 69,
     "emoji": "🙋",
     "title": "Accorder une écoute",
     "duration": "15",
@@ -1386,6 +1460,7 @@
     ]
   },
   {
+    "id": 70,
     "emoji": "📜",
     "title": "Réviser une consigne",
     "duration": "5",
@@ -1405,7 +1480,9 @@
       "Calme"
     ]
   },
+
   {
+    "id": 71,
     "emoji": "🎒",
     "title": "Préparer un sac commun",
     "duration": "15",
@@ -1426,6 +1503,7 @@
     ]
   },
   {
+    "id": 72,
     "emoji": "🔥",
     "title": "Allumer un feu sécurisé",
     "duration": "15",
@@ -1445,6 +1523,7 @@
     ]
   },
   {
+    "id": 73,
     "emoji": "🧭",
     "title": "Suivre un petit itinéraire",
     "duration": "15",
@@ -1465,6 +1544,7 @@
     ]
   },
   {
+    "id": 74,
     "emoji": "🛶",
     "title": "Préparer une activité eau",
     "duration": "15",
@@ -1484,6 +1564,7 @@
     ]
   },
   {
+    "id": 75,
     "emoji": "🛏️",
     "title": "Installer les couchages",
     "duration": "15",
@@ -1503,6 +1584,7 @@
     ]
   },
   {
+    "id": 76,
     "emoji": "🍽️",
     "title": "Mettre la table commune",
     "duration": "15",
@@ -1518,11 +1600,12 @@
     ],
     "needs": [
       "Lien",
-      "Nutrition",
+      "Énergie",
       "Joie"
     ]
   },
   {
+    "id": 77,
     "emoji": "🎈",
     "title": "Décorer un espace fête",
     "duration": "15",
@@ -1543,6 +1626,7 @@
     ]
   },
   {
+    "id": 78,
     "emoji": "🎤",
     "title": "Tester le micro et le son",
     "duration": "15",
@@ -1564,6 +1648,7 @@
     ]
   },
   {
+    "id": 79,
     "emoji": "🛍️",
     "title": "Distribuer les cadeaux",
     "duration": "15",
@@ -1584,6 +1669,7 @@
     ]
   },
   {
+    "id": 80,
     "emoji": "🚐",
     "title": "Organiser la montée dans le véhicule",
     "duration": "15",
@@ -1602,7 +1688,9 @@
       "Sens"
     ]
   },
+
   {
+    "id": 81,
     "emoji": "📸",
     "title": "Prendre une photo souvenir",
     "duration": "5",
@@ -1623,6 +1711,7 @@
     ]
   },
   {
+    "id": 82,
     "emoji": "🧭",
     "title": "Repérer un point de ralliement",
     "duration": "5",
@@ -1642,6 +1731,7 @@
     ]
   },
   {
+    "id": 83,
     "emoji": "🧼",
     "title": "Nettoyer la table repas",
     "duration": "15",
@@ -1662,6 +1752,7 @@
     ]
   },
   {
+    "id": 84,
     "emoji": "🍕",
     "title": "Servir les snacks pour tous",
     "duration": "15",
@@ -1675,12 +1766,13 @@
       "voyage"
     ],
     "needs": [
-      "Nutrition",
+      "Énergie",
       "Lien",
       "Joie"
     ]
   },
   {
+    "id": 85,
     "emoji": "🎵",
     "title": "Lancer une playlist",
     "duration": "5",
@@ -1701,6 +1793,7 @@
     ]
   },
   {
+    "id": 86,
     "emoji": "🧂",
     "title": "Assaisonner et goûter le plat commun",
     "duration": "15",
@@ -1715,12 +1808,13 @@
       "voyage"
     ],
     "needs": [
-      "Nutrition",
+      "Énergie",
       "Joie",
       "Lien"
     ]
   },
   {
+    "id": 87,
     "emoji": "👋",
     "title": "Serrer des mains",
     "duration": "5",
@@ -1740,6 +1834,7 @@
     ]
   },
   {
+    "id": 88,
     "emoji": "🗺️",
     "title": "Étudier une petite carte",
     "duration": "5",
@@ -1760,6 +1855,7 @@
     ]
   },
   {
+    "id": 89,
     "emoji": "🛎️",
     "title": "Accueillir les arrivants",
     "duration": "5",
@@ -1780,6 +1876,7 @@
     ]
   },
   {
+    "id": 90,
     "emoji": "🧃",
     "title": "Servir un verre d’accueil",
     "duration": "5",
@@ -1799,7 +1896,9 @@
       "Joie"
     ]
   },
+
   {
+    "id": 91,
     "emoji": "🧹",
     "title": "Balayer une zone de circulation",
     "duration": "15",
@@ -1820,6 +1919,7 @@
     ]
   },
   {
+    "id": 92,
     "emoji": "🪨",
     "title": "Ramasser les déchets visibles",
     "duration": "15",
@@ -1840,6 +1940,7 @@
     ]
   },
   {
+    "id": 93,
     "emoji": "🔥",
     "title": "Surveiller un feu",
     "duration": "15",
@@ -1859,6 +1960,7 @@
     ]
   },
   {
+    "id": 94,
     "emoji": "🌭",
     "title": "Préparer une grillade",
     "duration": "15",
@@ -1872,12 +1974,13 @@
       "fête"
     ],
     "needs": [
-      "Nutrition",
+      "Énergie",
       "Joie",
       "Lien"
     ]
   },
   {
+    "id": 95,
     "emoji": "🕊️",
     "title": "Proposer un moment calme",
     "duration": "15",
@@ -1898,6 +2001,7 @@
     ]
   },
   {
+    "id": 96,
     "emoji": "🎯",
     "title": "Coordonner les jeux extérieurs",
     "duration": "15",
@@ -1918,6 +2022,7 @@
     ]
   },
   {
+    "id": 97,
     "emoji": "📚",
     "title": "Animer un petit atelier",
     "duration": "15",
@@ -1938,6 +2043,7 @@
     ]
   },
   {
+    "id": 98,
     "emoji": "📷",
     "title": "Photographier les moments clés",
     "duration": "15",
@@ -1959,6 +2065,7 @@
     ]
   },
   {
+    "id": 99,
     "emoji": "🚩",
     "title": "Baliser le chemin d’accès",
     "duration": "15",
@@ -1979,6 +2086,7 @@
     ]
   },
   {
+    "id": 100,
     "emoji": "🧑‍🤝‍🧑",
     "title": "Encadrer un petit groupe",
     "duration": "15",
