@@ -2437,8 +2437,6 @@
           friends.appendChild(editBtn);
         };
         manageEditButton();
-        pen.addEventListener('click', e => { e.stopPropagation(); openDetail(it.id, btn); selectDetailTab('settings'); });
-        if (state === 1) ensureOpenDesc();
         col.addEventListener('click', handleClick);
         cont.addEventListener('click', (e) => { if (e.target.closest('.badge')) return; handleClick(); });
         col.append(btn);
