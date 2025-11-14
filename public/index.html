@@ -161,7 +161,7 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
-    
+
     .loader-content {
       display: flex;
       flex-direction: column;
@@ -197,12 +197,15 @@
       0% {
         transform: scale(1) translateY(0);
       }
+
       40% {
         transform: scale(1.05) translateY(-6px);
       }
+
       65% {
         transform: scale(0.98) translateY(2px);
       }
+
       100% {
         transform: scale(1) translateY(0);
       }
@@ -1616,7 +1619,7 @@
                 <option value="week">À la semaine</option>
                 <option value="day">À la journée</option>
               </select>
-              <div class="subtitle" id="gardenModeHint">Idéal pour &lt;20 tâches récurrentes flexibles sur la semaine.
+              <div class="subtitle" id="gardenModeHint">10-20 routines à organiser librement dans la semaine.
               </div>
             </div>
             <div class="field">
@@ -1789,12 +1792,12 @@
     function safeStorageSet(key, value) {
       try {
         localStorage.setItem(key, value);
-      } catch (e) {}
+      } catch (e) { }
     }
     function safeStorageRemove(key) {
       try {
         localStorage.removeItem(key);
-      } catch (e) {}
+      } catch (e) { }
     }
     function parseSessionLock(value) {
       if (!value) return null;
@@ -3642,9 +3645,9 @@
     function updateGardenModeHint() {
       if (!gardenModeHint || !gardenModeSelect) return;
       if (gardenModeSelect.value === 'day') {
-        gardenModeHint.textContent = "Idéal pour des habitudes nombreuses et différentes d'un jour de la semaine à un autre.";
+        gardenModeHint.textContent = "20+ routines à répartir différemment chaque jour";
       } else {
-        gardenModeHint.textContent = "Idéal pour &lt;20 tâches récurrentes flexibles sur la semaine.";
+        gardenModeHint.textContent = "5 à 20 routines à organiser librement sur la semaine.";
       }
     }
     gardenModeSelect?.addEventListener('change', () => {
