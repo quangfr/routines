@@ -907,6 +907,64 @@
       margin-left: 4px;
       white-space: pre-line
     }
+    .profile-link {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+    }
+    .profile-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: space-between;
+    }
+    .profile-head .detailTitle {
+      margin: 0;
+    }
+    .profile-head .subtitle {
+      font-size: 12px;
+      color: #5f5f5f;
+    }
+    .profile-period-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .profile-period-buttons {
+      display: flex;
+      gap: 6px;
+    }
+    .profile-habit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .profile-habit {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .profile-habit-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .profile-habit-stats {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      align-items: center;
+    }
 
     .calendarWrap {
       padding: 0 var(--gap) var(--gap)
@@ -1459,6 +1517,30 @@
       </div>
     </section>
 
+    <section id="profile" class="view">
+      <div class="detailHead profile-head">
+        <button class="backMini" id="backFromProfile">←</button>
+        <div>
+          <div class="detailTitle" id="profileTitle"></div>
+          <div class="subtitle" id="profileSubtitle"></div>
+        </div>
+        <button class="btn danger hide" id="removeFromGardenBtn">Retirer du jardin</button>
+      </div>
+      <div class="section">
+        <div class="rankHeader profile-period-row">
+          <b>Habitudes</b>
+          <div class="profile-period-buttons">
+            <button class="btnToggle" data-pp="7" id="profilePeriod7">7 jours</button>
+            <button class="btnToggle active" data-pp="30" id="profilePeriod30">30 jours</button>
+            <button class="btnToggle" data-pp="all" id="profilePeriodAll">Total</button>
+          </div>
+        </div>
+        <div class="subtitle" id="profilePeriodHint">Sélectionne une période pour voir les réalisations.</div>
+        <div id="profileHabits" class="profile-habit-list"></div>
+        <div class="subtitle hide" id="profileEmpty">Pas encore d’activité sur cette période.</div>
+      </div>
+    </section>
+
     <section id="space" class="view">
       <div class="detailHead">
         <button class="backMini" id="backFromSpace">←</button>
@@ -1859,6 +1941,11 @@
       club: 'Communauté / Club'
     };
 
+    const MODE_META = {
+      libre: { label: 'Individuel', emoji: '👤', target: 'individual' },
+      commun: { label: 'Partagé', emoji: '👥', target: 'group' }
+    };
+
     const CONTEXT_EMOJIS = {
       home: '🏡',
       maison: '🏠',
@@ -2134,6 +2221,7 @@
 
     /* Global */
     let period = '30', spaceId = 'D0PWE3', userName = 'Moi', dayOff = 0;
+    let profilePeriod = '30', activeProfileName = null, activeProfileEmail = null, profileReturnView = 'detail';
 
     /* Spaces (orgMode: day ou week) */
     const SPACES = {};
@@ -2313,7 +2401,7 @@
     function ensureHabitMetadata(habit) {
       if (!habit?.id) return;
       if (habit.baseMin) BASE_MINUTES[habit.id] = habit.baseMin;
-      if (habit.desc) HABIT_DESC[habit.id] = habit.desc;
+      if (habit.desc || habit.note) HABIT_DESC[habit.id] = habit.desc || habit.note || '';
       if (habit.customTitle) HABIT_TITLE_CUSTOM[habit.id] = habit.customTitle;
       if (habit.mode) HABIT_MODE[habit.id] = habit.mode;
       if (habit.recurrence) HABIT_REC[habit.id] = habit.recurrence;
@@ -3171,7 +3259,7 @@
 
     /* ===== Navigation vues ===== */
     function showHome() { hideAll(); $("#home").classList.add('active'); $("#daysWrap").classList.remove('hide') }
-    function hideAll() { $$('#home,#detail,#space').forEach(v => v.classList.remove('active')) }
+    function hideAll() { $$('#home,#detail,#space,#profile').forEach(v => v.classList.remove('active')) }
     $("#backHome").onclick = showHome;
 
     /* ===== Classement (texte simple ❤️🤝) ===== */
@@ -3213,9 +3301,12 @@
         const big = document.createElement('span');
         big.className = 'scoreEmoji';
         big.textContent = `${lvlEmoji(Math.min(65, Math.round(totalMin / 60)))} ${txt}`;
-        const name = document.createElement('b');
-        name.textContent = `${n}${me ? ' (toi)' : ''}`;
-        left.append(big, name);
+        const nameBtn = document.createElement('button');
+        nameBtn.type = 'button';
+        nameBtn.className = 'profile-link';
+        nameBtn.textContent = `${n}${me ? ' (toi)' : ''}`;
+        nameBtn.addEventListener('click', () => openProfileView(n, 'detail'));
+        left.append(big, nameBtn);
         const right = document.createElement('div');
         right.style.display = 'flex';
         right.style.gap = '8px';
@@ -3227,11 +3318,182 @@
         row.append(left, right);
         root.appendChild(row);
       });
+      renderProfileStats();
     }
     function updPeriodBtns() { $$('#btnP7,#btnP30,#btnPAll').forEach(b => b.classList.toggle('active', b.dataset.period === period)) }
     $('#btnP7').onclick = () => { period = '7'; updPeriodBtns(); renderRank() };
     $('#btnP30').onclick = () => { period = '30'; updPeriodBtns(); renderRank() };
     $('#btnPAll').onclick = () => { period = 'all'; updPeriodBtns(); renderRank() };
+    function showDetailView() { hideAll(); $("#detail").classList.add('active'); $("#daysWrap").classList.add('hide') }
+    function getProfilePeriodLabel(key) {
+      if (key === 'all') return 'Total';
+      const base = Number(key);
+      if (!base) return '';
+      const unit = isWeekMode() ? (base === 1 ? 'semaine' : 'semaines') : (base === 1 ? 'jour' : 'jours');
+      return `${base} ${unit}`;
+    }
+    function updateProfileSubtitle() {
+      const subtitle = $("#profileSubtitle");
+      if (!subtitle) return;
+      const label = getProfilePeriodLabel(profilePeriod);
+      subtitle.textContent = label === 'Total' ? 'Toutes les périodes' : `Période : ${label}`;
+    }
+    function updateProfilePeriodButtons() {
+      $$('#profilePeriod7,#profilePeriod30,#profilePeriodAll').forEach(btn => {
+        const key = btn.dataset.pp;
+        if (!key) return;
+        btn.classList.toggle('active', key === profilePeriod);
+        btn.textContent = getProfilePeriodLabel(key);
+      });
+      const hint = $("#profilePeriodHint");
+      if (hint) {
+        hint.textContent = isWeekMode() ? 'Les périodes sont exprimées en semaines pour ce jardin.' : 'Les périodes sont exprimées en jours pour ce jardin.';
+      }
+      updateProfileSubtitle();
+    }
+    function getProfileSinceDate() {
+      if (!spaceId || profilePeriod === 'all') return null;
+      const base = Number(profilePeriod) || 0;
+      if (!base) return null;
+      const multiplier = isWeekMode() ? 7 : 1;
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() - (base * multiplier) + 1);
+      return date;
+    }
+    function renderProfileStats() {
+      updateProfilePeriodButtons();
+      const root = $("#profileHabits");
+      const empty = $("#profileEmpty");
+      if (root) root.innerHTML = '';
+      if (!spaceId || !activeProfileName) {
+        if (empty) empty.classList.remove('hide');
+        return;
+      }
+      const normalized = normalizeOwnerLabel(activeProfileName);
+      const since = getProfileSinceDate();
+      const records = getSpaceRecords(spaceId, since).filter(rec => normalizeOwnerLabel(rec.owner) === normalized);
+      const minutesPerHabit = new Map();
+      records.forEach(rec => {
+        if ((rec.state || 0) >= 1) {
+          const minutes = BASE_MINUTES[rec.habitId] || 15;
+          minutesPerHabit.set(rec.habitId, (minutesPerHabit.get(rec.habitId) || 0) + minutes);
+        }
+      });
+      const events = getSpaceEvents(spaceId, since);
+      const supportCounts = new Map();
+      const likeCounts = new Map();
+      events.forEach(event => {
+        const actor = getOwnerNameFromEvent(event);
+        if (!actor || normalizeOwnerLabel(actor) !== normalized) return;
+        if (!event.habitId) return;
+        if (event.type === 'support') {
+          supportCounts.set(event.habitId, (supportCounts.get(event.habitId) || 0) + 1);
+        }
+        if (event.type === 'like' && event.liked) {
+          likeCounts.set(event.habitId, (likeCounts.get(event.habitId) || 0) + 1);
+        }
+      });
+      const habitIds = new Set([...minutesPerHabit.keys(), ...supportCounts.keys(), ...likeCounts.keys()]);
+      if (!habitIds.size) {
+        if (empty) empty.classList.remove('hide');
+        return;
+      }
+      if (empty) empty.classList.add('hide');
+      const entries = Array.from(habitIds).map(hid => ({
+        habit: findAny(hid),
+        minutes: minutesPerHabit.get(hid) || 0,
+        supports: supportCounts.get(hid) || 0,
+        likes: likeCounts.get(hid) || 0,
+        id: hid
+      })).sort((a, b) => b.minutes - a.minutes);
+      entries.forEach(item => {
+        const name = habitLabel(item.habit) || 'Habitude';
+        const row = document.createElement('div');
+        row.className = 'profile-habit';
+        const title = document.createElement('div');
+        title.className = 'profile-habit-title';
+        title.textContent = name;
+        const stats = document.createElement('div');
+        stats.className = 'profile-habit-stats';
+        const duration = document.createElement('span');
+        duration.textContent = `⏱ ${m2txt(item.minutes)}`;
+        const supports = document.createElement('span');
+        supports.textContent = `🤝 ${item.supports}`;
+        const likes = document.createElement('span');
+        likes.textContent = `❤️ ${item.likes}`;
+        stats.append(duration, supports, likes);
+        row.append(title, stats);
+        root.appendChild(row);
+      });
+    }
+    function resolveProfileEmail(name) {
+      const normalizedTarget = normalizeOwnerLabel(name);
+      if (!normalizedTarget) return null;
+      if (currentProfile && normalizeOwnerLabel(getCurrentOwnerLabel()) === normalizedTarget) {
+        return currentProfile.email || null;
+      }
+      const sp = getSpace();
+      if (!sp) return null;
+      const ownerName = displayNameFromEmail(sp.ownerEmail);
+      if (normalizeOwnerLabel(ownerName) === normalizedTarget) return sp.ownerEmail;
+      for (const email of sp.members || []) {
+        if (normalizeOwnerLabel(displayNameFromEmail(email)) === normalizedTarget) {
+          return email;
+        }
+      }
+      return null;
+    }
+    function updateProfileRemoveButton() {
+      const btn = $("#removeFromGardenBtn");
+      if (!btn || !activeProfileName) return;
+      const sp = getSpace();
+      const ownerName = sp ? displayNameFromEmail(sp.ownerEmail) : '';
+      const isOwner = normalizeOwnerLabel(activeProfileName) === normalizeOwnerLabel(ownerName);
+      const isSelf = normalizeOwnerLabel(activeProfileName) === normalizeOwnerLabel(getCurrentOwnerLabel());
+      const shouldShow = isCurrentSpaceAdmin() && !isOwner && !isSelf;
+      btn.classList.toggle('hide', !shouldShow);
+    }
+    function openProfileView(name, returnView = 'detail') {
+      if (!name) return;
+      activeProfileName = name;
+      profileReturnView = returnView || 'detail';
+      activeProfileEmail = resolveProfileEmail(name);
+      updateProfilePeriodButtons();
+      hideAll();
+      $("#profile").classList.add('active');
+      $("#daysWrap").classList.add('hide');
+      $("#profileTitle").textContent = name;
+      updateProfileRemoveButton();
+      renderProfileStats();
+    }
+    function closeProfileView() {
+      const target = profileReturnView;
+      profileReturnView = 'detail';
+      activeProfileName = null;
+      activeProfileEmail = null;
+      hideAll();
+      if (target === 'space') {
+        openSpacePage();
+      } else if (activeId) {
+        showDetailView();
+      } else {
+        showHome();
+      }
+    }
+    async function removeActiveProfileMember() {
+      if (!activeProfileEmail || !spaceId) return;
+      if (!confirm('Retirer ce jardinier du jardin ?')) return;
+      const normalized = normalizeEmail(activeProfileEmail);
+      const sp = getSpace();
+      if (!sp) return;
+      sp.members = (sp.members || []).filter(email => normalizeEmail(email) !== normalized);
+      await persistSpaceDoc(spaceId, { members: sp.members });
+      renderSpaceRank();
+      renderRank();
+      renderCards();
+      closeProfileView();
+    }
 
     /* ===== Paramètres habitude ===== */
     let activeId = null, refBtn = null;
@@ -3329,7 +3591,13 @@
       if (save && !save.dataset.bound) {
         save.onclick = async () => {
           if (!requireAdmin('modifier une habitude')) return;
-          const payload = { id: activeId, customTitle: HABIT_TITLE_CUSTOM[activeId] || '', desc: HABIT_DESC[activeId] || '', mode: HABIT_MODE[activeId] || null };
+          const payload = {
+            id: activeId,
+            customTitle: HABIT_TITLE_CUSTOM[activeId] || '',
+            desc: HABIT_DESC[activeId] || '',
+            note: HABIT_DESC[activeId] || '',
+            mode: HABIT_MODE[activeId] || null
+          };
           await persistHabit(spaceId, payload);
           activeId = null;
           renderCards();
@@ -3602,9 +3870,12 @@
         const big = document.createElement('span');
         big.className = 'scoreEmoji';
         big.textContent = `${lvlEmoji(Math.min(65, Math.round(totalMin / 60)))} ${txt}`;
-        const name = document.createElement('b');
-        name.textContent = `${n}${me ? ' (toi)' : ''}`;
-        left.append(big, name);
+        const nameBtn = document.createElement('button');
+        nameBtn.type = 'button';
+        nameBtn.className = 'profile-link';
+        nameBtn.textContent = `${n}${me ? ' (toi)' : ''}`;
+        nameBtn.addEventListener('click', () => openProfileView(n, 'space'));
+        left.append(big, nameBtn);
         const right = document.createElement('div');
         right.style.display = 'flex';
         right.style.gap = '8px';
@@ -3613,15 +3884,21 @@
         const likeTxt = document.createElement('span');
         likeTxt.textContent = `❤️ ${likes}`;
         right.append(helpTxt, likeTxt);
-        row.append(left, right);
-        root.appendChild(row);
-      });
-    }
+      row.append(left, right);
+      root.appendChild(row);
+    });
+    renderProfileStats();
+  }
     let sPeriod = '30';
     function updSpacePeriodBtns() { $$('#sBtnP7,#sBtnP30,#sBtnPAll').forEach(b => b.classList.toggle('active', b.dataset.speriod === sPeriod)); }
     $('#sBtnP7').onclick = () => { sPeriod = '7'; updSpacePeriodBtns(); renderSpaceRank(); };
     $('#sBtnP30').onclick = () => { sPeriod = '30'; updSpacePeriodBtns(); renderSpaceRank(); };
     $('#sBtnPAll').onclick = () => { sPeriod = 'all'; updSpacePeriodBtns(); renderSpaceRank(); };
+    $('#profilePeriod7').onclick = () => { profilePeriod = '7'; updateProfilePeriodButtons(); renderProfileStats(); };
+    $('#profilePeriod30').onclick = () => { profilePeriod = '30'; updateProfilePeriodButtons(); renderProfileStats(); };
+    $('#profilePeriodAll').onclick = () => { profilePeriod = 'all'; updateProfilePeriodButtons(); renderProfileStats(); };
+    $('#backFromProfile').onclick = closeProfileView;
+    $('#removeFromGardenBtn').onclick = removeActiveProfileMember;
 
     let sCalOff = 0;
     function populateSpaceWho() { const sel = $("#sCalWho"); sel.innerHTML = ''; sel.add(new Option('Tous', '__all__')); allMembersOfSpace().forEach(n => sel.add(new Option(n, n))); sel.value = '__all__'; }
@@ -4120,27 +4397,56 @@
       nextBtn.disabled = true;
       nextBtn.textContent = 'Voir les habitudes (0 contextes · 0 besoins)';
 
+      const modeSection = document.createElement('div');
+      modeSection.className = 'tag-section';
+      const modeLabelEl = document.createElement('label');
+      modeLabelEl.innerHTML = `<b>Mode de réalisation</b>`;
+      const modeGrid = document.createElement('div');
+      modeGrid.className = 'tag-grid';
+      modeSection.append(modeLabelEl, modeGrid);
+      let selectedMode = 'libre';
+      const modeButtons = {};
+      const setMode = (value) => {
+        selectedMode = value;
+        Object.entries(modeButtons).forEach(([key, btn]) => {
+          btn.classList.toggle('active', key === value);
+        });
+        updateNextLabel();
+      };
+      Object.entries(MODE_META).forEach(([key, info]) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tag';
+        btn.textContent = `${info.emoji} ${info.label}`;
+        btn.addEventListener('click', () => setMode(key));
+        modeButtons[key] = btn;
+        modeGrid.appendChild(btn);
+      });
+
       let contextSection;
       let needSection;
       function updateNextLabel() {
         const ctxCount = contextSection?.selected.length || 0;
         const needCount = needSection?.selected.length || 0;
+        const modeLabel = MODE_META[selectedMode]?.label || 'Mode';
         nextBtn.disabled = ctxCount === 0 || needCount === 0;
-        nextBtn.textContent = `Voir les habitudes (${ctxCount} contextes · ${needCount} besoins)`;
+        nextBtn.textContent = `Voir les habitudes (${ctxCount} contextes · ${needCount} besoins · ${modeLabel})`;
       }
 
       contextSection = buildTagSection('Contextes', LIBRARY_CONTEXTS, 3, updateNextLabel, 'context');
       needSection = buildTagSection('Besoins', LIBRARY_NEEDS, 3, updateNextLabel, 'need');
+      setMode(selectedMode);
 
       nextBtn.addEventListener('click', () => {
         if (!contextSection.selected.length || !needSection.selected.length) {
           alert("Choisis au moins un contexte et un besoin.");
           return;
         }
-        renderHabitSuggestions([...contextSection.selected], [...needSection.selected]);
+        renderHabitSuggestions([...contextSection.selected], [...needSection.selected], selectedMode);
       });
 
       actions.appendChild(nextBtn);
+      root.appendChild(modeSection);
       root.appendChild(contextSection.container);
       root.appendChild(needSection.container);
       root.appendChild(actions);
@@ -4197,7 +4503,7 @@
       return { container, selected };
     }
 
-    function renderHabitSuggestions(contextTags, needTags) {
+    function renderHabitSuggestions(contextTags, needTags, modeFilter = 'libre') {
       const step1El = $("#step1");
       const root = $("#step2");
       if (!root) return;
@@ -4206,13 +4512,19 @@
       root.style.display = 'grid';
       root.innerHTML = '';
 
+      const modeInfo = MODE_META[modeFilter] || MODE_META.libre;
+      const targetFilter = (modeInfo.target || 'group').toLowerCase();
       const summary = document.createElement('div');
       summary.className = 'subtitle';
-      summary.textContent = `Résultat pour ${contextTags.length} contexte(s) et ${needTags.length} besoin(s).`;
+      summary.textContent = `Résultat pour ${contextTags.length} contexte(s) · ${needTags.length} besoin(s) · mode ${modeInfo.emoji} ${modeInfo.label}`;
       root.appendChild(summary);
 
       const matchingHabits = LIBRARY_HABITS
         .filter(habit => (habit.contexts || []).some(ctx => contextTags.includes(ctx)))
+        .filter(habit => {
+          const habitTarget = (habit.target || 'group').toString().toLowerCase();
+          return habitTarget === targetFilter;
+        })
         .sort((a, b) => (a.title || '').localeCompare(b.title || '', 'fr'));
       const grid = document.createElement('div');
       grid.className = 'habit-grid';
