@@ -1688,6 +1688,21 @@
 
     /* Utils */
     const APP_VERSION = '0.0.1';
+    const APP_TIPS = [
+      'Planifie tes 3 habitudes clés dès le matin pour garder le cap.',
+      'Ajoute un cœur pour féliciter les personnes qui t’inspirent.',
+      'Utilise la note pour garder un souvenir de ta séance.',
+      'Passe en vue hebdo pour visualiser les routines d’équipe.',
+      'Bascule sur "Je fais" avant de valider ton soutien collectif.',
+      'Attribue une durée réaliste à chaque habitude et ajuste-la.',
+      'Vérifie le calendrier pour repérer tes streaks les plus longs.',
+      'Invite un proche pour créer un jardin partagé et motivant.',
+      'Coche plusieurs fois le jour pour suivre tes habitudes flexibles.',
+      'Touche l’emoji pour découvrir la fiche détaillée de l’habitude.'
+    ];
+    const TIP_ROTATION_MS = 3000;
+    let tipRotationIndex = 0;
+    let tipRotationTimer = null;
     const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
     const setLoaderVersion = () => {
       const versionEl = $('#loaderVersion');
@@ -1695,7 +1710,21 @@
         versionEl.textContent = `v${APP_VERSION}`;
       }
     };
+    const rotateLoaderTip = () => {
+      const tipEl = $('#loaderTip');
+      if (!tipEl) return;
+      tipEl.textContent = `Astuce ${tipRotationIndex + 1}: ${APP_TIPS[tipRotationIndex]}`;
+      tipRotationIndex = (tipRotationIndex + 1) % APP_TIPS.length;
+    };
+    const startLoaderTips = () => {
+      rotateLoaderTip();
+      if (tipRotationTimer) {
+        clearInterval(tipRotationTimer);
+      }
+      tipRotationTimer = setInterval(rotateLoaderTip, TIP_ROTATION_MS);
+    };
     setLoaderVersion();
+    startLoaderTips();
     function fmtDate(d) { const M = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'][d.getMonth()]; const j = String(d.getDate()).padStart(2, '0'); const J = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'][d.getDay()]; return `${J} ${j}/${M}`; }
     function weekLabel(d) {
       const day = d.getDay(); // 0=dim
