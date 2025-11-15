@@ -255,21 +255,24 @@
       cursor: pointer
     }
 
-    .auth-card .auth-switch {
+    .auth-card .auth-actions {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .auth-card .auth-actions button {
+      flex: 1 1 120px;
+      min-width: 120px;
+    }
+
+    .auth-link-row {
       display: flex;
       justify-content: center;
       gap: 6px;
-      font-size: 12px;
-      flex-wrap: wrap;
-    }
-
-    .auth-card .auth-switch button {
-      border: none;
-      background: transparent;
-      color: var(--green);
-      cursor: pointer;
-      text-decoration: underline;
-      padding: 0;
+      margin-top: 6px;
     }
 
     .auth-link {
@@ -1449,6 +1452,7 @@
     .session-conflict.visible {
       display: block;
     }
+
     .session-overlay {
       position: fixed;
       inset: 0;
@@ -1484,14 +1488,17 @@
       opacity: 0;
       animation: toastIn 0.3s forwards;
     }
+
     .toast.toast-success {
       background: #def7ec;
       color: #1f824d;
     }
+
     .toast.toast-error {
       background: #ffe0e0;
       color: #a32020;
     }
+
     .toast.toast-info {
       background: #e1edff;
       color: #1a3e86;
@@ -1502,6 +1509,7 @@
         opacity: 0;
         transform: translateY(-6px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -1593,24 +1601,19 @@
       <div class="auth-message" id="authMessage">Connecte-toi pour retrouver Habitube.</div>
       <div class="auth-space-desc" id="authSpaceDesc"></div>
       <div class="auth-forms">
-        <form id="loginForm">
+        <form id="authForm">
+          <input id="authName" type="text" placeholder="Prénom" />
           <input id="authEmail" type="email" required placeholder="Email" />
           <input id="authPassword" type="password" required placeholder="Mot de passe" />
-          <button type="submit">Se connecter</button>
+          <div class="auth-actions">
+            <button type="submit" id="authLoginBtn" data-action="login">Se connecter</button>
+            <button type="submit" id="authSignupBtn" data-action="signup">Créer mon compte</button>
+          </div>
           <div class="auth-error" id="authError"></div>
-        </form>
-        <form id="signupForm" class="hide">
-          <input id="authName" type="text" placeholder="Prénom" required />
-          <input id="authEmailSignup" type="email" required placeholder="Email" />
-          <input id="authPasswordSignup" type="password" required placeholder="Mot de passe" />
-          <button type="submit">Créer mon compte</button>
-          <div class="auth-error" id="authSignupError"></div>
-          <div class="auth-note">Nous gardons tes jardins privés.</div>
+          <div class="auth-note" id="authNote">Nous gardons tes jardins privés.</div>
         </form>
       </div>
-      <div class="auth-switch">
-        <span id="showSignup" class="auth-link">Créer un compte</span>
-        <span id="showLogin" class="auth-link hide">Déjà inscrit ? Se connecter</span>
+      <div class="auth-link-row">
         <span id="forgotPasswordLink" class="auth-link">Mot de passe oublié ?</span>
       </div>
       <div class="auth-helper" id="resetNotice"></div>
@@ -1775,9 +1778,9 @@
         <div class="rankHeader profile-period-row">
           <b>Période</b>
           <div class="profile-period-buttons">
-                <button class="btnToggle" id="profilePeriod7">7 jours</button>
-                <button class="btnToggle active" id="profilePeriod30">30 jours</button>
-                <button class="btnToggle" id="profilePeriodAll">Total</button>
+            <button class="btnToggle" id="profilePeriod7">7 jours</button>
+            <button class="btnToggle active" id="profilePeriod30">30 jours</button>
+            <button class="btnToggle" id="profilePeriodAll">Total</button>
           </div>
         </div>
         <div id="profileHabits" class="profile-habit-list"></div>
@@ -2424,15 +2427,15 @@
             showToast('Tu peux installer Habitube depuis ce bouton.', { type: 'info' });
           } else {
             showToast('Installation annulée.', { type: 'error' });
-        }
-        markInstallPromptSeen();
-        deferredInstallPrompt = null;
-        closeInstallPromptCard();
-        updateInstallOptionVisibility();
-      }).catch(err => {
-        console.warn('triggerInstallPrompt', err);
-        showToast('Impossible d’installer pour l’instant.', { type: 'error' });
-      });
+          }
+          markInstallPromptSeen();
+          deferredInstallPrompt = null;
+          closeInstallPromptCard();
+          updateInstallOptionVisibility();
+        }).catch(err => {
+          console.warn('triggerInstallPrompt', err);
+          showToast('Impossible d’installer pour l’instant.', { type: 'error' });
+        });
       }
       function maybeShowInstallPrompt(auto = true) {
         if (isRunningAsPWA() || installPromptAutoShown || hasSeenInstallPrompt()) return;
@@ -3086,17 +3089,22 @@
       }
 
       /* Utils cartes */
-      function ensureOwnerBadge(badges, owner, it, btn) {
-        let b = badges.querySelector('.owner-badge');
-        if (!owner) { if (b) b.remove(); return; }
-        if (!b) {
-          b = document.createElement('button');
+      function ensureOwnerBadges(badges, owners, it, btn) {
+        badges.querySelectorAll('.owner-badge').forEach(el => el.remove());
+        if (!Array.isArray(owners) || owners.length === 0) return;
+        const sanitized = owners.map(o => (o || '').trim()).filter(Boolean);
+        sanitized.forEach(owner => {
+          const b = document.createElement('button');
           b.type = 'button';
           b.className = 'badge owner-badge';
-          b.addEventListener('click', (e) => { e.stopPropagation(); openDetail(it.id, btn); selectDetailTab('members'); });
+          b.textContent = `🧑‍🌾 ${owner}`;
+          b.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openDetail(it.id, btn);
+            selectDetailTab('members');
+          });
           badges.appendChild(b);
-        }
-        b.textContent = `🧑‍🌾 ${owner}`;
+        });
       }
       function ensureHelperBadge(badges, helpers) {
         helpers = [...new Set(helpers || [])];
@@ -3425,10 +3433,17 @@
           btn.dataset.cid = it.id;
           btn.dataset.habitEmoji = it.emoji || '🌱';
 
-          const records = getHabitRecords(spaceId, it.id, today);
+          const windowStart = isWeekMode() ? getWeekStart(today) : today;
+          const records = getHabitRecords(spaceId, it.id, windowStart);
           const freqWeekly = HABIT_REC[it.id] || 1;
           let userRecord = records.find(r => isCurrentUserLabel(r.owner)) || null;
-          let ownerRecord = records[0] || null;
+          const doneRecord = records.find(r => (r.state || 0) >= 1) || null;
+          let ownerRecord = null;
+          if (mode.type === 'commun') {
+            ownerRecord = doneRecord || records[0] || null;
+          } else {
+            ownerRecord = userRecord || doneRecord || null;
+          }
           const ownerFreq = Math.max(1, Number(ownerRecord?.frequency ?? freqWeekly));
           const ownerModeType = ownerRecord?.modeType || mode.type;
           const resetProgress = (isWeekMode() && ownerRecord && ownerFreq !== freqWeekly) || (ownerRecord && ownerModeType !== mode.type);
@@ -3436,6 +3451,12 @@
             ownerRecord = null;
             userRecord = null;
           }
+          const ownerNames = Array.from(new Set(records
+            .filter(r => (r.state || 0) >= 1)
+            .map(r => (r.owner || '').trim())
+            .filter(Boolean)
+          ));
+          btn.dataset.ownerList = JSON.stringify(ownerNames);
           const baseMin = BASE_MINUTES[it.id] || 15;
           const ownerState = ownerRecord?.state ?? 0;
           const owner = ownerState > 0 ? (ownerRecord?.owner || '') : '';
@@ -3463,18 +3484,36 @@
           const setVisualFromState = stNow => {
             const baseEl = title.querySelector('.base');
             const ownerNow = btn.dataset.owner || '';
-            const helpingNow = btn.dataset.helping === '1';
             applyCardClass(card, stNow, ownerNow, helpingNow, (HABIT_MODE[it.id] || { type: 'libre' }).type);
             baseEl.classList.toggle('strike', stNow === 2 && isCurrentUserLabel(ownerNow));
             ensureModeTag();
           };
 
+          const parseOwnerList = () => {
+            try {
+              const parsed = JSON.parse(btn.dataset.ownerList || '[]');
+              return Array.isArray(parsed) ? parsed : [];
+            } catch (err) {
+              console.warn('parseOwnerList', err);
+              return [];
+            }
+          };
+          const syncOwnerListFromState = (prevOwner) => {
+            const owners = new Set(parseOwnerList().filter(Boolean));
+            const activeOwner = (btn.dataset.owner || '').trim();
+            if ((+btn.dataset.state || 0) >= 1 && activeOwner) {
+              owners.add(activeOwner);
+            }
+            if ((+btn.dataset.state || 0) === 0 && prevOwner) {
+              owners.delete(prevOwner);
+            }
+            btn.dataset.ownerList = JSON.stringify(Array.from(owners));
+          };
           const renderBadges = () => {
             const stNow = +btn.dataset.state || 0;
             const ownerNow = btn.dataset.owner || '';
-            const helpingNow = btn.dataset.helping === '1';
-            const shouldShowOwner = (mode.type === 'commun') ? ((stNow === 1 || stNow === 2) ? ownerNow : '') : (stNow >= 1 ? getCurrentOwnerLabel() : '');
-            ensureOwnerBadge(friendsBadges, shouldShowOwner, it, btn);
+            const ownersNow = parseOwnerList();
+            ensureOwnerBadges(friendsBadges, ownersNow, it, btn);
             const showHelpers = mode.type === 'commun' && stNow === 2;
             if (showHelpers) {
               const hlist = (btn.dataset.helpers ? JSON.parse(btn.dataset.helpers) : []) || [];
@@ -3570,6 +3609,7 @@
 
           const applyState = (nst, { keepOwner = false } = {}) => {
             btn.dataset.state = String(nst);
+            const previousOwner = (btn.dataset.owner || '').trim();
             if (!keepOwner && nst === 0) {
               btn.dataset.owner = '';
               btn.dataset.helping = '0';
@@ -3579,6 +3619,7 @@
             if (nst >= 1 && !btn.dataset.owner) {
               btn.dataset.owner = getCurrentOwnerLabel();
             }
+            syncOwnerListFromState(previousOwner);
             drawBtn(btn);
             setVisualFromState(nst);
             renderBadges();
@@ -4331,7 +4372,7 @@
           saveSettingsBtn.onclick = async () => {
             if (!spaceId) return;
             await persistSpaceDoc(spaceId);
-          showToast('Réglages sauvegardés.', { type: 'success' });
+            showToast('Réglages sauvegardés.', { type: 'success' });
           };
           saveSettingsBtn.dataset.bound = '1';
         }
@@ -5021,6 +5062,7 @@
             authSpaceDesc.textContent = '';
           }
         }
+        updateAuthFormState();
       }
       refreshPendingInviteInfo().then(updateAuthMessage);
 
@@ -5494,37 +5536,23 @@
       const loaderEmojiEl = $("#loaderEmoji");
       const authOverlay = $("#authOverlay");
       const forgotPasswordLink = $("#forgotPasswordLink");
-      const loginForm = $("#loginForm");
-      const signupForm = $("#signupForm");
-      const loginEmailInput = $("#authEmail");
-      const signupEmailInput = $("#authEmailSignup");
+      const authForm = $("#authForm");
+      const authNameInput = $("#authName");
+      const authEmailInput = $("#authEmail");
+      const authPasswordInput = $("#authPassword");
+      const authLoginBtn = $("#authLoginBtn");
+      const authSignupBtn = $("#authSignupBtn");
       const resetNotice = $("#resetNotice");
-      const showSignupBtn = $("#showSignup");
-      const showLoginBtn = $("#showLogin");
       const authError = $("#authError");
-      const signupError = $("#authSignupError");
       const LOADER_EMOJIS = ['🌰', '🌱', '🍀', '🌼', '🌻', '🌷', '🌹', '🪻', '💐', '🎋'];
       let loaderIndex = 0;
       let loaderTimer = null;
-      showSignupBtn.addEventListener('click', () => setAuthMode('signup'));
-      showLoginBtn.addEventListener('click', () => setAuthMode('login'));
-      loginForm.addEventListener('submit', handleLoginSubmit);
-      signupForm.addEventListener('submit', handleSignupSubmit);
-      setAuthMode(pendingInviteInfo ? 'signup' : 'login');
+      authLoginBtn?.addEventListener('click', () => { if (authForm) authForm.dataset.intent = 'login'; });
+      authSignupBtn?.addEventListener('click', () => { if (authForm) authForm.dataset.intent = 'signup'; });
+      authForm?.addEventListener('submit', handleAuthSubmit);
+      updateAuthFormState();
       updateAuthMessage();
       showLoaderOverlay();
-
-      function setAuthMode(mode) {
-        const forceSignup = !!pendingInviteInfo;
-        const isSignup = mode === 'signup' || forceSignup;
-        loginForm.classList.toggle('hide', isSignup);
-        signupForm.classList.toggle('hide', !isSignup);
-        showSignupBtn.classList.toggle('hide', isSignup);
-        showLoginBtn.classList.toggle('hide', !isSignup);
-        authError.textContent = '';
-        signupError.textContent = '';
-        clearResetNotice();
-      }
 
       function clearResetNotice() {
         if (resetNotice) resetNotice.textContent = '';
@@ -5535,11 +5563,55 @@
         return input.checkValidity();
       }
 
-      function getVisibleEmailInput() {
-        if (loginForm?.classList.contains('hide')) {
-          return signupEmailInput || loginEmailInput;
+      function updateAuthFormState() {
+        const forceSignup = !!pendingInviteInfo;
+        if (authLoginBtn) {
+          authLoginBtn.disabled = forceSignup;
+          authLoginBtn.title = forceSignup ? 'Tu dois créer un compte pour accepter cette invitation.' : '';
         }
-        return loginEmailInput || signupEmailInput;
+      }
+
+      async function handleAuthSubmit(event) {
+        if (!authForm) return;
+        event.preventDefault();
+        authError.textContent = '';
+        clearResetNotice();
+        const forceSignup = !!pendingInviteInfo;
+        const submitterAction = event.submitter?.dataset?.action;
+        const fallbackIntent = authForm.dataset.intent;
+        const rawIntent = submitterAction || fallbackIntent || 'login';
+        const intent = forceSignup ? 'signup' : rawIntent;
+        authForm.dataset.intent = '';
+
+        if (!authEmailInput || !isEmailValid(authEmailInput)) {
+          authError.textContent = 'Entre un email valide.';
+          return;
+        }
+        const email = (authEmailInput.value || '').trim().toLowerCase();
+        const password = (authPasswordInput?.value || '').trim();
+        if (!password) {
+          authError.textContent = intent === 'signup' ? 'Choisis un mot de passe.' : 'Entre ton mot de passe.';
+          return;
+        }
+        if (intent === 'signup') {
+          const name = (authNameInput?.value || '').trim();
+          if (!name) {
+            authError.textContent = 'Entre ton prénom.';
+            return;
+          }
+          try {
+            const cred = await HABITU_FIREBASE_AUTH.createUserWithEmailAndPassword(email, password);
+            await cred.user.updateProfile({ displayName: name });
+          } catch (err) {
+            authError.textContent = err.message || 'Impossible de créer le compte.';
+          }
+          return;
+        }
+        try {
+          await HABITU_FIREBASE_AUTH.signInWithEmailAndPassword(email, password);
+        } catch (err) {
+          authError.textContent = 'Mot de passe erroné.';
+        }
       }
 
       function animateLoaderEmoji() {
@@ -5571,13 +5643,11 @@
 
       forgotPasswordLink?.addEventListener('click', async (e) => {
         e.preventDefault();
-        const emailInput = getVisibleEmailInput();
-        if (!emailInput) return;
-        const email = (emailInput.value || '').trim().toLowerCase();
-        if (!email || !isEmailValid(emailInput)) {
+        if (!authEmailInput || !isEmailValid(authEmailInput)) {
           resetNotice.textContent = 'Entre un email valide.';
           return;
         }
+        const email = (authEmailInput.value || '').trim().toLowerCase();
         try {
           await HABITU_FIREBASE_AUTH.sendPasswordResetEmail(email);
         } catch (err) {
@@ -5587,47 +5657,12 @@
         }
       });
 
-      async function handleLoginSubmit(event) {
-        event.preventDefault();
-        authError.textContent = '';
-        const emailInput = loginEmailInput;
-        if (!emailInput || !isEmailValid(emailInput)) {
-          authError.textContent = 'Entre un email valide.';
-          return;
-        }
-        const email = (emailInput.value || '').trim().toLowerCase();
-        const password = $("#authPassword").value || '';
-        try {
-          await HABITU_FIREBASE_AUTH.signInWithEmailAndPassword(email, password);
-        } catch (err) {
-          authError.textContent = 'Mot de passe erroné.';
-        }
-      }
-
-      async function handleSignupSubmit(event) {
-        event.preventDefault();
-        signupError.textContent = '';
-        const name = ($("#authName").value || '').trim();
-        const emailInput = signupEmailInput;
-        if (!name) { signupError.textContent = 'Entre ton prénom.'; return; }
-        if (!emailInput || !isEmailValid(emailInput)) {
-          signupError.textContent = 'Entre un email valide.';
-          return;
-        }
-        const email = (emailInput.value || '').trim().toLowerCase();
-        const password = $("#authPasswordSignup").value || '';
-        try {
-          const cred = await HABITU_FIREBASE_AUTH.createUserWithEmailAndPassword(email, password);
-          await cred.user.updateProfile({ displayName: name });
-        } catch (err) {
-          signupError.textContent = err.message || 'Impossible de créer le compte.';
-        }
-      }
-
       function hideAuthOverlay() { authOverlay.classList.add('hide') }
       function showAuthOverlay() {
         if (hasSessionCookie()) return;
         hideLoaderOverlay();
+        clearResetNotice();
+        if (authError) authError.textContent = '';
         authOverlay.classList.remove('hide');
       }
 
@@ -5636,7 +5671,7 @@
           persistProfile(null);
           clearLocalState();
           showAuthOverlay();
-          setAuthMode(pendingInviteInfo ? 'signup' : 'login');
+          clearResetNotice();
           updateAuthMessage();
           return;
         }
