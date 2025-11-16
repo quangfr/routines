@@ -2165,7 +2165,8 @@
                 <option value="no">Non</option>
                 <option value="dynamic">Dynamique</option>
               </select>
-              <div class="subtitle">En mode dynamique, le crayon n’apparaît que pour les habitudes en cours ou en soutien.</div>
+              <div class="subtitle">En mode dynamique, le crayon n’apparaît que pour les habitudes en cours ou en
+                soutien.</div>
             </div>
           </div>
         </div>
@@ -2392,7 +2393,7 @@
         school: 'École / Classe',
         sleep: 'Sommeil',
         slowness: 'Lenteur',
-        studio: 'Local / Association',
+        social: 'Local / Association',
         family: 'Famille / Couple',
         home: 'Maison / Logement',
         office: 'Bureau / Équipe'
@@ -2408,7 +2409,7 @@
         home: '🏡',
         office: '🏢',
         school: '🏫',
-        studio: '🧵'
+        social: '🫂'
       };
 
       const NEED_EMOJIS = {
@@ -3928,9 +3929,9 @@
               toggleNote();
             });
 
-          const applyState = (nst, { keepOwner = false } = {}) => {
-            btn.dataset.state = String(nst);
-            const previousOwner = (btn.dataset.owner || '').trim();
+            const applyState = (nst, { keepOwner = false } = {}) => {
+              btn.dataset.state = String(nst);
+              const previousOwner = (btn.dataset.owner || '').trim();
               if (!keepOwner && nst === 0) {
                 btn.dataset.owner = '';
                 btn.dataset.helping = '0';
@@ -3943,11 +3944,11 @@
               syncOwnerListFromState(previousOwner);
               drawBtn(btn);
               setVisualFromState(nst);
-            renderBadges();
-            renderWeeklyProgress();
-            applyNoteDisplayMode(desc, infoBtn, { state: nst });
-            manageEditButton();
-            scheduleHabitActivity(it.id, {
+              renderBadges();
+              renderWeeklyProgress();
+              applyNoteDisplayMode(desc, infoBtn, { state: nst });
+              manageEditButton();
+              scheduleHabitActivity(it.id, {
                 type: 'realization',
                 state: nst,
                 owner: btn.dataset.owner,
@@ -4046,10 +4047,10 @@
             renderBadges();
             renderWeeklyProgress();
             applyNoteDisplayMode(desc, infoBtn, { state });
-          const manageEditButton = () => {
-            const currentState = +btn.dataset.state || 0;
-            const enabled = shouldShowEditButton(currentState);
-            const existing = friends.querySelector('.card-edit');
+            const manageEditButton = () => {
+              const currentState = +btn.dataset.state || 0;
+              const enabled = shouldShowEditButton(currentState);
+              const existing = friends.querySelector('.card-edit');
               if (!enabled) {
                 if (existing) existing.remove();
                 return;
