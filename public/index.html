@@ -1338,6 +1338,14 @@
       justify-content: space-between;
     }
 
+    .habit-actions__info {
+      flex: 1;
+      text-align: left;
+      font-size: 12px;
+      color: #5f5f5f;
+      align-self: center;
+    }
+
     .opt {
       border: 1px solid var(--border);
       background: var(--card);
@@ -1999,55 +2007,56 @@
         <div class="sheetBody">
           <div class="grid">
             <div class="opt" id="createGarden">
-              <div class="emoji">🌿</div>
+              <div class="emoji">🏡</div>
               <div><b>Créer un jardin</b>
                 <div class="subtitle">Nouvel espace partagé</div>
               </div>
             </div>
             <div class="opt" id="addHabit">
               <div class="emoji">🌱</div>
-              <div><b>Nouvelle(s) plante(s)</b>
-                <div class="subtitle">Démarrer une nouvelle habitude</div>
+              <div><b>Semer de nouvelles graines</b>
+                <div class="subtitle">Démarrer des nouvelles habitudes</div>
               </div>
             </div>
             <div class="opt" id="inviteFriend">
-              <div class="emoji">❤️</div>
+              <div class="emoji">💌</div>
               <div><b>Inviter un jardinier</b>
                 <div class="subtitle">Partager un code d'accès ou un lien d'invitation</div>
               </div>
             </div>
             <div class="opt" id="joinGarden">
-              <div class="emoji">🪴</div>
+              <div class="emoji">🧑‍🌾</div>
               <div><b>Rejoindre un jardin</b>
                 <div class="subtitle">Entrer un code d'accès</div>
+              </div>
+            </div>
+            <div class="opt" id="menuPrefs">
+              <div class="emoji">✨</div>
+              <div>
+                <b>Ajuster ton intérieur</b>
+                <div class="subtitle">Personnalise tes préférences</div>
               </div>
             </div>
             <div class="opt" id="installApp">
               <div class="emoji">📱</div>
               <div>
                 <b>Installer l'application mobile</b>
-                <div class="subtitle">Profite d'un accès plus rapide et étendu</div>
+                <div class="subtitle">Profite d'un accès plus rapide et confortable</div>
               </div>
             </div>
-            <div class="opt" id="menuPrefs">
-              <div class="emoji">⚙️</div>
-              <div>
-                <b>Voir mes préférences</b>
-                <div class="subtitle">Personnalise tes habitudes</div>
-              </div>
-            </div>
+
             <div class="opt auth-action hide" id="menuLogin">
               <div class="emoji">🔐</div>
               <div>
                 <b>Se connecter</b>
-                <div class="subtitle">Accède à tes jardins enregistrés.</div>
+                <div class="subtitle">Partager l'accès avec un autre appareil</div>
               </div>
             </div>
             <div class="opt auth-action hide" id="menuLogout">
               <div class="emoji">🔓</div>
               <div>
                 <b>Se déconnecter</b>
-                <div class="subtitle">Changer de compte.</div>
+                <div class="subtitle">Changer de compte</div>
               </div>
             </div>
           </div>
@@ -2393,7 +2402,7 @@
         school: 'École / Classe',
         sleep: 'Sommeil',
         slowness: 'Lenteur',
-        social: 'Local / Association',
+        social: 'Social / Groupe',
         family: 'Famille / Couple',
         home: 'Maison / Logement',
         office: 'Bureau / Équipe'
@@ -2409,7 +2418,7 @@
         home: '🏡',
         office: '🏢',
         school: '🏫',
-        social: '🫂'
+        social: '🧑‍🤝‍🧑'
       };
 
       const NEED_EMOJIS = {
@@ -2818,7 +2827,6 @@
         { emoji: '🏫', label: 'École / Classe', type: 'group', orgMode: 'week', desc: 'Rituels pédagogiques simples.' },
         { emoji: '🏢', label: '🏢 Bureau', type: 'group', orgMode: 'week', desc: 'Rituels collaboratifs pro.' }
       ];
-      const MAX_GARDENS_PER_ACCOUNT = 3;
       let allowedSpaces = [];
       let currentProfile = loadStoredProfile();
       let guestSpaces = loadGuestSpaces();
@@ -5118,6 +5126,11 @@
       const open = m => m.classList.add('on'), close = m => m.classList.remove('on');
       let skipMenuAutoOpen = false;
       let menuAutoOpenSuppressed = false;
+      let habitWizardStep = 1;
+      const mPrefs = $("#modalPrefs");
+      const prefsNotesSelect = $("#prefsNotesDisplayMode");
+      const prefsEditSelect = $("#prefsEditButtonMode");
+      const closePrefsBtn = $("#closePrefs");
       function updateHabitModalControls() {
         const hasHabits = (getSpace()?.ch?.length || 0) > 0;
         if (habitBackBtn) {
@@ -5182,10 +5195,16 @@
       document.querySelectorAll('.menu-back').forEach(btn => {
         btn.addEventListener('click', () => {
           const modal = btn.closest('.modal');
-          if (modal === mHabit && habitModalContext === 'creation') {
-            close(mHabit);
-            open(mGarden);
-            return;
+          if (modal === mHabit) {
+            if (habitWizardStep === 2) {
+              step1();
+              return;
+            }
+            if (habitModalContext === 'creation') {
+              close(mHabit);
+              open(mGarden);
+              return;
+            }
           }
           if (modal) close(modal);
           maybeTogglePrivateAdd(true);
@@ -5373,33 +5392,15 @@
       const menuLoginOpt = $("#menuLogin");
       const menuPrefsOpt = $("#menuPrefs");
       const menuLogoutOpt = $("#menuLogout");
-      const mPrefs = $("#modalPrefs");
-      const prefsNotesSelect = $("#prefsNotesDisplayMode");
-      const prefsEditSelect = $("#prefsEditButtonMode");
-      const closePrefsBtn = $("#closePrefs");
-      const mPrefs = $("#modalPrefs");
-      const prefsNotesSelect = $("#prefsNotesDisplayMode");
-      const prefsEditSelect = $("#prefsEditButtonMode");
-      const closePrefsBtn = $("#closePrefs");
       function updateAddModalOptions() {
         const hasSpaces = allowedSpaces.length > 0;
         const isAuthenticated = !!currentProfile?.email;
         const ownedCount = countOwnedGardens(currentProfile?.email);
         const showSupportOptions = hasSpaces;
-        const reachedLimit = ownedCount >= MAX_GARDENS_PER_ACCOUNT;
         if (menuCreateGarden) {
-          if (reachedLimit) {
-            menuCreateGarden.dataset.disabled = '1';
-            menuCreateGarden.classList.add('disabled');
-          } else {
-            delete menuCreateGarden.dataset.disabled;
-            menuCreateGarden.classList.remove('disabled');
-          }
           const subtitle = menuCreateGarden.querySelector('.subtitle');
           if (subtitle) {
-            subtitle.textContent = reachedLimit
-              ? `Tu as créé ${MAX_GARDENS_PER_ACCOUNT} jardins maximum.`
-              : 'Nouvel espace partagé';
+            subtitle.textContent = 'Nouvel espace partagé';
           }
         }
         if (menuAddHabit) {
@@ -5570,15 +5571,9 @@
         if (!currentProfile) {
           persistProfile({ name: userName || 'Moi', guest: true });
         }
-        let ownedCount = countOwnedGardens(currentProfile?.email);
         if (!currentProfile?.guest) {
           const normalizedEmail = normalizeEmail(currentProfile?.email);
-          const refreshed = await refreshOwnedSpaces(normalizedEmail);
-          ownedCount = refreshed.filter(space => normalizeEmail(space.ownerEmail) === normalizedEmail).length;
-        }
-        if (ownedCount >= MAX_GARDENS_PER_ACCOUNT) {
-          gardenStatus.textContent = `Tu as atteint la limite de ${MAX_GARDENS_PER_ACCOUNT} jardins créés.`;
-          return;
+          await refreshOwnedSpaces(normalizedEmail);
         }
         const profile = GARDEN_TYPES[0];
         const title = (gardenNameInput.value || profile.label).trim() || profile.label;
@@ -5819,6 +5814,7 @@
         root.style.display = 'grid';
         root.innerHTML = '';
 
+        habitWizardStep = 1;
         if (!LIBRARY_HABITS.length) {
           const empty = document.createElement('div');
           empty.className = 'miniInfo';
@@ -5944,6 +5940,7 @@
         if (step1El) step1El.style.display = 'none';
         root.style.display = 'grid';
         root.innerHTML = '';
+        habitWizardStep = 2;
 
         const modeInfo = modeFilter ? MODE_META[modeFilter] : null;
         const matchingHabits = LIBRARY_HABITS
@@ -5959,8 +5956,12 @@
         });
         const suggestionMap = new Map(matchingHabits.map(habit => [habit.id, habit]));
         let addBtn;
+        let infoLabel = null;
         const updateAddLabel = () => {
           if (!addBtn) return;
+          if (infoLabel) {
+            infoLabel.textContent = `${selection.size} habitude${selection.size > 1 ? 's' : ''}`;
+          }
           addBtn.textContent = `Ajouter ${selection.size}`;
           addBtn.disabled = selection.size === 0;
         };
@@ -5992,6 +5993,10 @@
           addBtn = document.createElement('button');
           addBtn.type = 'button';
           addBtn.className = 'btn primary';
+          addBtn.textContent = 'Créer le jardin';
+          infoLabel = document.createElement('div');
+          infoLabel.className = 'habit-actions__info';
+          infoLabel.textContent = '0 habitudes';
           addBtn.addEventListener('click', async () => {
             if (!selection.size) return;
             const sp = getSpace();
@@ -6016,18 +6021,19 @@
             renderCards();
           });
           updateAddLabel();
+          const controls = document.createElement('div');
+          controls.className = 'habit-actions footer-sticky';
+          controls.appendChild(infoLabel);
+          controls.appendChild(addBtn);
+          root.appendChild(controls);
         }
 
-        const controls = document.createElement('div');
-        controls.className = 'habit-actions footer-sticky';
-        const backBtn = document.createElement('button');
-        backBtn.type = 'button';
-        backBtn.className = 'btn';
-        backBtn.textContent = 'Changer les tags';
-        backBtn.addEventListener('click', () => step1());
-        controls.appendChild(backBtn);
-        if (addBtn) controls.appendChild(addBtn);
-        root.appendChild(controls);
+        if (addBtn) {
+          const controls = document.createElement('div');
+          controls.className = 'habit-actions footer-sticky';
+          controls.appendChild(addBtn);
+          root.appendChild(controls);
+        }
       }
 
       closeHabitBtn?.addEventListener('click', () => {
