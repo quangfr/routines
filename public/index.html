@@ -2549,7 +2549,7 @@
         if (!email) return;
         showLoaderOverlay();
         try {
-          await resetFirestoreState(email);
+          await resetFirestoreState(currentProfile);
           showHome();
         } finally {
           hideLoaderOverlay();
@@ -2912,10 +2912,52 @@
       function normalizeEmail(email) {
         return String(email || '').trim().toLowerCase();
       }
-      async function refreshOwnedSpaces(email) {
+      function buildMemberInfo(members) {
+        const emails = new Set();
+        const idByEmail = {};
+        if (!Array.isArray(members)) {
+          return { emails: [], idByEmail };
+        }
+        members.forEach(member => {
+          if (!member) return;
+          if (typeof member === 'string') {
+            const email = normalizeEmail(member);
+            if (email) emails.add(email);
+            return;
+          }
+          if (typeof member === 'object') {
+            const email = normalizeEmail(member.email || member.value || '');
+            if (!email) return;
+            emails.add(email);
+            const resolvedId = member.uid || member.id || member.userId || null;
+            if (resolvedId) {
+              idByEmail[email] = resolvedId;
+            }
+          }
+        });
+        return { emails: Array.from(emails), idByEmail };
+      }
+      function resolveMemberUserId(spaceIdArg, email) {
+        if (!spaceIdArg || !email) return null;
+        const normalized = normalizeEmail(email);
+        if (!normalized) return null;
+        const sp = SPACES[spaceIdArg];
+        if (sp?.memberIdByEmail?.[normalized]) {
+          return sp.memberIdByEmail[normalized];
+        }
+        const activities = SPACE_ACTIVITIES[spaceIdArg] || [];
+        for (const activity of activities) {
+          if (normalizeEmail(activity.userEmail || '') === normalized && activity.userId) {
+            return activity.userId;
+          }
+        }
+        return null;
+      }
+      async function refreshOwnedSpaces(profile) {
+        const email = profile?.email;
         if (!email) return [];
         try {
-          const spaces = await fetchSpacesForEmail(email);
+          const spaces = await fetchSpacesForUser(profile);
           spaces.forEach(space => {
             SPACES[space.id] = { ...(SPACES[space.id] || {}), ...space, members: space.members || [], ch: space.ch || [] };
           });
@@ -2927,14 +2969,26 @@
           return [];
         }
       }
-      function countOwnedGardens(email) {
+      function isProfileSpaceOwner(space, profile) {
+        if (!space || !profile) return false;
+        return Boolean(space.ownerId && profile.uid && space.ownerId === profile.uid);
+      }
+      function getSpaceOwnerLabel(space) {
+        if (!space) return '';
+        if (space.ownerId && currentProfile?.uid && space.ownerId === currentProfile.uid) {
+          return currentProfile.name || userName || 'Moi';
+        }
+        if (space.ownerName) {
+          return space.ownerName;
+        }
+        return 'Un jardinier';
+      }
+      function countOwnedGardens(profile) {
         if (currentProfile?.guest) {
           return guestSpaces.size;
         }
-        if (!email) return 0;
-        const normalized = normalizeEmail(email);
-        if (!normalized) return 0;
-        return Object.values(SPACES).filter(space => normalizeEmail(space.ownerEmail) === normalized).length;
+        if (!profile) return 0;
+        return Object.values(SPACES).filter(space => isProfileSpaceOwner(space, profile)).length;
       }
       function displayNameFromEmail(email) {
         const normalized = normalizeEmail(email);
@@ -2994,13 +3048,9 @@
         renderCalendar();
         renderProfileStats();
       }
-      function getSpaceOwnerEmail(spaceId) {
-        return normalizeEmail(SPACES[spaceId]?.ownerEmail || '');
-      }
       function isCurrentSpaceAdmin() {
-        if (!currentProfile?.email) return false;
-        const ownerEmail = getSpaceOwnerEmail(spaceId);
-        return ownerEmail && ownerEmail === normalizeEmail(currentProfile.email);
+        const sp = getSpace();
+        return !!sp && isProfileSpaceOwner(sp, currentProfile);
       }
       function getEditorRights(space) {
         const mode = (space?.editorRights || 'admin').toString().toLowerCase();
@@ -3031,11 +3081,18 @@
       function persistSpaceDoc(spaceId, data = {}) {
         if (!HABITU_FIREBASE_DB || !spaceId) return Promise.resolve();
         const space = SPACES[spaceId] || {};
+        const members = Array.isArray(space.members) ? [...new Set(space.members.map(normalizeEmail))] : [];
+        const ownerIdCandidate = space.ownerId || null;
+        let ownerNameCandidate = space.ownerName || null;
+        if (!ownerNameCandidate && ownerIdCandidate && currentProfile?.uid === ownerIdCandidate) {
+          ownerNameCandidate = currentProfile.name || userName || 'Moi';
+        }
         const payload = {
-          ownerEmail: normalizeEmail(space.ownerEmail),
-          members: Array.isArray(space.members) ? [...new Set(space.members.map(normalizeEmail))] : [],
           ...space,
           ...data,
+          ...(ownerIdCandidate ? { ownerId: ownerIdCandidate } : {}),
+          ...(ownerNameCandidate ? { ownerName: ownerNameCandidate } : {}),
+          members,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
         return HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).set(payload, { merge: true }).catch(e => console.warn('persistSpaceDoc', e));
@@ -3093,9 +3150,10 @@
       }
       function persistInviteDoc(token, payload) {
         if (!HABITU_FIREBASE_DB || !token) return Promise.resolve();
-        const ownerEmail = normalizeEmail(payload.ownerEmail || currentProfile?.email);
+        const ownerId = payload.ownerId || currentProfile?.uid || null;
+        const ownerName = payload.ownerName || currentProfile?.name || userName || 'Un jardinier';
         return HABITU_FIREBASE_DB.collection('invites').doc(token)
-          .set({ ...payload, ownerEmail, token, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+          .set({ ...payload, ownerId, ownerName, token, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
           .catch(e => console.warn('persistInvite', e));
       }
       function deleteInviteDoc(token) {
@@ -3148,9 +3206,10 @@
         if (habit.recurrence) HABIT_REC[habit.id] = habit.recurrence;
         if (habit.freqDefault) FREQ_MODE[habit.id] = { type: habit.freqDefault };
       }
-      async function fetchSpacesForEmail(email) {
-        if (!HABITU_FIREBASE_DB || !email) return [];
-        const normalized = normalizeEmail(email);
+      async function fetchSpacesForUser(profile) {
+        if (!HABITU_FIREBASE_DB || !profile) return [];
+        const normalized = normalizeEmail(profile.email);
+        const userId = profile.uid;
         try {
           const snapshot = await HABITU_FIREBASE_DB.collection('spaces').get();
           const spaces = [];
@@ -3158,16 +3217,18 @@
             const raw = doc.data() || {};
             const code = (raw.code || '').toUpperCase();
             const data = { id: doc.id, ...raw, createdAt: timestampToDate(raw.createdAt), code };
-            const ownerEmail = normalizeEmail(data.ownerEmail);
-            const members = Array.isArray(data.members) ? [...new Set(data.members.map(normalizeEmail))] : [];
-            if (ownerEmail === normalized || members.includes(normalized)) {
+            const ownerId = data.ownerId;
+            const { emails: members, idByEmail } = buildMemberInfo(raw.members);
+            const ownerMatches = ownerId && userId && ownerId === userId;
+            const memberMatches = normalized && members.includes(normalized);
+            if (ownerMatches || memberMatches) {
               const enabledEditButton = raw.editButton !== false;
-              spaces.push({ ...data, members, editButton: enabledEditButton });
+              spaces.push({ ...data, members, memberIdByEmail: idByEmail, editButton: enabledEditButton });
             }
           });
           return spaces;
         } catch (err) {
-          console.warn('fetchSpacesForEmail', err);
+          console.warn('fetchSpacesForUser', err);
           return [];
         }
       }
@@ -3210,11 +3271,10 @@
           return SPACE_ACTIVITIES[spaceId];
         }
       }
-      async function loadInvitesForOwner(email) {
-        if (!HABITU_FIREBASE_DB || !email) return;
-        const normalized = normalizeEmail(email);
+      async function loadInvitesForOwner(ownerId) {
+        if (!HABITU_FIREBASE_DB || !ownerId) return;
         try {
-          const snapshot = await HABITU_FIREBASE_DB.collection('invites').where('ownerEmail', '==', normalized).get();
+          const snapshot = await HABITU_FIREBASE_DB.collection('invites').where('ownerId', '==', ownerId).get();
           Object.keys(INVITE_CACHE).forEach(key => delete INVITE_CACHE[key]);
           snapshot.forEach(doc => { INVITE_CACHE[doc.id] = { token: doc.id, ...doc.data() }; });
         } catch (err) {
@@ -3324,16 +3384,24 @@
         });
         refreshLibraryTags();
       }
-      async function resetFirestoreState(email) {
+      async function resetFirestoreState(profile) {
         clearLocalState();
+        const email = profile?.email;
         if (!email) { return; }
         await loadLibraryData();
-        const spaces = await fetchSpacesForEmail(email);
+        const spaces = await fetchSpacesForUser(profile);
         allowedSpaces = spaces.map(space => space.id);
-        spaces.forEach(space => { SPACES[space.id] = { ...space, members: space.members || [], ch: [] }; });
+        spaces.forEach(space => {
+          SPACES[space.id] = {
+            ...space,
+            members: space.members || [],
+            memberIdByEmail: space.memberIdByEmail || {},
+            ch: []
+          };
+        });
         await Promise.all(spaces.map(space => loadHabitsForSpace(space.id)));
         await Promise.all(spaces.map(space => loadActivitiesForSpace(space.id)));
-        await loadInvitesForOwner(email);
+        await loadInvitesForOwner(profile.uid);
         renderInviteList();
         await Promise.all(allowedSpaces.map(id => ensureSpaceHasCode(id)));
         if (!spaceId && allowedSpaces.length) { spaceId = allowedSpaces[0]; }
@@ -4456,10 +4524,6 @@
         if (currentProfile && normalizeOwnerLabel(getCurrentOwnerLabel()) === normalizedTarget) {
           return currentProfile.email || null;
         }
-        const sp = getSpace();
-        if (!sp) return null;
-        const ownerName = displayNameFromEmail(sp.ownerEmail);
-        if (normalizeOwnerLabel(ownerName) === normalizedTarget) return sp.ownerEmail;
         for (const email of sp.members || []) {
           if (normalizeOwnerLabel(displayNameFromEmail(email)) === normalizedTarget) {
             return email;
@@ -4476,7 +4540,7 @@
           return;
         }
         const sp = getSpace();
-        const ownerName = sp ? displayNameFromEmail(sp.ownerEmail) : '';
+        const ownerName = sp ? getSpaceOwnerLabel(sp) : '';
         const isOwner = normalizeOwnerLabel(activeProfileName) === normalizeOwnerLabel(ownerName);
         const isSelf = normalizeOwnerLabel(activeProfileName) === normalizeOwnerLabel(getCurrentOwnerLabel());
         const shouldShow = isCurrentSpaceAdmin() && !isOwner && !isSelf;
@@ -4531,7 +4595,7 @@
         if (!sp) return;
         const token = genInviteToken();
         const link = `${inviteBaseUrl()}?invite=${token}`;
-        const ownerName = displayNameFromEmail(sp.ownerEmail);
+        const ownerName = getSpaceOwnerLabel(sp);
         const inviteData = {
           ownerName,
           invitedName: activeProfileName,
@@ -4540,7 +4604,7 @@
           spaceDesc: (sp.desc || '').trim(),
           gardenLabel: sp.label || 'ton jardin',
           created: Date.now(),
-          ownerEmail: sp.ownerEmail
+          ownerId: sp.ownerId || null
         };
         await persistInviteDoc(token, inviteData);
         INVITE_CACHE[token] = { token, ...inviteData };
@@ -4731,9 +4795,9 @@
       function getTransferCandidates() {
         const sp = getSpace();
         if (!sp) return [];
-        const owner = getSpaceOwnerEmail(spaceId);
+        const ownerEmail = normalizeEmail(currentProfile?.email || '');
         const normalizedMembers = Array.from(new Set((sp.members || []).map(normalizeEmail)));
-        return normalizedMembers.filter(email => email && email !== owner);
+        return normalizedMembers.filter(email => email && email !== ownerEmail);
       }
 
       function refreshOwnerPanel() {
@@ -4834,16 +4898,23 @@
       }
 
       async function updateSpaceOwner(spaceIdArg, email) {
-        if (!spaceIdArg || !email) return;
+        if (!spaceIdArg || !email) return false;
         const sp = SPACES[spaceIdArg];
-        if (!sp) return;
+        if (!sp) return false;
         const normalized = normalizeEmail(email);
-        sp.ownerEmail = normalized;
+        const targetId = resolveMemberUserId(spaceIdArg, normalized);
+        if (!targetId) {
+          showToast('Impossible de transférer sans identifiant valide.', { type: 'error' });
+          return false;
+        }
+        sp.ownerId = targetId;
+        sp.ownerName = displayNameFromEmail(normalized) || sp.ownerName || '';
         await persistSpaceDoc(spaceIdArg);
         refreshOwnerPanel();
         updSpaceHeader();
         renderSpaceRank();
         setupSpaceInfo();
+        return true;
       }
 
 
@@ -5183,7 +5254,7 @@
       };
       async function maybeTogglePrivateAdd(forceOpen = false) {
         if (currentProfile?.email && !currentProfile?.guest) {
-          await refreshOwnedSpaces(normalizeEmail(currentProfile.email));
+          await refreshOwnedSpaces(currentProfile);
         }
         const locked = allowedSpaces.length === 0;
         if (!spacesInitialized && !forceOpen) return;
@@ -5399,7 +5470,7 @@
       function updateAddModalOptions() {
         const hasSpaces = allowedSpaces.length > 0;
         const isAuthenticated = !!currentProfile?.email;
-        const ownedCount = countOwnedGardens(currentProfile?.email);
+        const ownedCount = countOwnedGardens(currentProfile);
         const showSupportOptions = hasSpaces;
         if (menuCreateGarden) {
           const subtitle = menuCreateGarden.querySelector('.subtitle');
@@ -5468,9 +5539,13 @@
           if (transferStatus) transferStatus.textContent = 'Choisis un jardinier.';
           return;
         }
-        await updateSpaceOwner(spaceId, select.value);
-        if (transferStatus) transferStatus.textContent = 'Propriété transférée !';
-        close(mTransfer);
+        const success = await updateSpaceOwner(spaceId, select.value);
+        if (transferStatus) {
+          transferStatus.textContent = success ? 'Propriété transférée !' : 'Impossible de transférer.';
+        }
+        if (success) {
+          close(mTransfer);
+        }
       });
       $("#closeTransfer").onclick = () => close(mTransfer);
       installAppOpt?.addEventListener('click', () => {
@@ -5530,7 +5605,7 @@
       function updateAuthMessage() {
         if (pendingInviteInfo) {
           const spaceName = pendingInviteInfo.gardenLabel || pendingInviteInfo.label || 'ton jardin';
-          const ownerName = pendingInviteInfo.ownerName || pendingInviteInfo.ownerEmail || 'un jardinier';
+          const ownerName = pendingInviteInfo.ownerName || 'un jardinier';
           authMessage.textContent = `Connecte-toi pour retrouver le jardin "${spaceName}" de ${ownerName}.`;
           if (authSpaceDesc) {
             authSpaceDesc.textContent = (pendingInviteInfo.spaceDesc || '').trim();
@@ -5576,8 +5651,7 @@
           persistProfile({ name: userName || 'Moi', guest: true });
         }
         if (!currentProfile?.guest) {
-          const normalizedEmail = normalizeEmail(currentProfile?.email);
-          await refreshOwnedSpaces(normalizedEmail);
+          await refreshOwnedSpaces(currentProfile);
         }
         const profile = GARDEN_TYPES[0];
         const title = (gardenNameInput.value || profile.label).trim() || profile.label;
@@ -5585,6 +5659,7 @@
         const accessCode = generateSpaceAccessCode();
         const id = generateSpaceId();
         const ownerEmail = normalizeEmail(currentProfile?.email || '');
+        const ownerId = currentProfile?.uid || null;
         SPACES[id] = {
           emoji: profile.emoji,
           label: title,
@@ -5592,7 +5667,8 @@
           orgMode: mode,
           code: accessCode,
           ch: [],
-          ownerEmail,
+          ownerId,
+          ownerName: currentProfile?.name || userName || 'Moi',
           members: [ownerEmail],
           createdAt: new Date(),
           editButton: true,
@@ -5708,7 +5784,7 @@
           spaceDesc: (SPACES[spaceId]?.desc || '').trim(),
           gardenLabel: SPACES[spaceId]?.label || 'ton jardin',
           created: Date.now(),
-          ownerEmail: currentProfile?.email
+          ownerId: currentProfile?.uid
         };
         await persistInviteDoc(token, inviteData);
         INVITE_CACHE[token] = { token, ...inviteData };
@@ -6272,7 +6348,7 @@
           hideAuthOverlay();
           showLoaderOverlay();
           try {
-            await resetFirestoreState(email);
+            await resetFirestoreState(currentProfile);
           } finally {
             hideLoaderOverlay();
           }
