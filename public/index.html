@@ -2246,6 +2246,7 @@
       </div>
     </div>
 
+    <script src="library.js"></script>
     <script>
       /* ===== Données ===== */
 
@@ -2830,7 +2831,6 @@
       let allowedSpaces = [];
       let currentProfile = loadStoredProfile();
       let guestSpaces = loadGuestSpaces();
-      let pendingSpaceCreation = null;
       let pendingInviteToken = new URLSearchParams(window.location.search).get('invite');
       let pendingInviteInfo = null;
       const HABITU_FIREBASE_DB = window.HABITU_FIREBASE_DB;
@@ -2914,28 +2914,52 @@
       }
       function buildMemberInfo(members) {
         const emails = new Set();
+        const userIds = new Set();
         const idByEmail = {};
         if (!Array.isArray(members)) {
-          return { emails: [], idByEmail };
+          return { emails: [], userIds: [], idByEmail };
         }
         members.forEach(member => {
           if (!member) return;
           if (typeof member === 'string') {
-            const email = normalizeEmail(member);
-            if (email) emails.add(email);
+            const candidate = member.trim();
+            if (!candidate) return;
+            if (candidate.includes('@')) {
+              const email = normalizeEmail(candidate);
+              if (email) emails.add(email);
+            } else {
+              userIds.add(candidate);
+            }
             return;
           }
           if (typeof member === 'object') {
-            const email = normalizeEmail(member.email || member.value || '');
-            if (!email) return;
-            emails.add(email);
-            const resolvedId = member.uid || member.id || member.userId || null;
-            if (resolvedId) {
-              idByEmail[email] = resolvedId;
+            const candidate = String(member.email || member.value || '').trim();
+            let normalizedEmail = '';
+            if (candidate.includes('@')) {
+              normalizedEmail = normalizeEmail(candidate);
+              if (normalizedEmail) {
+                emails.add(normalizedEmail);
+              } else {
+                normalizedEmail = '';
+              }
+            } else if (candidate) {
+              userIds.add(candidate);
+            }
+            const resolvedId = String(member.uid || member.id || member.userId || member.value || '').trim();
+            if (resolvedId && !resolvedId.includes('@')) {
+              userIds.add(resolvedId);
+              if (normalizedEmail) {
+                idByEmail[normalizedEmail] = resolvedId;
+              }
             }
           }
         });
-        return { emails: Array.from(emails), idByEmail };
+        return { emails: Array.from(emails), userIds: Array.from(userIds), idByEmail };
+      }
+      function sanitizeSpaceMembers(members) {
+        const { emails, userIds } = buildMemberInfo(members);
+        if (!userIds.length) return emails;
+        return [...emails, ...userIds];
       }
       function resolveMemberUserId(spaceIdArg, email) {
         if (!spaceIdArg || !email) return null;
@@ -2955,7 +2979,8 @@
       }
       async function refreshOwnedSpaces(profile) {
         const email = profile?.email;
-        if (!email) return [];
+        const uid = profile?.uid;
+        if (!email && !uid) return [];
         try {
           const spaces = await fetchSpacesForUser(profile);
           spaces.forEach(space => {
@@ -3081,7 +3106,7 @@
       function persistSpaceDoc(spaceId, data = {}) {
         if (!HABITU_FIREBASE_DB || !spaceId) return Promise.resolve();
         const space = SPACES[spaceId] || {};
-        const members = Array.isArray(space.members) ? [...new Set(space.members.map(normalizeEmail))] : [];
+        const members = sanitizeSpaceMembers(space.members);
         const ownerIdCandidate = space.ownerId || null;
         let ownerNameCandidate = space.ownerName || null;
         if (!ownerNameCandidate && ownerIdCandidate && currentProfile?.uid === ownerIdCandidate) {
@@ -3210,21 +3235,24 @@
         if (!HABITU_FIREBASE_DB || !profile) return [];
         const normalized = normalizeEmail(profile.email);
         const userId = profile.uid;
+        const normalizedUserId = (userId || '').trim();
         try {
           const snapshot = await HABITU_FIREBASE_DB.collection('spaces').get();
           const spaces = [];
           snapshot.forEach(doc => {
-            const raw = doc.data() || {};
-            const code = (raw.code || '').toUpperCase();
-            const data = { id: doc.id, ...raw, createdAt: timestampToDate(raw.createdAt), code };
-            const ownerId = data.ownerId;
-            const { emails: members, idByEmail } = buildMemberInfo(raw.members);
-            const ownerMatches = ownerId && userId && ownerId === userId;
-            const memberMatches = normalized && members.includes(normalized);
-            if (ownerMatches || memberMatches) {
-              const enabledEditButton = raw.editButton !== false;
-              spaces.push({ ...data, members, memberIdByEmail: idByEmail, editButton: enabledEditButton });
-            }
+          const raw = doc.data() || {};
+          const code = (raw.code || '').toUpperCase();
+          const data = { id: doc.id, ...raw, createdAt: timestampToDate(raw.createdAt), code };
+          const ownerId = data.ownerId;
+          const { emails: memberEmails, userIds, idByEmail } = buildMemberInfo(raw.members);
+          const sanitizedMembers = [...memberEmails, ...userIds];
+          const ownerMatches = ownerId && normalizedUserId && ownerId === normalizedUserId;
+          const memberMatches = normalized && memberEmails.includes(normalized);
+          const userMatches = normalizedUserId && userIds.includes(normalizedUserId);
+          if (ownerMatches || memberMatches || userMatches) {
+            const enabledEditButton = raw.editButton !== false;
+            spaces.push({ ...data, members: sanitizedMembers, memberIdByEmail: idByEmail, editButton: enabledEditButton });
+          }
           });
           return spaces;
         } catch (err) {
@@ -3270,6 +3298,54 @@
           SPACE_ACTIVITIES[spaceId] = SPACE_ACTIVITIES[spaceId] || [];
           return SPACE_ACTIVITIES[spaceId];
         }
+      }
+      async function fetchSpaceDoc(spaceId) {
+        if (!HABITU_FIREBASE_DB || !spaceId) return null;
+        try {
+          const doc = await HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).get();
+          if (!doc.exists) return null;
+          const raw = doc.data() || {};
+          const members = Array.isArray(raw.members) ? raw.members : [];
+          return {
+            id: doc.id,
+            ...raw,
+            members,
+            memberIdByEmail: raw.memberIdByEmail || {},
+            code: (raw.code || '').toUpperCase(),
+            createdAt: timestampToDate(raw.createdAt)
+          };
+        } catch (err) {
+          console.warn('fetchSpaceDoc', err);
+          return null;
+        }
+      }
+      async function refreshGuestSpaces() {
+        if (!guestSpaces.size || !HABITU_FIREBASE_DB) return [];
+        const spaceIds = Array.from(guestSpaces);
+        const docs = await Promise.all(spaceIds.map(id => fetchSpaceDoc(id)));
+        const spaces = docs.filter(Boolean);
+        if (!spaces.length) return [];
+        const validIds = spaces.map(space => space.id);
+        spaces.forEach(space => {
+          SPACES[space.id] = {
+            ...(SPACES[space.id] || {}),
+            ...space,
+            members: space.members,
+            memberIdByEmail: space.memberIdByEmail,
+            ch: SPACES[space.id]?.ch || []
+          };
+        });
+        allowedSpaces = [...new Set([...allowedSpaces, ...validIds])];
+        await Promise.all(validIds.map(id => loadHabitsForSpace(id)));
+        await Promise.all(validIds.map(id => loadActivitiesForSpace(id)));
+        await Promise.all(validIds.map(id => ensureSpaceHasCode(id)));
+        if (!spaceId && allowedSpaces.length) {
+          spaceId = allowedSpaces[0];
+        }
+        if (spaceId && !allowedSpaces.includes(spaceId)) {
+          spaceId = allowedSpaces[0] || null;
+        }
+        return spaces;
       }
       async function loadInvitesForOwner(ownerId) {
         if (!HABITU_FIREBASE_DB || !ownerId) return;
@@ -3329,29 +3405,14 @@
           }
         }
         if (SPACES[spaceId]) {
-          const members = new Set([...(SPACES[spaceId].members || []).map(normalizeEmail)]);
+          const members = new Set(sanitizeSpaceMembers(SPACES[spaceId].members));
           members.add(normalized);
           SPACES[spaceId].members = Array.from(members);
         }
       }
       async function loadLibraryData() {
-        const libraryUrl = new URL('library.json', window.location);
-        let data = null;
-        try {
-          const response = await fetch(libraryUrl.href, { cache: 'no-store' });
-          if (response.ok) {
-            const parsed = await response.json();
-            if (Array.isArray(parsed)) {
-              data = parsed;
-            } else {
-              console.warn('loadLibraryData: library.json malformé');
-            }
-          } else {
-            console.warn('loadLibraryData: library.json unavailable');
-          }
-        } catch (err) {
-          console.warn('loadLibraryData static fetch', err);
-        }
+        const staticLibrary = Array.isArray(window.LIBRARY_JSON_DATA) ? window.LIBRARY_JSON_DATA : null;
+        let data = staticLibrary;
         if (!data && HABITU_FIREBASE_DB) {
           try {
             const snapshot = await HABITU_FIREBASE_DB.collection('libraryHabits').get();
@@ -3362,7 +3423,7 @@
           }
         }
         if (!data) {
-          console.warn('loadLibraryData: no data available');
+          console.warn('loadLibraryData: no library data available');
           return;
         }
         LIBRARY_HABITS.length = 0;
@@ -4849,9 +4910,7 @@
         const nextSpace = allowedSpaces[0] || null;
         spaceId = nextSpace;
         updSel();
-        skipMenuAutoOpen = true;
         renderCards();
-        skipMenuAutoOpen = false;
         if (spaceId) {
           openSpacePage();
         } else {
@@ -5197,8 +5256,6 @@
       let autoOpenedHabitModalForEmptySpace = false;
       let lastRenderedSpaceId = null;
       const open = m => m.classList.add('on'), close = m => m.classList.remove('on');
-      let skipMenuAutoOpen = false;
-      let menuAutoOpenSuppressed = false;
       let spacesInitialized = false;
       let habitWizardStep = 1;
       const mPrefs = $("#modalPrefs");
@@ -5249,21 +5306,15 @@
       $("#closeAdd").onclick = () => {
         if (allowedSpaces.length === 0) return;
         pendingAddModalTarget = null;
-        menuAutoOpenSuppressed = true;
         close(mAdd);
       };
       async function maybeTogglePrivateAdd(forceOpen = false) {
         if (currentProfile?.email && !currentProfile?.guest) {
           await refreshOwnedSpaces(currentProfile);
         }
-        const locked = allowedSpaces.length === 0;
         if (!spacesInitialized && !forceOpen) return;
-        const shouldOpen = (locked && !skipMenuAutoOpen && !menuAutoOpenSuppressed) || forceOpen;
-        if (shouldOpen) {
+        if (forceOpen) {
           open(mAdd);
-        }
-        if (!locked) {
-          menuAutoOpenSuppressed = false;
         }
         updateAddModalOptions();
       }
@@ -5499,10 +5550,6 @@
         if (closeAddBtnLocal) {
           closeAddBtnLocal.classList.toggle('hide', locked);
         }
-        const menuModal = $("#modalAdd");
-        if (locked && menuModal && !menuModal.classList.contains('on')) {
-          open(mAdd);
-        }
       }
       const installPromptBtn = $("#installPromptBtn");
       const installPromptClose = $("#installPromptClose");
@@ -5659,7 +5706,11 @@
         const accessCode = generateSpaceAccessCode();
         const id = generateSpaceId();
         const ownerEmail = normalizeEmail(currentProfile?.email || '');
-        const ownerId = currentProfile?.uid || null;
+        const ownerId = (currentProfile?.uid || '').trim();
+        const memberSet = new Set();
+        if (ownerEmail) memberSet.add(ownerEmail);
+        if (ownerId) memberSet.add(ownerId);
+        const memberList = sanitizeSpaceMembers(Array.from(memberSet));
         SPACES[id] = {
           emoji: profile.emoji,
           label: title,
@@ -5667,9 +5718,9 @@
           orgMode: mode,
           code: accessCode,
           ch: [],
-          ownerId,
+          ownerId: ownerId || null,
           ownerName: currentProfile?.name || userName || 'Moi',
-          members: [ownerEmail],
+          members: memberList,
           createdAt: new Date(),
           editButton: true,
           editorRights: 'admin',
@@ -5682,34 +5733,22 @@
         if (currentProfile?.guest) {
           addGuestSpace(id);
         }
-        pendingSpaceCreation = {
-          spaceId: id,
-          payload: {
-            createdBy: currentProfile?.email || null,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            editButton: true,
-            editButtonMode: 'dynamic',
-            notesDisplayMode: 'dynamic'
-          }
+        const creationPayload = {
+          members: memberList,
+          createdBy: currentProfile?.email || null,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          editButton: true,
+          editButtonMode: 'dynamic',
+          notesDisplayMode: 'dynamic'
         };
         gardenStatus.textContent = 'Ajoute quelques habitudes pour démarrer ton jardin.';
+        await persistSpaceDoc(id, creationPayload);
+        await loadActivitiesForSpace(id);
         updSel();
         renderCards();
         close(mGarden);
         openHabitFlow('creation');
       }
-      async function finalizePendingSpaceCreation() {
-        if (!pendingSpaceCreation) return;
-        const { spaceId: pendingId, payload } = pendingSpaceCreation;
-        pendingSpaceCreation = null;
-        try {
-          await persistSpaceDoc(pendingId, payload);
-          await loadActivitiesForSpace(pendingId);
-        } catch (err) {
-          console.warn('finalizePendingSpaceCreation', err);
-        }
-      }
-
       function renderInviteList() {
         inviteList.innerHTML = '';
         const entries = Object.values(INVITE_CACHE).sort((a, b) => (b.created || 0) - (a.created || 0));
@@ -6093,9 +6132,6 @@
             if (persistPromises.length) {
               await Promise.all(persistPromises);
             }
-            if (pendingSpaceCreation?.spaceId === spaceId) {
-              await finalizePendingSpaceCreation();
-            }
             close(mHabit);
             renderCards();
           });
@@ -6364,9 +6400,11 @@
           showLoaderOverlay();
           try {
             await loadLibraryData();
+            await refreshGuestSpaces();
           } finally {
             hideLoaderOverlay();
           }
+          updAll();
           showHome();
         }
       });
@@ -6445,7 +6483,8 @@
         await handleAppUpdateRequest({ auto: true });
       }
       initAutoUpdater();
-      if ('serviceWorker' in navigator) {
+      const canUseServiceWorker = !['file:'].includes(window.location.protocol);
+      if ('serviceWorker' in navigator && canUseServiceWorker) {
         const registerServiceWorker = async () => {
           try {
             const registration = await navigator.serviceWorker.register('/service-worker.js', { scope: './' });
