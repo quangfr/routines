@@ -34,9 +34,9 @@ Moins de “Qui devait faire ça déjà ?”, plus de clarté, de partage et de 
 💚 **The promise**  
 Less “Who was supposed to do this?”, more clarity, teamwork, and calm in shared daily life.
 
-## 📦 Import `library.json` into Firestore
+## 📦 Import `library.js` into Firestore
 
-The app now reads `libraryHabits` from Firestore and keeps a hash in `libraryMeta/import` to avoid double imports. To push `library.json` into Firestore once:
+The app now ships with the habit library baked into `public/library.js` and still keeps a hash in `libraryMeta/import` to avoid double imports. To push `library.js` into Firestore once:
 
 1. Install the Firestore admin SDK (if not already available):  
    `npm install firebase-admin`
@@ -45,7 +45,7 @@ The app now reads `libraryHabits` from Firestore and keeps a hash in `libraryMet
    ```
    node scripts/import-library.js --projectId=my-project-id
    ```
-   Use `--libraryPath` to point to a different JSON file, `--dry-run` to preview without writing, or `--force` to re-import even if the existing hash matches.
+   Use `--libraryPath` to point to a different file (it accepts either `.js` or `.json`), `--dry-run` to preview without writing, or `--force` to re-import even if the existing hash matches.
 
 The script wipes `libraryHabits`, writes each habit under `/libraryHabits/{id}`, and records the import hash so subsequent runs skip unchanged data.
 

@@ -2033,7 +2033,7 @@
             <div class="opt" id="menuPrefs">
               <div class="emoji">✨</div>
               <div>
-                <b>Ajuster ton intérieur</b>
+                <b>Décorer ton jardin</b>
                 <div class="subtitle">Personnalise tes préférences</div>
               </div>
             </div>
@@ -2049,7 +2049,7 @@
               <div class="emoji">🔐</div>
               <div>
                 <b>Se connecter</b>
-                <div class="subtitle">Partager l'accès avec un autre appareil</div>
+                <div class="subtitle">Utiliser un compte pour partager l'accès</div>
               </div>
             </div>
             <div class="opt auth-action hide" id="menuLogout">
@@ -2174,8 +2174,6 @@
                 <option value="no">Non</option>
                 <option value="dynamic">Dynamique</option>
               </select>
-              <div class="subtitle">En mode dynamique, le crayon n’apparaît que pour les habitudes en cours ou en
-                soutien.</div>
             </div>
           </div>
         </div>
@@ -2483,17 +2481,9 @@
         const emoji = getTagEmoji(tag, type);
         return emoji ? `${emoji} ${label}` : label;
       }
-      const SESSION_LOCK_KEY = 'habitu-primary-tab';
-      const SESSION_LOCK_TTL = 15 * 1000;
-      const SESSION_LOCK_PING = 4 * 1000;
-      const SESSION_CONFLICT_MESSAGE = 'Un autre onglet Habitube est actif. Ferme-le ou attends qu\'il se libère pour continuer.';
-      const TAB_INSTANCE_ID = (window.crypto?.randomUUID ? crypto.randomUUID() : `tab-${Date.now()}-${Math.random().toString(36).slice(2)}`);
       const INSTALL_PROMPT_STORAGE_KEY = 'habitu-install-prompt-seen';
       const INSTALL_PROMPT_SUPPRESSION_MS = 15 * 24 * 60 * 60 * 1000;
       const INSTALL_PROMPT_FIRST_HABIT_KEY = 'habitu-install-first-habit';
-      let sessionLockTimer;
-      let isPrimaryTab = false;
-      let sessionConflictHandled = false;
       let deferredInstallPrompt = null;
       let installPromptAutoShown = false;
       let toastContainerEl = null;
@@ -2532,29 +2522,6 @@
         setTimeout(() => {
           toast.remove();
         }, duration);
-      }
-      function parseSessionLock(value) {
-        if (!value) return null;
-        try {
-          return JSON.parse(value);
-        } catch (e) {
-          return null;
-        }
-      }
-      async function handleSessionConflict() {
-        if (sessionConflictHandled) return;
-        sessionConflictHandled = true;
-        showToast('Une autre session est active, récupération des données…', { type: 'info', duration: 5000 });
-        clearLocalState();
-        const email = currentProfile?.email;
-        if (!email) return;
-        showLoaderOverlay();
-        try {
-          await resetFirestoreState(currentProfile);
-          showHome();
-        } finally {
-          hideLoaderOverlay();
-        }
       }
       function isRunningAsPWA() {
         if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) return true;
@@ -2626,60 +2593,6 @@
         showInstallPromptCard();
         installPromptAutoShown = true;
       }
-      function readSessionLock() {
-        return parseSessionLock(safeStorageGet(SESSION_LOCK_KEY));
-      }
-      function refreshSessionLock() {
-        const now = Date.now();
-        const current = readSessionLock();
-        const otherActive = current && current.tabId !== TAB_INSTANCE_ID && (now - (current.ts || 0) < SESSION_LOCK_TTL);
-        if (otherActive) {
-          isPrimaryTab = false;
-          handleSessionConflict();
-          return;
-        }
-        safeStorageSet(SESSION_LOCK_KEY, JSON.stringify({ tabId: TAB_INSTANCE_ID, ts: now }));
-        if (!isPrimaryTab) {
-          isPrimaryTab = true;
-        }
-        sessionConflictHandled = false;
-      }
-      function startSessionLockHeartbeat() {
-        refreshSessionLock();
-        if (!sessionLockTimer) {
-          sessionLockTimer = setInterval(refreshSessionLock, SESSION_LOCK_PING);
-        }
-      }
-      function stopSessionLockHeartbeat() {
-        if (sessionLockTimer) {
-          clearInterval(sessionLockTimer);
-          sessionLockTimer = null;
-        }
-      }
-      function releaseSessionLock() {
-        const current = readSessionLock();
-        if (current && current.tabId === TAB_INSTANCE_ID) {
-          safeStorageRemove(SESSION_LOCK_KEY);
-        }
-      }
-      function ensureSingleSessionActive() {
-        if (isPrimaryTab) return true;
-        handleSessionConflict();
-        return false;
-      }
-      startSessionLockHeartbeat();
-      window.addEventListener('storage', event => {
-        if (event.key === SESSION_LOCK_KEY) {
-          refreshSessionLock();
-        }
-      });
-      window.addEventListener('focus', refreshSessionLock);
-      const teardownSessionLock = () => {
-        stopSessionLockHeartbeat();
-        releaseSessionLock();
-      };
-      window.addEventListener('beforeunload', teardownSessionLock);
-      window.addEventListener('pagehide', teardownSessionLock);
       window.addEventListener('beforeinstallprompt', (event) => {
         if (isRunningAsPWA()) return;
         event.preventDefault();
@@ -3166,8 +3079,9 @@
       function persistHabit(spaceId, habitData) {
         if (!HABITU_FIREBASE_DB || !spaceId || !habitData?.id) return Promise.resolve();
         ensureHabitMetadata(habitData);
-        return HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).collection('habits').doc(habitData.id)
-          .set({ ...habitData, spaceId, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+        const habitId = String(habitData.id);
+        return HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).collection('habits').doc(habitId)
+          .set({ ...habitData, id: habitId, spaceId, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
           .then(() => {
             markFirstHabitCreated();
           })
@@ -3240,19 +3154,19 @@
           const snapshot = await HABITU_FIREBASE_DB.collection('spaces').get();
           const spaces = [];
           snapshot.forEach(doc => {
-          const raw = doc.data() || {};
-          const code = (raw.code || '').toUpperCase();
-          const data = { id: doc.id, ...raw, createdAt: timestampToDate(raw.createdAt), code };
-          const ownerId = data.ownerId;
-          const { emails: memberEmails, userIds, idByEmail } = buildMemberInfo(raw.members);
-          const sanitizedMembers = [...memberEmails, ...userIds];
-          const ownerMatches = ownerId && normalizedUserId && ownerId === normalizedUserId;
-          const memberMatches = normalized && memberEmails.includes(normalized);
-          const userMatches = normalizedUserId && userIds.includes(normalizedUserId);
-          if (ownerMatches || memberMatches || userMatches) {
-            const enabledEditButton = raw.editButton !== false;
-            spaces.push({ ...data, members: sanitizedMembers, memberIdByEmail: idByEmail, editButton: enabledEditButton });
-          }
+            const raw = doc.data() || {};
+            const code = (raw.code || '').toUpperCase();
+            const data = { id: doc.id, ...raw, createdAt: timestampToDate(raw.createdAt), code };
+            const ownerId = data.ownerId;
+            const { emails: memberEmails, userIds, idByEmail } = buildMemberInfo(raw.members);
+            const sanitizedMembers = [...memberEmails, ...userIds];
+            const ownerMatches = ownerId && normalizedUserId && ownerId === normalizedUserId;
+            const memberMatches = normalized && memberEmails.includes(normalized);
+            const userMatches = normalizedUserId && userIds.includes(normalizedUserId);
+            if (ownerMatches || memberMatches || userMatches) {
+              const enabledEditButton = raw.editButton !== false;
+              spaces.push({ ...data, members: sanitizedMembers, memberIdByEmail: idByEmail, editButton: enabledEditButton });
+            }
           });
           return spaces;
         } catch (err) {
@@ -4177,7 +4091,6 @@
             };
 
             const handleClick = () => {
-              if (!ensureSingleSessionActive()) return;
               (mode.type === 'commun') ? clickCommon() : clickLibre();
             };
 
@@ -5949,56 +5862,24 @@
         nextBtn.className = 'btn primary';
         nextBtn.textContent = 'Voir les 0 sur 0 habitudes';
 
-        const modeSection = document.createElement('div');
-        modeSection.className = 'tag-section';
-        const modeLabelEl = document.createElement('label');
-        modeLabelEl.innerHTML = `<b>Qui ?</b>`;
-        const modeGrid = document.createElement('div');
-        modeGrid.className = 'tag-grid';
-        modeSection.append(modeLabelEl, modeGrid);
-        let selectedMode = 'libre';
-        const modeButtons = {};
-        const setMode = (value) => {
-          if (selectedMode === value) {
-            selectedMode = null;
-          } else {
-            selectedMode = value;
-          }
-          Object.entries(modeButtons).forEach(([key, btn]) => {
-            btn.classList.toggle('active', key === selectedMode);
-          });
-          updateNextLabel();
-        };
-        Object.entries(MODE_META).forEach(([key, info]) => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'tag';
-          btn.textContent = info.shortLabel || `${info.emoji} ${info.label}`;
-          btn.addEventListener('click', () => setMode(key));
-          modeButtons[key] = btn;
-          modeGrid.appendChild(btn);
-        });
-
         let contextSection;
         let needSection;
         function updateNextLabel() {
           const ctxCount = contextSection?.selected.length || 0;
           const needCount = needSection?.selected.length || 0;
-          const totalMatching = countMatchingHabits(contextSection?.selected || [], selectedMode);
-          const preselected = countPreselectedHabits(contextSection?.selected || [], needSection?.selected || [], selectedMode);
+          const totalMatching = countMatchingHabits(contextSection?.selected || [], null);
+          const preselected = countPreselectedHabits(contextSection?.selected || [], needSection?.selected || [], null);
           nextBtn.textContent = `Voir les ${preselected} sur ${totalMatching} habitudes`;
         }
 
         contextSection = buildTagSection('Où ?', LIBRARY_CONTEXTS, updateNextLabel, 'context');
         needSection = buildTagSection('Pourquoi ?', LIBRARY_NEEDS, updateNextLabel, 'need');
-        setMode(selectedMode);
 
         nextBtn.addEventListener('click', () => {
-          renderHabitSuggestions([...contextSection.selected], [...needSection.selected], selectedMode);
+          renderHabitSuggestions([...contextSection.selected], [...needSection.selected]);
         });
 
         actions.appendChild(nextBtn);
-        root.appendChild(modeSection);
         root.appendChild(contextSection.container);
         root.appendChild(needSection.container);
         root.appendChild(actions);
@@ -6061,7 +5942,6 @@
         root.innerHTML = '';
         habitWizardStep = 2;
 
-        const modeInfo = modeFilter ? MODE_META[modeFilter] : null;
         const matchingHabits = LIBRARY_HABITS
           .filter(habit => matchesHabitContext(habit, contextTags))
           .filter(habit => matchesHabitMode(habit, modeFilter))
@@ -6075,13 +5955,12 @@
         });
         const suggestionMap = new Map(matchingHabits.map(habit => [habit.id, habit]));
         let addBtn;
-        let infoLabel = null;
         const updateAddLabel = () => {
           if (!addBtn) return;
-          if (infoLabel) {
-            infoLabel.textContent = `${selection.size} habitude${selection.size > 1 ? 's' : ''}`;
-          }
-          addBtn.disabled = selection.size === 0;
+          const count = selection.size;
+          const suffix = count === 1 ? '' : 's';
+          addBtn.disabled = count === 0;
+          addBtn.textContent = `Ajouter les ${count} habitude${suffix}`;
         };
 
         if (!matchingHabits.length) {
@@ -6111,10 +5990,6 @@
           addBtn = document.createElement('button');
           addBtn.type = 'button';
           addBtn.className = 'btn primary';
-          addBtn.textContent = 'Créer le jardin';
-          infoLabel = document.createElement('div');
-          infoLabel.className = 'habit-actions__info';
-          infoLabel.textContent = '0 habitudes';
           addBtn.addEventListener('click', async () => {
             if (!selection.size) return;
             const sp = getSpace();
@@ -6137,15 +6012,7 @@
           });
           updateAddLabel();
           const controls = document.createElement('div');
-          controls.className = 'habit-actions footer-sticky';
-          controls.appendChild(infoLabel);
-          controls.appendChild(addBtn);
-          root.appendChild(controls);
-        }
-
-        if (addBtn) {
-          const controls = document.createElement('div');
-          controls.className = 'habit-actions footer-sticky';
+          controls.className = 'habit-actions';
           controls.appendChild(addBtn);
           root.appendChild(controls);
         }

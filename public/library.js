@@ -1,12 +1,12 @@
-[
+const LIBRARY_JSON_DATA = [
   {
     "id": 1,
     "emoji": "🍳",
-    "title": "Préparer un repas partagé",
-    "needs": ["nutrition", "cooperation"],
+    "title": "Préparer un repas sain",
+    "needs": ["nutrition", "safety"],
     "contexts": ["home", "family"],
     "frequency": 1,
-    "target": "group"
+    "target": "individual"
   },
   {
     "id": 2,
@@ -28,7 +28,7 @@
   },
   {
     "id": 4,
-    "emoji": "☕",
+    "emoji": "🍵",
     "title": "Préparer une boisson chaude",
     "needs": ["comfort", "calm"],
     "contexts": ["home", "office"],
@@ -46,8 +46,8 @@
   },
   {
     "id": 6,
-    "emoji": "🍏",
-    "title": "Manger 5 fruits et légumes par jour",
+    "emoji": "🍎",
+    "title": "Manger plus de fruits",
     "needs": ["nutrition", "comfort"],
     "contexts": ["home"],
     "frequency": 7,
@@ -56,7 +56,7 @@
   {
     "id": 7,
     "emoji": "💧",
-    "title": "Boire un grand verre d’eau au réveil",
+    "title": "Remplir sa gourde d’eau",
     "needs": ["nutrition", "comfort"],
     "contexts": ["home"],
     "frequency": 7,
@@ -65,7 +65,7 @@
   {
     "id": 8,
     "emoji": "💊",
-    "title": "Prendre son traitement du jour",
+    "title": "Prendre son traitement",
     "needs": ["comfort", "safety"],
     "contexts": ["home"],
     "frequency": 7,
@@ -74,7 +74,7 @@
   {
     "id": 9,
     "emoji": "🚭",
-    "title": "S'abstenir de fumer aujourd'hui",
+    "title": "Ne pas fumer aujourd’hui",
     "needs": ["safety", "calm"],
     "contexts": ["home", "office"],
     "frequency": 7,
@@ -91,8 +91,8 @@
   },
   {
     "id": 11,
-    "emoji": "😶‍🌫️",
-    "title": "Appliquer son soin quotidien",
+    "emoji": "🧴",
+    "title": "Faire son soin du jour",
     "needs": ["hygiene", "comfort"],
     "contexts": ["home"],
     "frequency": 7,
@@ -109,8 +109,8 @@
   },
   {
     "id": 13,
-    "emoji": "🪥",
-    "title": "Soigner le brossage de dents",
+    "emoji": "🦷",
+    "title": "Bien brosser ses dents",
     "needs": ["hygiene"],
     "contexts": ["home", "family"],
     "frequency": 7,
@@ -128,7 +128,7 @@
   {
     "id": 15,
     "emoji": "🧹",
-    "title": "Nettoyer le couloir et l’entrée",
+    "title": "Nettoyer couloir et entrée",
     "needs": ["cleanliness", "safety"],
     "contexts": ["home"],
     "frequency": 1,
@@ -138,7 +138,7 @@
     "id": 16,
     "emoji": "🍽️",
     "title": "Remettre la cuisine en ordre",
-    "needs": ["cleanliness", "organization"],
+    "needs": ["cleanliness", "hygiene"],
     "contexts": ["home"],
     "frequency": 3,
     "target": "group"
@@ -146,7 +146,7 @@
   {
     "id": 17,
     "emoji": "🛋️",
-    "title": "Remettre le salon en ordre",
+    "title": "Ranger le salon",
     "needs": ["cleanliness", "comfort"],
     "contexts": ["home"],
     "frequency": 3,
@@ -164,8 +164,8 @@
   {
     "id": 19,
     "emoji": "🧻",
-    "title": "Vérifier les produits ménagers",
-    "needs": ["equipment", "organization"],
+    "title": "Vérifier les produits ménages",
+    "needs": ["equipment", "cleanliness"],
     "contexts": ["home"],
     "frequency": 1,
     "target": "group"
@@ -182,8 +182,8 @@
   {
     "id": 21,
     "emoji": "🪥",
-    "title": "Organiser les affaires de toilette",
-    "needs": ["organization", "privacy"],
+    "title": "Ranger ses affaires de toilette",
+    "needs": ["equipment", "privacy"],
     "contexts": ["home", "family"],
     "frequency": 1,
     "target": "individual"
@@ -199,7 +199,7 @@
   },
   {
     "id": 23,
-    "emoji": "🏟️",
+    "emoji": "🏢",
     "title": "Ranger la salle de réunion",
     "needs": ["cleanliness", "organization"],
     "contexts": ["office"],
@@ -209,7 +209,7 @@
   {
     "id": 24,
     "emoji": "🖥️",
-    "title": "Remettre le poste de travail en ordre",
+    "title": "Ranger le poste de travail",
     "needs": ["organization", "cleanliness"],
     "contexts": ["office"],
     "frequency": 3,
@@ -218,7 +218,7 @@
   {
     "id": 25,
     "emoji": "📦",
-    "title": "Ranger les fournitures communes",
+    "title": "Vérifier les fournitures communes",
     "needs": ["organization", "equipment"],
     "contexts": ["office", "school"],
     "frequency": 1,
@@ -235,7 +235,7 @@
   },
   {
     "id": 27,
-    "emoji": "🧹",
+    "emoji": "♻️",
     "title": "Ramasser et trier les déchets",
     "needs": ["cleanliness", "organization"],
     "contexts": ["home", "school"],
@@ -244,9 +244,9 @@
   },
   {
     "id": 28,
-    "emoji": "📦",
-    "title": "Ranger ses affaires dans l’espace commun",
-    "needs": ["organization", "cooperation"],
+    "emoji": "🗃️",
+    "title": "Ranger ses étagères",
+    "needs": ["organization", "privacy"],
     "contexts": ["home", "office", "social"],
     "frequency": 3,
     "target": "individual"
@@ -254,7 +254,7 @@
   {
     "id": 29,
     "emoji": "🚌",
-    "title": "Préparer le trajet",
+    "title": "Préparer son départ",
     "needs": ["organization", "calm"],
     "contexts": ["home", "office", "school"],
     "frequency": 7,
@@ -263,7 +263,7 @@
   {
     "id": 30,
     "emoji": "🛣️",
-    "title": "Choisir un itinéraire de trajet différent",
+    "title": "Choisir un trajet différent",
     "needs": ["curiosity", "calm"],
     "contexts": ["home"],
     "frequency": 3,
@@ -272,7 +272,7 @@
   {
     "id": 31,
     "emoji": "🧰",
-    "title": "Réparer un petit problème",
+    "title": "Réparer un petit souci",
     "needs": ["equipment", "safety"],
     "contexts": ["home"],
     "frequency": 1,
@@ -281,8 +281,8 @@
   {
     "id": 32,
     "emoji": "🧭",
-    "title": "Revoir l’agenda de la semaine",
-    "needs": ["organization", "calm"],
+    "title": "Revoir l’agenda",
+    "needs": ["organization", "calm","privacy"],
     "contexts": ["home", "family"],
     "frequency": 1,
     "target": "individual"
@@ -290,8 +290,8 @@
   {
     "id": 33,
     "emoji": "🗂️",
-    "title": "Classer et ranger les documents",
-    "needs": ["organization"],
+    "title": "Trier ses documents",
+    "needs": ["organization","privacy"],
     "contexts": ["home"],
     "frequency": 1,
     "target": "individual"
@@ -299,26 +299,26 @@
   {
     "id": 34,
     "emoji": "📌",
-    "title": "Noter les rappels du jour",
-    "needs": ["organization", "communication"],
+    "title": "Noter ses rappels",
+    "needs": ["organization", "communication","privacy"],
     "contexts": ["home", "office"],
     "frequency": 7,
     "target": "individual"
   },
   {
     "id": 35,
-    "emoji": "🗓️",
-    "title": "Mini plan du jour",
-    "needs": ["organization", "calm"],
-    "contexts": ["home", "office"],
+    "emoji": "💗",
+    "title": "Partager une envie",
+    "needs": ["expression", "joy"],
+    "contexts": ["home", "office","social"],
     "frequency": 7,
-    "target": "individual"
+    "target": "group"
   },
   {
     "id": 36,
     "emoji": "💶",
-    "title": "Vérifier les dépenses du mois",
-    "needs": ["organization", "safety"],
+    "title": "Vérifier ses dépenses",
+    "needs": ["organization", "safety","privacy"],
     "contexts": ["home"],
     "frequency": 1,
     "target": "individual"
@@ -326,8 +326,8 @@
   {
     "id": 37,
     "emoji": "👚",
-    "title": "Repasser et réorganiser ses vêtements",
-    "needs": ["organization", "comfort"],
+    "title": "Trier ses vêtements",
+    "needs": ["organization", "comfort","privacy"],
     "contexts": ["home"],
     "frequency": 1,
     "target": "individual"
@@ -335,7 +335,7 @@
   {
     "id": 38,
     "emoji": "🧺",
-    "title": "Lancer une machine à laver",
+    "title": "Lancer une machine",
     "needs": ["cleanliness", "organization"],
     "contexts": ["home"],
     "frequency": 3,
@@ -344,7 +344,7 @@
   {
     "id": 39,
     "emoji": "🌦️",
-    "title": "Partager sa météo émotionnelle",
+    "title": "Partager son humeur",
     "needs": ["expression", "communication"],
     "contexts": ["home", "family"],
     "frequency": 3,
@@ -352,17 +352,17 @@
   },
   {
     "id": 40,
-    "emoji": "🤲",
-    "title": "Faire une petite tâche pour l’autre",
+    "emoji": "👌",
+    "title": "Avoir un élan bienveillant",
     "needs": ["cooperation", "joy"],
-    "contexts": ["home", "family"],
+    "contexts": ["home", "family","social"],
     "frequency": 3,
     "target": "individual"
   },
   {
     "id": 41,
     "emoji": "🗣️",
-    "title": "Partager une ressource utile",
+    "title": "Partager une astuce de travail",
     "needs": ["communication", "cooperation"],
     "contexts": ["office", "school", "social"],
     "frequency": 3,
@@ -371,7 +371,7 @@
   {
     "id": 42,
     "emoji": "📞",
-    "title": "Appeler ou envoyer un message à un proche",
+    "title": "Contacter un proche",
     "needs": ["communication", "joy"],
     "contexts": ["home"],
     "frequency": 3,
@@ -380,7 +380,7 @@
   {
     "id": 43,
     "emoji": "🤝",
-    "title": "Inviter un ami à se voir",
+    "title": "Manger avec sa famille",
     "needs": ["joy", "inclusion"],
     "contexts": ["home", "social"],
     "frequency": 1,
@@ -389,7 +389,7 @@
   {
     "id": 44,
     "emoji": "🧡",
-    "title": "Demander à quelqu’un comment il va vraiment",
+    "title": "Remonter le moral à un ami",
     "needs": ["communication", "inclusion"],
     "contexts": ["home", "office", "school"],
     "frequency": 3,
@@ -397,8 +397,8 @@
   },
   {
     "id": 45,
-    "emoji": "🙂",
-    "title": "Sourire à un inconnu dans la rue",
+    "emoji": "😊",
+    "title": "Sourire à un inconnu",
     "needs": ["joy", "inclusion"],
     "contexts": ["home"],
     "frequency": 7,
@@ -407,7 +407,7 @@
   {
     "id": 46,
     "emoji": "🤗",
-    "title": "Faire un câlin du jour",
+    "title": "Faire un câlin",
     "needs": ["joy", "comfort"],
     "contexts": ["home", "family"],
     "frequency": 7,
@@ -434,7 +434,7 @@
   {
     "id": 49,
     "emoji": "👏",
-    "title": "Encourager ou motiver quelqu’un",
+    "title": "Encourager quelqu’un",
     "needs": ["communication", "joy"],
     "contexts": ["home", "office", "school"],
     "frequency": 7,
@@ -443,7 +443,7 @@
   {
     "id": 50,
     "emoji": "🙌",
-    "title": "Valoriser une bonne idée de quelqu’un",
+    "title": "Valoriser une bonne idée",
     "needs": ["communication", "participation"],
     "contexts": ["office", "school", "social"],
     "frequency": 3,
@@ -451,8 +451,8 @@
   },
   {
     "id": 51,
-    "emoji": "✨",
-    "title": "Offrir un petit acte de gentillesse",
+    "emoji": "🎁",
+    "title": "Offrir un petit cadeau",
     "needs": ["joy", "cooperation"],
     "contexts": ["home", "office", "school"],
     "frequency": 3,
@@ -461,7 +461,7 @@
   {
     "id": 52,
     "emoji": "🧶",
-    "title": "Inclure une personne en retrait",
+    "title": "Inclure une personne isolée",
     "needs": ["inclusion", "joy"],
     "contexts": ["school", "social", "office"],
     "frequency": 1,
@@ -470,7 +470,7 @@
   {
     "id": 53,
     "emoji": "💡",
-    "title": "Proposer son aide pour un travail",
+    "title": "Proposer son aide",
     "needs": ["cooperation", "participation"],
     "contexts": ["school", "office", "social"],
     "frequency": 3,
@@ -479,7 +479,7 @@
   {
     "id": 54,
     "emoji": "💆‍♀️",
-    "title": "Offrir un petit massage détente",
+    "title": "Offrir un massage court",
     "needs": ["comfort", "joy"],
     "contexts": ["home", "social"],
     "frequency": 1,
@@ -488,7 +488,7 @@
   {
     "id": 55,
     "emoji": "🤐",
-    "title": "S’abstenir de dire un gros mot",
+    "title": "Éviter un gros mot",
     "needs": ["communication", "calm"],
     "contexts": ["home", "school"],
     "frequency": 7,
@@ -497,8 +497,8 @@
   {
     "id": 56,
     "emoji": "🌼",
-    "title": "Penser à un moment chouette de la journée",
-    "needs": ["joy", "calm"],
+    "title": "Penser à un bon moment",
+    "needs": ["joy", "calm","privacy"],
     "contexts": ["home"],
     "frequency": 7,
     "target": "individual"
@@ -506,7 +506,7 @@
   {
     "id": 57,
     "emoji": "🧠",
-    "title": "Se rappeler d’un bon souvenir",
+    "title": "Se rappeler un souvenir doux",
     "needs": ["joy", "calm"],
     "contexts": ["home"],
     "frequency": 7,
@@ -514,8 +514,8 @@
   },
   {
     "id": 58,
-    "emoji": "🕯️",
-    "title": "Créer une soirée plus lente",
+    "emoji": "🧘",
+    "title": "Créer une soirée détente",
     "needs": ["calm", "slowness"],
     "contexts": ["home", "family"],
     "frequency": 1,
@@ -533,7 +533,7 @@
   {
     "id": 60,
     "emoji": "📵",
-    "title": "Couper les écrans après le repas",
+    "title": "Couper les écrans après 21h",
     "needs": ["calm", "slowness"],
     "contexts": ["home"],
     "frequency": 3,
@@ -551,8 +551,8 @@
   {
     "id": 62,
     "emoji": "😴",
-    "title": "S’offrir une sieste de 20 min",
-    "needs": ["sleep", "calm"],
+    "title": "Faire une sieste courte",
+    "needs": ["sleep", "calm","privacy"],
     "contexts": ["home"],
     "frequency": 1,
     "target": "individual"
@@ -560,7 +560,7 @@
   {
     "id": 63,
     "emoji": "🌬️",
-    "title": "Respirer profondément et lentement 2 min",
+    "title": "Respirer lentement 2 min",
     "needs": ["calm"],
     "contexts": ["home", "office", "school"],
     "frequency": 7,
@@ -569,7 +569,7 @@
   {
     "id": 64,
     "emoji": "🧘",
-    "title": "S’asseoir 2 min en silence complet",
+    "title": "S’asseoir 2 min en silence",
     "needs": ["calm", "slowness"],
     "contexts": ["home", "office", "school"],
     "frequency": 7,
@@ -578,7 +578,7 @@
   {
     "id": 65,
     "emoji": "👀",
-    "title": "Prendre 30 sec pour admirer le paysage",
+    "title": "Admirer le paysage 30 sec",
     "needs": ["calm", "nature"],
     "contexts": ["home"],
     "frequency": 7,
@@ -587,7 +587,7 @@
   {
     "id": 66,
     "emoji": "🌿",
-    "title": "Aller prendre l’air 5 min",
+    "title": "Prendre l’air 5 min",
     "needs": ["calm", "nature"],
     "contexts": ["home", "office"],
     "frequency": 7,
@@ -596,16 +596,16 @@
   {
     "id": 67,
     "emoji": "🌳",
-    "title": "Faire une balade dans la nature",
+    "title": "Se balader dans la nature",
     "needs": ["nature", "calm"],
-    "contexts": ["home"],
+    "contexts": ["social"],
     "frequency": 1,
     "target": "individual"
   },
   {
     "id": 68,
     "emoji": "🕊️",
-    "title": "Ramener un peu de sérénité dans la salle",
+    "title": "Apaiser l’ambiance du groupe",
     "needs": ["calm", "participation"],
     "contexts": ["school", "office", "social"],
     "frequency": 1,
@@ -613,8 +613,8 @@
   },
   {
     "id": 69,
-    "emoji": "👀",
-    "title": "Faire attention à un besoin du groupe",
+    "emoji": "🫂",
+    "title": "Veiller au besoin du groupe",
     "needs": ["inclusion", "cooperation"],
     "contexts": ["school", "office", "social"],
     "frequency": 1,
@@ -623,8 +623,8 @@
   {
     "id": 70,
     "emoji": "🤸",
-    "title": "Réveil corporel doux",
-    "needs": ["comfort"],
+    "title": "Faire un réveil corporel",
+    "needs": ["comfort","privacy"],
     "contexts": ["home"],
     "frequency": 7,
     "target": "individual"
@@ -632,7 +632,7 @@
   {
     "id": 71,
     "emoji": "💪",
-    "title": "Faire 30 min d’exercice physique",
+    "title": "Faire 30 min d’exercice",
     "needs": ["comfort"],
     "contexts": ["home"],
     "frequency": 3,
@@ -641,7 +641,7 @@
   {
     "id": 72,
     "emoji": "🤸‍♂️",
-    "title": "Faire des étirements doux",
+    "title": "Faire des étirements",
     "needs": ["comfort"],
     "contexts": ["home", "office"],
     "frequency": 3,
@@ -649,17 +649,17 @@
   },
   {
     "id": 73,
-    "emoji": "🎉",
-    "title": "Célébrer ou partager une réussite",
+    "emoji": "👏",
+    "title": "Applaudir une réussite",
     "needs": ["joy", "participation"],
-    "contexts": ["home", "office", "school"],
+    "contexts": ["home", "office", "school","social"],
     "frequency": 1,
     "target": "group"
   },
   {
     "id": 74,
     "emoji": "📸",
-    "title": "Photographier un détail beau",
+    "title": "Photographier un beau détail",
     "needs": ["expression", "curiosity"],
     "contexts": ["home"],
     "frequency": 3,
@@ -677,7 +677,7 @@
   {
     "id": 76,
     "emoji": "🎶",
-    "title": "Fredonner un air ou une chanson",
+    "title": "Fredonner une chanson",
     "needs": ["joy", "expression"],
     "contexts": ["home", "social"],
     "frequency": 7,
@@ -686,7 +686,7 @@
   {
     "id": 77,
     "emoji": "🎮",
-    "title": "Faire un divertissement court",
+    "title": "Regarder une comédie",
     "needs": ["joy", "entertainment"],
     "contexts": ["home"],
     "frequency": 1,
@@ -696,7 +696,7 @@
     "id": 78,
     "emoji": "🎲",
     "title": "Lancer un jeu collectif",
-    "needs": ["joy", "participation"],
+    "needs": ["joy", "participation","entertainment"],
     "contexts": ["home", "social", "school"],
     "frequency": 1,
     "target": "group"
@@ -704,7 +704,7 @@
   {
     "id": 79,
     "emoji": "🧩",
-    "title": "Résoudre un mini défi",
+    "title": "Résoudre une énigme",
     "needs": ["curiosity", "entertainment"],
     "contexts": ["home", "office"],
     "frequency": 3,
@@ -715,17 +715,97 @@
     "emoji": "🖼️",
     "title": "Faire une sortie culturelle",
     "needs": ["joy", "curiosity"],
-    "contexts": ["home", "social"],
+    "contexts": ["social"],
     "frequency": 1,
     "target": "individual"
   },
   {
     "id": 81,
     "emoji": "✍️",
-    "title": "Écrire 3 lignes pour vider la tête",
+    "title": "Écrire 3 lignes",
     "needs": ["expression", "calm"],
     "contexts": ["home", "office"],
     "frequency": 7,
     "target": "individual"
-  }
-]
+  },
+  {
+  "id": 82,
+  "emoji": "🖼️",
+  "title": "Ajouter une touche déco",
+  "needs": ["comfort", "joy"],
+  "contexts": ["home", "office", "social"],
+  "frequency": 1,
+  "target": "group"
+},
+{
+  "id": 83,
+  "emoji": "🪜",
+  "title": "Prendre les escaliers",
+  "needs": ["comfort", "movement"],
+  "contexts": ["office", "school", "social"],
+  "frequency": 7,
+  "target": "individual"
+},
+{
+  "id": 84,
+  "emoji": "📘",
+  "title": "Lire 10 pages",
+  "needs": ["calm", "curiosity"],
+  "contexts": ["home", "office"],
+  "frequency": 3,
+  "target": "individual"
+},
+{
+  "id": 85,
+  "emoji": "🔧",
+  "title": "Faire du bricolage",
+  "needs": ["equipment", "participation", "joy"],
+  "contexts": ["home", "social"],
+  "frequency": 1,
+  "target": "individual"
+},
+{
+  "id": 86,
+  "emoji": "🕺",
+  "title": "Danser 30 secondes",
+  "needs": ["joy", "movement"],
+  "contexts": ["home", "social"],
+  "frequency": 7,
+  "target": "individual"
+},
+{
+  "id": 87,
+  "emoji": "📻",
+  "title": "Écouter un podcast",
+  "needs": ["curiosity", "calm"],
+  "contexts": ["home", "office"],
+  "frequency": 3,
+  "target": "individual"
+},
+{
+  "id": 88,
+  "emoji": "🤣",
+  "title": "Apporter une touche d’humour",
+  "needs": ["joy", "communication"],
+  "contexts": ["home", "office", "school", "social"],
+  "frequency": 3,
+  "target": "group"
+},
+{
+  "id": 89,
+  "emoji": "🌸",
+  "title": "Sentir un parfum agréable",
+  "needs": ["calm", "sense"],
+  "contexts": ["home", "office"],
+  "frequency": 3,
+  "target": "individual"
+}
+];
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = LIBRARY_JSON_DATA;
+  module.exports.default = LIBRARY_JSON_DATA;
+}
+if (typeof window !== "undefined") {
+  window.LIBRARY_JSON_DATA = LIBRARY_JSON_DATA;
+}

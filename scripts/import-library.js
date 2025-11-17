@@ -15,9 +15,14 @@ const hasFlag = flag => args.includes(`--${flag}`);
 const resolveLibraryPath = () => {
   const explicit = parse('libraryPath');
   if (explicit) return path.resolve(explicit);
-  const candidates = ['library.json', path.join('public', 'library.json')];
+  const candidates = [
+    'library.js',
+    path.join('public', 'library.js'),
+    'library.json',
+    path.join('public', 'library.json')
+  ];
   const found = candidates.map(candidate => path.resolve(candidate)).find(fs.existsSync);
-  return found || path.resolve('library.json');
+  return found || path.resolve('library.js');
 };
 const libraryPath = resolveLibraryPath();
 const serviceAccountPath = parse('serviceAccount') || process.env.GOOGLE_APPLICATION_CREDENTIALS;
@@ -40,22 +45,29 @@ admin.initializeApp({
 const db = admin.firestore();
 
 async function main() {
-  if (!fs.existsSync(libraryPath)) {
-    console.error(`Library file not found at ${libraryPath}`);
+  const resolvedLibraryPath = path.resolve(libraryPath);
+  if (!fs.existsSync(resolvedLibraryPath)) {
+    console.error(`Library file not found at ${resolvedLibraryPath}`);
     process.exit(1);
   }
 
-  const raw = fs.readFileSync(libraryPath, 'utf8');
+  const raw = fs.readFileSync(resolvedLibraryPath, 'utf8');
   const hash = crypto.createHash('sha256').update(raw).digest('hex');
   let library;
   try {
-    library = JSON.parse(raw);
+    if (path.extname(resolvedLibraryPath).toLowerCase() === '.js') {
+      delete require.cache[require.resolve(resolvedLibraryPath)];
+      library = require(resolvedLibraryPath);
+      library = (library && library.default) || library;
+    } else {
+      library = JSON.parse(raw);
+    }
   } catch (err) {
-    console.error('Failed to parse library.json:', err.message);
+    console.error(`Failed to parse ${path.basename(resolvedLibraryPath)}:`, err.message);
     process.exit(1);
   }
   if (!Array.isArray(library)) {
-    console.error('Expected library.json to export an array of habits.');
+    console.error(`Expected ${path.basename(resolvedLibraryPath)} to export an array of habits.`);
     process.exit(1);
   }
 
@@ -103,7 +115,7 @@ async function main() {
     hash,
     importedAt: admin.firestore.FieldValue.serverTimestamp(),
     count: library.length,
-    sourcePath: libraryPath
+    sourcePath: resolvedLibraryPath
   }, { merge: true });
 
   console.log('Import complete.');

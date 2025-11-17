@@ -8,17 +8,45 @@ service cloud.firestore {
         : '';
     }
 
+    function currentEmail() {
+      return request.auth != null &&
+        request.auth.token.email is string
+        ? (request.auth.token.email as string).toLowerCase()
+        : '';
+    }
+
     function isSpaceOwner(spaceData) {
       return request.auth != null &&
         spaceData.ownerId is string &&
         spaceData.ownerId == currentUid();
     }
 
+    function isSpaceMember(spaceData) {
+      if (request.auth == null || !(spaceData.members is list)) {
+        return false;
+      }
+      const members = spaceData.members;
+      const uid = currentUid();
+      if (uid != '' && members.hasAny([uid])) {
+        return true;
+      }
+      const email = currentEmail();
+      if (email != '' && members.hasAny([email])) {
+        return true;
+      }
+      return false;
+    }
+
     function canAccessSpace(spaceId) {
-      return request.auth != null &&
-        spaceId is string &&
-        get(/databases/$(database)/documents/spaces/$(spaceId)).exists &&
-        isSpaceOwner(get(/databases/$(database)/documents/spaces/$(spaceId)).data);
+      if (request.auth == null || !(spaceId is string)) {
+        return false;
+      }
+      const snapshot = get(/databases/$(database)/documents/spaces/$(spaceId));
+      if (!snapshot.exists) {
+        return false;
+      }
+      const spaceData = snapshot.data;
+      return isSpaceOwner(spaceData) || isSpaceMember(spaceData);
     }
 
     function ownerIdUnchanged(resourceData) {
@@ -27,7 +55,7 @@ service cloud.firestore {
     }
 
     match /spaces/{spaceId} {
-      allow read: if request.auth != null && isSpaceOwner(resource.data);
+      allow read: if request.auth != null && (isSpaceOwner(resource.data) || isSpaceMember(resource.data));
       allow create: if request.auth != null && request.resource.data.ownerId == currentUid();
       allow update: if request.auth != null &&
         resource.data != null &&
