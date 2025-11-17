@@ -2194,27 +2194,27 @@
           <div>Préférences</div><button class="closeX" id="closePrefs">⨉</button>
         </div>
         <div class="sheetBody">
-        <div class="grid">
-          <div class="field">
-            <label><b>Afficher les astuces</b></label>
-            <select id="prefsTipsDisplayMode" class="select">
-              <option value="auto">Auto (en cours seulement)</option>
-              <option value="oui">Oui</option>
-              <option value="non">Non</option>
-            </select>
-          </div>
-          <div class="field">
-            <label><b>Bouton d'édition</b></label>
-            <select id="prefsEditButtonDisplay" class="select">
-              <option value="auto">Auto (en cours seulement)</option>
-              <option value="oui">Oui</option>
-              <option value="non">Non</option>
-            </select>
+          <div class="grid">
+            <div class="field">
+              <label><b>Afficher les astuces</b></label>
+              <select id="prefsTipsDisplayMode" class="select">
+                <option value="auto">Auto (en cours seulement)</option>
+                <option value="oui">Oui</option>
+                <option value="non">Non</option>
+              </select>
+            </div>
+            <div class="field">
+              <label><b>Bouton d'édition</b></label>
+              <select id="prefsEditButtonDisplay" class="select">
+                <option value="auto">Auto (en cours seulement)</option>
+                <option value="oui">Oui</option>
+                <option value="non">Non</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
     <div class="modal join" id="modalJoin">
       <div class="sheet">
@@ -2455,7 +2455,7 @@
         if (!tipEl) return;
         const info = pickLoaderTip(seed, habit);
         const tipText = info.text || 'Une astuce pour démarrer.';
-        tipEl.textContent = `Astuce : ${tipText}`;
+        tipEl.textContent = `💡${tipText}`;
       }
       function buildLoaderHabitTags(habit) {
         if (!habit) return ['#habitude'];
