@@ -442,7 +442,7 @@ const LIBRARY_JSON_DATA = [
   },
   {
     "id": 22,
-    "emoji": "💻",
+    "emoji": "🗄️",
     "title": "Ranger son bureau",
     "needs": ["organization", "cleanliness"],
     "contexts": ["home", "office"],
@@ -482,31 +482,31 @@ const LIBRARY_JSON_DATA = [
       "Remercier le groupe pour le coup de main"
     ]
   },
-  {
-    "id": 24,
-    "emoji": "🖥️",
-    "title": "Ranger le poste de travail",
-    "needs": ["organization", "cleanliness"],
-    "contexts": ["office"],
-    "frequency": 3,
-    "target": "individual",
-    "tips": [
-      "Vider la table de tout ce qui n’est pas utile",
-      "Rassembler les documents dans un porte-dossier",
-      "Ranger clavier et souris sous l’écran",
-      "Éteindre ou mettre en veille l’ordinateur",
-      "Essuyer rapidement la surface du bureau",
-      "Dégager la zone autour de la chaise",
-      "Ranger les fournitures dans un tiroir dédié",
-      "Jeter les papiers déjà traités",
-      "Laisser un seul objet sympa sur le bureau",
-      "Quitter le poste en le trouvant agréable"
-    ]
-  },
+ {
+  "id": 24,
+  "emoji": "💻",
+  "title": "Trier ses outils numériques",
+  "needs": ["organization", "calm"],
+  "contexts": ["office"],
+  "frequency": 3,
+  "target": "individual",
+  "tips": [
+    "Supprimer les fichiers inutiles",
+    "Classer les documents dans des dossiers clairs",
+    "Renommer les fichiers ambigus",
+    "Vider la corbeille",
+    "Mettre à jour les applis essentielles",
+    "Désinstaller ce que tu n’utilises plus",
+    "Faire un point sur les onglets ouverts",
+    "Sauvegarder un dossier important",
+    "Vérifier l’espace de stockage",
+    "Conserver un écran d’accueil épuré"
+  ]
+},
   {
     "id": 25,
-    "emoji": "📦",
-    "title": "Vérifier les fournitures communes",
+    "emoji": "🖋️",
+    "title": "Vérifier les fournitures de bureau",
     "needs": ["organization", "equipment"],
     "contexts": ["office", "school"],
     "frequency": 1,
@@ -842,7 +842,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 41,
     "emoji": "🗣️",
-    "title": "Partager une astuce de travail",
+    "title": "Partager une astuce productive",
     "needs": ["communication", "cooperation"],
     "contexts": ["office", "school", "social"],
     "frequency": 3,

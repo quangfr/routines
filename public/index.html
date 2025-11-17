@@ -130,7 +130,9 @@
     }
 
     .brand {
-      font-weight: 800;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.1em;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -183,7 +185,6 @@
     .loader-title {
       font-size: 28px;
       font-weight: 700;
-      text-transform: uppercase;
       letter-spacing: 0.1em;
     }
 
@@ -209,17 +210,31 @@
       color: #4d4d4d;
     }
 
-    .loader-habit-index {
-      font-size: 16px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
+    .loader-habit-tags {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: lowercase;
+      color: #6c6c6c;
     }
 
     .loader-habit-name {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 600;
       max-width: 260px;
       text-align: center;
+    }
+
+    .loader-tip {
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: lowercase;
+      color: #6c6c6c;
+      max-width: 280px;
+      text-align: center;
+      line-height: 1.4;
     }
 
     .loader-version {
@@ -756,19 +771,6 @@
     .title .base.strike {
       text-decoration: line-through;
       opacity: .75
-    }
-
-    .infoBtn {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      padding: 4px 6px;
-      border-radius: var(--r);
-      font-size: 11px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: inherit;
-      cursor: pointer;
     }
 
     .desc {
@@ -1684,9 +1686,10 @@
       <div class="loader-title">Habitube.com</div>
       <div class="loader-emoji" id="loaderEmoji">🌰</div>
       <div class="loader-habit">
-        <div class="loader-habit-index" id="loaderHabitIndex">#0</div>
+        <div class="loader-habit-tags" id="loaderHabitTags"></div>
         <div class="loader-habit-name" id="loaderHabitName">Une habitude</div>
       </div>
+      <div class="loader-tip" id="loaderTip"></div>
     </div>
     <div class="loader-version" id="loaderVersion"></div>
   </div>
@@ -1956,26 +1959,6 @@
               <textarea id="spaceDescInfo"
                 placeholder="Présentez le jardin, les règles et l’état d’esprit. Cliquez pour éditer."></textarea>
             </div>
-            <div class="field">
-              <label><b>Affiche des notes</b></label>
-              <select id="notesDisplayMode" class="select">
-                <option value="dynamic" selected>Dynamique</option>
-                <option value="info">Bouton d'info</option>
-                <option value="show">Tout afficher</option>
-                <option value="hide">Tout cacher</option>
-              </select>
-            </div>
-            <div class="field">
-              <label><b>Mode d'organisation</b></label>
-              <div class="org-mode-buttons" id="spaceOrgButtons">
-                <button type="button" class="org-mode-btn" data-mode="day">À la journée</button>
-                <button type="button" class="org-mode-btn" data-mode="week">À la semaine</button>
-              </div>
-              <select id="spaceOrgMode" class="select hide" disabled>
-                <option value="day">À la journée</option>
-                <option value="week">À la semaine</option>
-              </select>
-            </div>
             <div class="field hide" id="autoWeekField">
               <label><b>Affection hebdomadaire automatique</b></label>
               <select id="autoWeekAffection" class="select">
@@ -1989,13 +1972,6 @@
               <select id="spaceEditorRights" class="select">
                 <option value="admin">Admin</option>
                 <option value="registered">Utilisateurs enregistrés</option>
-              </select>
-            </div>
-            <div class="field">
-              <label><b>Mode d'édition</b></label>
-              <select id="spaceEditButton" class="select">
-                <option value="yes">Oui</option>
-                <option value="no">Non</option>
               </select>
             </div>
             <div class="field owner-controls hide" id="ownerControls">
@@ -2179,27 +2155,10 @@
         <div class="sheetBody">
           <div class="grid">
             <div class="field">
-              <label><b>Afficher des notes</b></label>
-              <select id="prefsNotesDisplayMode" class="select">
-                <option value="dynamic">Dynamique</option>
-                <option value="info">Bouton d'info</option>
-                <option value="show">Tout afficher</option>
-                <option value="hide">Tout cacher</option>
-              </select>
-            </div>
-            <div class="field">
-              <label><b>Afficher le bouton d'édition</b></label>
-              <select id="prefsEditButtonMode" class="select">
-                <option value="yes">Oui</option>
-                <option value="no">Non</option>
-                <option value="dynamic">Dynamique</option>
-              </select>
-            </div>
-            <div class="field">
               <label><b>Afficher les astuces</b></label>
               <select id="prefsTipsDisplayMode" class="select">
-                <option value="absence">En l'absence de note</option>
-                <option value="never">Jamais</option>
+                <option value="absence">Dynamique</option>
+                <option value="never">Non</option>
               </select>
             </div>
           </div>
@@ -2276,6 +2235,120 @@
 
       /* Utils */
       const APP_VERSION = '0.0.2';
+      const NEED_EMOJIS = {
+        affection: '❤️',
+        joy: '😄',
+        joie: '😄',
+        calme: '🕊️',
+        calm: '🕊️',
+        nature: '🌿',
+        nutrition: '🍎',
+        organization: '🗂️',
+        organisation: '🗂️',
+        movement: '🏃',
+        mouvement: '🏃',
+        lien: '🔗',
+        sens: '🎯',
+        energie: '⚡',
+        energy: '⚡',
+        expression: '🗣️',
+        communication: '🗣️',
+        cooperation: '🤝',
+        participation: '🙌',
+        curiosity: '🔍',
+        curiosite: '🔍',
+        inclusion: '🌈',
+        equipment: '🧰',
+        comfort: '🛋️',
+        sleep: '😴',
+        sommeil: '😴',
+        entertainment: '🎭',
+        cleaning: '🧽',
+        cleanliness: '🧼',
+        hygiene: '🧼',
+        privacy: '🛡️',
+        intimite: '🛡️',
+        slowness: '🐢',
+        lenteur: '🐢'
+      };
+      function slugifyTag(text) {
+        const base = (text || '').toString();
+        const normalized = base.normalize ? base.normalize('NFD') : base;
+        return normalized
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)+/g, '') || 'habitude';
+      }
+      function prettifyTag(tag) {
+        if (!tag) return '';
+        return tag
+          .split(/[-_ ]+/)
+          .filter(Boolean)
+          .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+          .join(' ');
+      }
+      const TAG_TRANSLATIONS = {
+        affection: 'Affection',
+        calm: 'Calme',
+        cleanliness: 'Propreté',
+        comfort: 'Confort',
+        communication: 'Communication',
+        cooperation: 'Coopération',
+        curiosity: 'Curiosité',
+        entertainment: 'Divertissement',
+        equipment: 'Matériel',
+        expression: 'Expression',
+        hygiene: 'Hygiène',
+        inclusion: 'Inclusion',
+        joy: 'Joie',
+        nature: 'Nature',
+        nutrition: 'Nutrition',
+        organization: 'Organisation',
+        participation: 'Participation',
+        privacy: 'Intimité',
+        safety: 'Sécurité',
+        school: 'École',
+        sleep: 'Sommeil',
+        slowness: 'Lenteur',
+        social: 'Social',
+        family: 'Famille',
+        home: 'Maison',
+        office: 'Bureau'
+      };
+      const MODE_META = {
+        libre: { label: 'Individuel', shortLabel: 'Moi 👤', emoji: '👤', target: 'individual' },
+        commun: { label: 'Partagé', shortLabel: 'Tout le monde 👥', emoji: '👥', target: 'group' }
+      };
+      const CONTEXT_EMOJIS = {
+        family: '👨‍👩‍👧‍👦',
+        home: '🏡',
+        office: '🏢',
+        school: '🏫',
+        social: '🧑‍🤝‍🧑'
+      };
+      function normalizeTagKey(tag) {
+        if (!tag) return '';
+        const value = tag.toString();
+        const normalized = value.normalize ? value.normalize('NFD') : value;
+        return normalized.replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+      }
+      function translateTag(tag) {
+        const key = normalizeTagKey(tag);
+        return TAG_TRANSLATIONS[key] || prettifyTag(tag);
+      }
+      function getTagEmoji(tag, type) {
+        if (!type) return '';
+        const key = normalizeTagKey(tag);
+        const emojiMap = type === 'context' ? CONTEXT_EMOJIS : type === 'need' ? NEED_EMOJIS : null;
+        return emojiMap?.[key] || '';
+      }
+      function formatTagLabel(tag, type) {
+        const label = translateTag(tag);
+        const emoji = getTagEmoji(tag, type);
+        return `${emoji ? `${emoji} ` : ''}${label}`;
+      }
+
       const FALLBACK_LOADER_HABITS = [
         { id: 'fallback-1', emoji: '🌱', title: 'Cultiver un rituel matinal' },
         { id: 'fallback-2', emoji: '🌿', title: 'Respirer profondément' },
@@ -2283,8 +2356,16 @@
         { id: 'fallback-4', emoji: '🌞', title: 'Programmer un sourire' },
         { id: 'fallback-5', emoji: '🌻', title: 'Noter un petit mérite' }
       ];
+      const FALLBACK_LOADER_TIPS = [
+        "Respire profondément trois fois avant de commencer.",
+        "Prépare ton espace pour éviter la procrastination.",
+        "Rappelle-toi pourquoi cette habitude compte pour toi.",
+        "Commence petit et laisse-toi la place pour ajuster.",
+        "Célèbre un petit progrès, même discret.",
+        "Partage ton avancée avec un proche motivant."
+      ];
       const DEFAULT_DURATION = 15;
-      const LOADER_ROTATION_MS = 10000;
+      const LOADER_ROTATION_MS = 60000;
       const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
       const setLoaderVersion = () => {
         const versionEl = $('#loaderVersion');
@@ -2312,19 +2393,72 @@
         const habit = candidates[idx];
         const label = habit.title || habit.titre || 'Une habitude';
         const indexValue = habit.id ?? (idx + 1);
-        return { emoji: habit.emoji || '🌱', title: label, index: indexValue };
+        return { emoji: habit.emoji || '🌱', title: label, index: indexValue, habit };
       }
       function refreshLoaderHabit(seed = '') {
         const info = pickLoaderHabit(seed);
         const emojiEl = $('#loaderEmoji');
-        const indexEl = $('#loaderHabitIndex');
         const nameEl = $('#loaderHabitName');
         if (emojiEl) emojiEl.textContent = info.emoji || '🌱';
-        if (indexEl) indexEl.textContent = info.index ? `#${info.index}` : '#0';
         if (nameEl) nameEl.textContent = info.title || 'Une habitude';
+        return info;
+      }
+      function pickLoaderTip(seed = '', habit = null) {
+        const normalizedSeed = String(seed || getLoaderMinuteSeed());
+        const tips = (Array.isArray(habit?.tips) ? habit.tips.filter(t => typeof t === 'string' && t.trim()) : [])
+          .map(t => t.trim());
+        const candidates = tips.length ? tips : FALLBACK_LOADER_TIPS;
+        if (!candidates.length) {
+          return { text: '' };
+        }
+        const hash = hashStr(`loader-tip:${habit?.id ?? habit?.title ?? 'fallback'}:${normalizedSeed}`);
+        const idx = ((hash % candidates.length) + candidates.length) % candidates.length;
+        return { text: candidates[idx] || '' };
+      }
+      function refreshLoaderTip(seed = '', habit = null) {
+        const tipEl = $('#loaderTip');
+        if (!tipEl) return;
+        const info = pickLoaderTip(seed, habit);
+        const tipText = info.text || 'Une astuce pour démarrer.';
+        tipEl.textContent = `Astuce : ${tipText}`;
+      }
+      function buildLoaderHabitTags(habit) {
+        if (!habit) return ['#habitude'];
+        const sources = [];
+        ['needs', 'contexts', 'tags'].forEach(key => {
+          const values = habit?.[key];
+          if (Array.isArray(values)) {
+            values.forEach(value => {
+              if (value) sources.push(value);
+            });
+          }
+        });
+        const seen = new Set();
+        const tags = [];
+        sources.forEach(value => {
+          const translated = translateTag(value) || value?.toString?.();
+          const slug = slugifyTag(translated || value);
+          if (!slug) return;
+          if (seen.has(slug)) return;
+          seen.add(slug);
+          tags.push(`#${slug}`);
+        });
+        return tags.length ? tags.slice(0, 3) : ['#habitude'];
+      }
+      function refreshLoaderTags(habit) {
+        const tagsEl = $('#loaderHabitTags');
+        if (!tagsEl) return;
+        const tags = buildLoaderHabitTags(habit);
+        tagsEl.textContent = tags.join(' ');
+      }
+      function refreshLoader(seed = '') {
+        const info = refreshLoaderHabit(seed);
+        refreshLoaderTip(seed, info.habit);
+        refreshLoaderTags(info.habit);
+        return info;
       }
       setLoaderVersion();
-      refreshLoaderHabit(getLoaderMinuteSeed());
+      refreshLoader(getLoaderMinuteSeed());
       /* ===== Sticky header offsets ===== */
       const stickyRoot = document.documentElement;
       function refreshStickyOffsets() {
@@ -2390,127 +2524,6 @@
       const round15 = m => Math.round(m / 15) * 15;
       function lvlEmoji(v) { if (v <= 7) return '🌰'; if (v <= 14) return '🌱'; if (v <= 21) return '🍀'; if (v <= 28) return '🌼'; if (v <= 35) return '🌻'; if (v <= 42) return '🌷'; if (v <= 49) return '🌹'; if (v <= 56) return '🪻'; if (v <= 64) return '💐'; return '🎋'; }
       function names(xs, m = 3) { if (xs.length <= m) return xs.join(', '); const s = xs.slice(0, m).join(', '); return `${s}… et ${xs.length - m} autres`; }
-      function slugifyTag(text) {
-        const base = (text || '').toString();
-        const normalized = base.normalize ? base.normalize('NFD') : base;
-        return normalized
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/(^-|-$)+/g, '') || 'habitude';
-      }
-      function prettifyTag(tag) {
-        if (!tag) return '';
-        return tag
-          .split(/[-_ ]+/)
-          .filter(Boolean)
-          .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-          .join(' ');
-      }
-
-      const TAG_TRANSLATIONS = {
-        affection: 'Affection',
-        calm: 'Calme',
-        cleanliness: 'Propreté',
-        comfort: 'Confort',
-        communication: 'Communication',
-        cooperation: 'Coopération',
-        curiosity: 'Curiosité',
-        entertainment: 'Divertissement',
-        equipment: 'Matériel',
-        expression: 'Expression',
-        hygiene: 'Hygiène',
-        inclusion: 'Inclusion',
-        joy: 'Joie',
-        nature: 'Nature',
-        nutrition: 'Nutrition',
-        organization: 'Organisation',
-        participation: 'Participation',
-        privacy: 'Intimité',
-        safety: 'Sécurité',
-        school: 'École / Classe',
-        sleep: 'Sommeil',
-        slowness: 'Lenteur',
-        social: 'Social / Groupe',
-        family: 'Famille / Couple',
-        home: 'Maison / Logement',
-        office: 'Bureau / Équipe'
-      };
-
-      const MODE_META = {
-        libre: { label: 'Individuel', shortLabel: 'Moi 👤', emoji: '👤', target: 'individual' },
-        commun: { label: 'Partagé', shortLabel: 'Tout le monde 👥', emoji: '👥', target: 'group' }
-      };
-
-      const CONTEXT_EMOJIS = {
-        family: '👨‍👩‍👧‍👦',
-        home: '🏡',
-        office: '🏢',
-        school: '🏫',
-        social: '🧑‍🤝‍🧑'
-      };
-
-      const NEED_EMOJIS = {
-        affection: '❤️',
-        joy: '😄',
-        joie: '😄',
-        calme: '🕊️',
-        calm: '🕊️',
-        nature: '🌿',
-        nutrition: '🍎',
-        organization: '🗂️',
-        organisation: '🗂️',
-        movement: '🏃',
-        mouvement: '🏃',
-        lien: '🔗',
-        sens: '🎯',
-        energie: '⚡',
-        energy: '⚡',
-        expression: '🗣️',
-        communication: '🗣️',
-        cooperation: '🤝',
-        participation: '🙌',
-        curiosity: '🔍',
-        curiosite: '🔍',
-        inclusion: '🌈',
-        equipment: '🧰',
-        comfort: '🛋️',
-        sleep: '😴',
-        sommeil: '😴',
-        entertainment: '🎭',
-        cleaning: '🧽',
-        cleanliness: '🧼',
-        hygiene: '🧼',
-        privacy: '🛡️',
-        intimite: '🛡️',
-        slowness: '🐢',
-        lenteur: '🐢'
-      };
-
-      function normalizeTagKey(tag) {
-        if (!tag) return '';
-        const value = tag.toString();
-        const normalized = value.normalize ? value.normalize('NFD') : value;
-        return normalized.replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-      }
-
-      function translateTag(tag) {
-        const key = normalizeTagKey(tag);
-        return TAG_TRANSLATIONS[key] || prettifyTag(tag);
-      }
-
-      function getTagEmoji(tag, type) {
-        if (!type) return '';
-        const key = normalizeTagKey(tag);
-        const emojiMap = type === 'context' ? CONTEXT_EMOJIS : type === 'need' ? NEED_EMOJIS : null;
-        return emojiMap?.[key] || '';
-      }
-
-      function formatTagLabel(tag, type) {
-        const label = translateTag(tag);
-        const emoji = getTagEmoji(tag, type);
-        return emoji ? `${emoji} ${label}` : label;
-      }
       const INSTALL_PROMPT_STORAGE_KEY = 'habitu-install-prompt-seen';
       const INSTALL_PROMPT_SUPPRESSION_MS = 15 * 24 * 60 * 60 * 1000;
       const INSTALL_PROMPT_FIRST_HABIT_KEY = 'habitu-install-first-habit';
@@ -2825,8 +2838,9 @@
           updateAddModalOptions();
           return;
         }
-        localStorage.setItem(STORAGE_USER_PROFILE, JSON.stringify(profile));
-        currentProfile = profile;
+        const nextProfile = { ...(currentProfile || {}), ...profile };
+        localStorage.setItem(STORAGE_USER_PROFILE, JSON.stringify(nextProfile));
+        currentProfile = nextProfile;
         setSessionCookie();
         updateAddModalOptions();
       }
@@ -3110,9 +3124,42 @@
       }
       function persistUserProfile(profile) {
         if (!HABITU_FIREBASE_DB || !profile?.uid) return Promise.resolve();
+        const payload = {
+          name: profile.name,
+          email: profile.email,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        if (profile.tipsDisplayMode) {
+          payload.tipsDisplayMode = profile.tipsDisplayMode;
+        }
         return HABITU_FIREBASE_DB.collection('users').doc(profile.uid)
-          .set({ name: profile.name, email: profile.email, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+          .set(payload, { merge: true })
           .catch(e => console.warn('persistUserProfile', e));
+      }
+
+      async function loadRemoteUserProfile(uid) {
+        if (!HABITU_FIREBASE_DB || !uid) return null;
+        try {
+          const snapshot = await HABITU_FIREBASE_DB.collection('users').doc(uid).get();
+          if (!snapshot.exists) return null;
+          return snapshot.data() || null;
+        } catch (err) {
+          console.warn('loadRemoteUserProfile', err);
+          return null;
+        }
+      }
+
+      async function updateUserTipsDisplayMode(mode) {
+        if (!currentProfile) return;
+        const normalized = mode === 'never' ? 'never' : 'absence';
+        const updated = { ...currentProfile, tipsDisplayMode: normalized };
+        persistProfile(updated);
+        await persistUserProfile({
+          uid: updated.uid,
+          email: updated.email,
+          name: updated.name,
+          tipsDisplayMode: normalized
+        });
       }
       function persistSpaceDoc(spaceId, data = {}) {
         if (!HABITU_FIREBASE_DB || !spaceId) return Promise.resolve();
@@ -3259,12 +3306,10 @@
             const memberMatches = normalized && memberEmails.includes(normalized);
             const userMatches = normalizedUserId && userIds.includes(normalizedUserId);
             if (ownerMatches || memberMatches || userMatches) {
-              const enabledEditButton = raw.editButton !== false;
               spaces.push({
                 ...data,
                 members: sanitizedMembers,
                 memberIdByEmail: idByEmail,
-                editButton: enabledEditButton,
                 memberSettings
               });
             }
@@ -3462,7 +3507,7 @@
           });
         });
         refreshLibraryTags();
-        refreshLoaderHabit(getLoaderMinuteSeed());
+        refreshLoader(getLoaderMinuteSeed());
       }
       async function resetFirestoreState(profile) {
         clearLocalState();
@@ -3603,15 +3648,6 @@
       /* Tag "Individuel" — supprimé */
       function ensureModeTag() { /* no-op */ }
 
-      /* Description open/close */
-      let openCard = null;
-      function collapseOpenDesc() {
-        if (!openCard) return;
-        const d = openCard.querySelector('.desc');
-        if (d) { d.classList.remove('open'); d.classList.add('hidden'); d.textContent = d.dataset.short || ''; }
-        openCard.classList.remove('ready'); openCard = null;
-      }
-      document.addEventListener('click', e => { if (openCard && !e.target.closest('.card')) collapseOpenDesc(); }, { capture: true })
       function setupDesc(desc, hid, { tipSeed = '' } = {}) {
         const stored = HABIT_DESC[hid] || '';
         const tipInfo = pickHabitTip(hid, tipSeed);
@@ -3626,13 +3662,8 @@
         desc.classList.remove('open');
       }
 
-      function getNotesDisplayMode() {
-        const sp = getSpace();
-        return (sp?.notesDisplayMode || 'dynamic');
-      }
       function getTipsDisplayMode() {
-        const sp = getSpace();
-        return (sp?.tipsDisplayMode || 'absence');
+        return currentProfile?.tipsDisplayMode || 'absence';
       }
       function getDescTipSeed(baseDate = curDate()) {
         const anchor = isWeekMode() ? getWeekStart(baseDate) : new Date(baseDate);
@@ -3663,9 +3694,8 @@
         return { text: tips[safeIndex], index: safeIndex, count: tips.length, habit };
       }
 
-      function applyNoteDisplayMode(desc, infoBtn, { state = 0 } = {}) {
+      function applyNoteDisplayMode(desc, { state = 0 } = {}) {
         if (!desc) return;
-        const mode = getNotesDisplayMode();
         const hasNote = desc.dataset.has === '1';
         const fullText = desc.dataset.full || '';
         const shortText = desc.dataset.short || '';
@@ -3683,37 +3713,14 @@
           desc.textContent = shortText;
         };
         if (tipsMode === 'absence' && !hasNote && tipText) {
-          if (infoBtn) infoBtn.style.display = 'none';
           desc.textContent = tipText;
           desc.classList.remove('hidden');
           desc.classList.add('open');
           return;
         }
-        if (mode === 'show') {
-          if (infoBtn) infoBtn.style.display = 'none';
+        if (numericState === 1 && hasNote) {
           showFull();
-          return;
-        }
-        if (mode === 'hide') {
-          if (infoBtn) infoBtn.style.display = 'none';
-          desc.textContent = '';
-          desc.classList.remove('open');
-          desc.classList.add('hidden');
-          return;
-        }
-        if (mode === 'dynamic') {
-          if (infoBtn) infoBtn.style.display = 'none';
-          if (numericState === 1 && hasNote) {
-            showFull();
-          } else {
-            hideShort();
-          }
-          return;
-        }
-        if (infoBtn) {
-          infoBtn.style.display = hasNote ? 'inline-flex' : 'none';
-        }
-        if (!hasNote) {
+        } else {
           hideShort();
         }
       }
@@ -3723,12 +3730,7 @@
       function getSpace() { return (spaceId && SPACES[spaceId]) || null; }
       function isWeekMode() { return getSpace()?.orgMode === 'week'; }
       function shouldShowEditButton(state = 0) {
-        const sp = getSpace();
-        if (!sp) return false;
-        const mode = (sp.editButtonMode || 'dynamic').toString();
-        if (mode === 'yes') return true;
-        if (mode === 'no') return false;
-        return state === 1;
+        return Number(state) === 1;
       }
       function getSpaceEarliestDate() {
         const sp = getSpace();
@@ -3888,7 +3890,6 @@
 
       /* Cartes */
       function renderCards() {
-        collapseOpenDesc();
         const root = $("#cards");
         root.innerHTML = '';
         if (!spaceId) return;
@@ -3937,13 +3938,6 @@
             const desc = document.createElement('div');
             desc.className = 'desc';
             setupDesc(desc, it.id, { tipSeed: viewTipSeed });
-            const infoBtn = document.createElement('button');
-            infoBtn.type = 'button';
-            infoBtn.className = 'infoBtn';
-            infoBtn.textContent = 'ℹ️';
-            const hasNote = desc.dataset.has === '1';
-            infoBtn.title = hasNote ? 'Afficher la note' : '';
-            title.appendChild(infoBtn);
 
             const friends = document.createElement('div');
             friends.className = 'friends';
@@ -4100,42 +4094,6 @@
               }
             };
 
-            const ensureOpenDesc = () => {
-              if (getNotesDisplayMode() !== 'info') return;
-              if (openCard !== card) {
-                collapseOpenDesc();
-                openCard = card;
-              }
-              if (!desc.classList.contains('open')) {
-                desc.classList.remove('hidden');
-                desc.classList.add('open');
-                desc.textContent = desc.dataset.full || '';
-              }
-            };
-            const hideDescNow = () => {
-              desc.classList.remove('open');
-              desc.classList.add('hidden');
-              desc.textContent = desc.dataset.short || '';
-              if (openCard === card) openCard = null;
-              if (desc.dataset.has === '1') {
-                infoBtn.title = 'Afficher la note';
-              }
-            };
-            const toggleNote = () => {
-              if (desc.dataset.has !== '1') return;
-              if (desc.classList.contains('open')) {
-                hideDescNow();
-              } else {
-                ensureOpenDesc();
-                infoBtn.title = 'Masquer la note';
-              }
-            };
-            infoBtn.addEventListener('click', e => {
-              if (getNotesDisplayMode() !== 'info') return;
-              e.stopPropagation();
-              toggleNote();
-            });
-
             const applyState = (nst, { keepOwner = false } = {}) => {
               btn.dataset.state = String(nst);
               const previousOwner = (btn.dataset.owner || '').trim();
@@ -4153,7 +4111,7 @@
               setVisualFromState(nst);
               renderBadges();
               renderWeeklyProgress();
-              applyNoteDisplayMode(desc, infoBtn, { state: nst });
+              applyNoteDisplayMode(desc, { state: nst });
               manageEditButton();
               scheduleHabitActivity(it.id, {
                 type: 'realization',
@@ -4252,7 +4210,7 @@
             setVisualFromState(state);
             renderBadges();
             renderWeeklyProgress();
-            applyNoteDisplayMode(desc, infoBtn, { state });
+            applyNoteDisplayMode(desc, { state });
             const manageEditButton = () => {
               const currentState = +btn.dataset.state || 0;
               const enabled = shouldShowEditButton(currentState);
@@ -4870,11 +4828,9 @@
         const currentMemberKey = getCurrentSpaceMemberKey(sp);
         const currentMemberName = getSpaceMemberLabel(sp, currentMemberKey);
         $("#paramName").value = currentMemberName || getLastMemberName() || '';
-        const orgSel = $("#spaceOrgMode");
-        if (orgSel) orgSel.value = sp.orgMode || 'day';
+        const orgMode = sp.orgMode || 'day';
         const autoWeekField = $("#autoWeekField");
-        if (autoWeekField) autoWeekField.classList.toggle('hide', sp.orgMode !== 'week');
-        updateSpaceOrgButtons();
+        if (autoWeekField) autoWeekField.classList.toggle('hide', orgMode !== 'week');
       }
       function setupSpaceInfo() {
         const sp = getSpace(); const t = $("#spaceDescInfo");
@@ -4886,7 +4842,6 @@
           autoWeekSelect.value = 'none';
           autoWeekSelect.dataset.bound = '1';
         }
-        updateSpaceOrgButtons();
         const rightsSelect = $("#spaceEditorRights");
         if (rightsSelect) {
           rightsSelect.value = getEditorRights(sp);
@@ -5317,8 +5272,6 @@
       let spacesInitialized = false;
       let habitWizardStep = 1;
       const mPrefs = $("#modalPrefs");
-      const prefsNotesSelect = $("#prefsNotesDisplayMode");
-      const prefsEditSelect = $("#prefsEditButtonMode");
       const prefsTipsSelect = $("#prefsTipsDisplayMode");
       const closePrefsBtn = $("#closePrefs");
       function updateHabitModalControls() {
@@ -5437,41 +5390,15 @@
         open(mJoin);
       }
       function openUserPreferences() {
-        const sp = getSpace();
-        if (!sp || !mPrefs) return;
-        if (prefsNotesSelect) {
-          prefsNotesSelect.value = sp.notesDisplayMode || 'dynamic';
-        }
-        if (prefsEditSelect) {
-          prefsEditSelect.value = sp.editButtonMode || 'dynamic';
-        }
+        if (!mPrefs) return;
         if (prefsTipsSelect) {
-          prefsTipsSelect.value = sp.tipsDisplayMode || 'absence';
+          prefsTipsSelect.value = getTipsDisplayMode();
         }
         open(mPrefs);
       }
-      prefsNotesSelect?.addEventListener('change', async () => {
-        if (!spaceId) return;
-        const mode = prefsNotesSelect.value || 'dynamic';
-        const current = getSpace();
-        if (current) current.notesDisplayMode = mode;
-        await persistSpaceDoc(spaceId, { notesDisplayMode: mode });
-        renderCards();
-      });
-      prefsEditSelect?.addEventListener('change', async () => {
-        if (!spaceId) return;
-        const mode = prefsEditSelect.value || 'dynamic';
-        const current = getSpace();
-        if (current) current.editButtonMode = mode;
-        await persistSpaceDoc(spaceId, { editButtonMode: mode });
-        renderCards();
-      });
       prefsTipsSelect?.addEventListener('change', async () => {
-        if (!spaceId) return;
         const mode = prefsTipsSelect.value || 'absence';
-        const current = getSpace();
-        if (current) current.tipsDisplayMode = mode;
-        await persistSpaceDoc(spaceId, { tipsDisplayMode: mode });
+        await updateUserTipsDisplayMode(mode);
         renderCards();
       });
       closePrefsBtn?.addEventListener('click', () => close(mPrefs));
@@ -5677,15 +5604,6 @@
         });
       }
 
-      function updateSpaceOrgButtons() {
-        const container = $("#spaceOrgButtons");
-        const select = $("#spaceOrgMode");
-        if (!container || !select) return;
-        container.querySelectorAll('.org-mode-btn').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.mode === select.value);
-        });
-      }
-
       function updateAuthMessage() {
         if (pendingInviteInfo) {
           const spaceName = pendingInviteInfo.gardenLabel || pendingInviteInfo.label || 'ton jardin';
@@ -5766,11 +5684,7 @@
           ownerId: ownerId || null,
           members: memberList,
           createdAt: new Date(),
-          editButton: true,
           editorRights: 'admin',
-          editButtonMode: 'dynamic',
-          notesDisplayMode: 'dynamic',
-          tipsDisplayMode: 'absence',
           memberSettings
         };
         spaceId = id;
@@ -5784,10 +5698,6 @@
           members: memberList,
           createdBy: currentProfile?.email || null,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          editButton: true,
-          editButtonMode: 'dynamic',
-          notesDisplayMode: 'dynamic',
-          tipsDisplayMode: 'absence',
           memberSettings
         };
         gardenStatus.textContent = 'Ajoute quelques habitudes pour démarrer ton jardin.';
@@ -6253,8 +6163,8 @@
 
       function startLoaderAnimation() {
         if (loaderHabitTimer) return;
-        refreshLoaderHabit(getLoaderMinuteSeed());
-        loaderHabitTimer = setInterval(() => refreshLoaderHabit(getLoaderMinuteSeed()), LOADER_ROTATION_MS);
+        refreshLoader(getLoaderMinuteSeed());
+        loaderHabitTimer = setInterval(() => refreshLoader(getLoaderMinuteSeed()), LOADER_ROTATION_MS);
       }
       function stopLoaderAnimation() {
         if (loaderHabitTimer) {
@@ -6340,7 +6250,12 @@
           }
         }
         if (updated.uid) {
-          await persistUserProfile({ uid: updated.uid, email: updated.email, name: finalName });
+          await persistUserProfile({
+            uid: updated.uid,
+            email: updated.email,
+            name: finalName,
+            tipsDisplayMode: updated.tipsDisplayMode
+          });
         }
         return finalName;
       }
@@ -6371,8 +6286,12 @@
         const email = (user.email || '').toLowerCase();
         const inviteName = pendingInviteInfo?.invitedName || '';
         const name = user.displayName || currentProfile?.name || inviteName || userName || 'Moi';
-        persistProfile({ uid: user.uid, email, name, guest: isGuest });
-        await persistUserProfile({ uid: user.uid, email, name });
+        const remoteProfile = await loadRemoteUserProfile(user.uid);
+        const fallbackTips = currentProfile?.tipsDisplayMode;
+        const tipsDisplayMode = remoteProfile?.tipsDisplayMode || fallbackTips || 'absence';
+        const profile = { uid: user.uid, email, name, guest: isGuest, tipsDisplayMode };
+        persistProfile(profile);
+        await persistUserProfile(profile);
         if (!isGuest) {
           await linkGuestSpacesToEmail(email);
           await acceptPendingInvite(email);
