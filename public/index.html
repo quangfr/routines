@@ -461,6 +461,35 @@
       font-weight: 700
     }
 
+    .habit-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 8px var(--gap);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .habit-filter button {
+      flex: 1 1 auto;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .habit-filter button.active {
+      border-color: var(--green);
+      color: var(--green);
+      font-weight: 700;
+    }
+
+
     .garden-config {
       display: flex;
       gap: 8px;
@@ -685,6 +714,16 @@
       opacity: 0.9;
     }
 
+    .card-shifted {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      font-size: 16px;
+      line-height: 1;
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
 
     .card {
       position: relative;
@@ -779,7 +818,6 @@
       order: 1;
     }
 
-    .list.dense-view .schedule-days,
     .list.dense-view .desc,
     .list.dense-view .friends {
       display: none;
@@ -791,20 +829,7 @@
       border-radius: 4px;
     }
 
-    .schedule-days-mini {
-      display: none;
-      gap: 2px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 4px;
-      margin-left: 2px;
-    }
-
     .weekly-progress__block--today {
-      box-shadow: 0 0 0 1px var(--border);
-    }
-
-    .schedule-days-mini__today {
       box-shadow: 0 0 0 1px var(--border);
     }
 
@@ -842,42 +867,6 @@
       display: flex;
       flex-direction: column;
       gap: 2px
-    }
-
-    .schedule-days {
-      display: none !important;
-    }
-
-    .schedule-days__pill {
-      width: 18px;
-      height: 18px;
-      border-radius: 6px;
-      font-size: 9px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--bg);
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .schedule-days__pill--done {
-      background: var(--green);
-      color: #fff;
-      border-color: var(--green);
-    }
-
-    .schedule-days__pill--active {
-      background: #f5c654;
-      color: #1e1f1a;
-      border-color: #f5c654;
-    }
-
-    .schedule-days__pill--pending {
-      background: var(--bg);
-      color: var(--text);
-      border-color: var(--bg);
     }
 
     .title {
@@ -925,13 +914,13 @@
     }
 
     .weekly-progress__block--pending {
-      background: var(--card);
+      background: var(--bg);
       border-color: var(--border);
     }
 
     .weekly-progress__block--disabled {
-      background: var(--border);
-      border-color: var(--border);
+      background: var(--bg);
+      border-color: var(--bg);
     }
 
     .title .left {
@@ -1003,7 +992,6 @@
       gap: 6px;
       align-items: center;
       flex-wrap: wrap;
-      min-height: 26px
     }
 
     .friends-badges {
@@ -1307,7 +1295,19 @@
       cursor: pointer
     }
 
-    .dayNum {
+    <<<<<<< ours .cell .scheduled-mark {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2a7a57;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+    }
+
+    =======>>>>>>>theirs .dayNum {
       position: absolute;
       top: 4px;
       right: 6px;
@@ -1517,14 +1517,14 @@
 
     .habit-btn {
       border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 6px 12px;
+      border-radius: 4px;
+      padding: 2px 4px;
       background: var(--card);
       color: var(--text);
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 13px;
+      gap: 2px;
+      font-size: 11px;
       cursor: pointer;
       transition: border-color .2s, color .2s, background .2s;
     }
@@ -1601,7 +1601,200 @@
       gap: 4px
     }
 
-    .field .access-code-row {
+    .freq-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    .freq-mode {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .freq-mode label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    #weeklyInterval {
+      padding: 6px 8px;
+    }
+
+    .freq-start {
+      margin-top: 8px;
+    }
+
+    .freq-start input {
+      width: 100%;
+    }
+
+    .freq-weekly {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .freq-weekdays {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .freq-weekdays label {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 12px;
+      background: var(--card);
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .freq-weekdays input {
+      cursor: pointer;
+    }
+
+    .opt.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+      border-color: #ccc;
+    }
+
+    .opt.update-app {
+      border-color: var(--green);
+      background: #ecf6ef;
+    }
+
+    .opt .emoji {
+      font-size: 20px
+    }
+
+    .field {
+      display: grid;
+      gap: 4px
+    }
+
+    .freq-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    #repeatInterval {
+      width: 58px;
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      font: 500 13px/1.2 system-ui, -apple-system, Roboto, sans-serif;
+      background: #fff;
+    }
+
+    .freq-start {
+      margin-top: 8px;
+    }
+
+    .freq-start input {
+      width: 100%;
+    }
+
+    .freq-weekdays {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .freq-weekdays label {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 12px;
+      background: var(--card);
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .freq-weekdays input {
+      cursor: pointer;
+    }
+
+    .freq-month-options {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .freq-month-mode {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 8px;
+      background: #fff;
+    }
+
+    .freq-month-mode input {
+      cursor: pointer;
+      accent-color: var(--green);
+    }
+
+    <<<<<<< ours .freq-end {
+      margin-top: 8px;
+    }
+
+    .freq-end-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .freq-end-options label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 8px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .freq-end-options input[type="date"],
+    .freq-end-options input[type="number"] {
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 4px 6px;
+      font-size: 12px;
+    }
+
+    .freq-end-options input[type="radio"] {
+      cursor: pointer;
+    }
+
+    =======>>>>>>>theirs .field .access-code-row {
       display: flex;
       gap: 6px;
       align-items: stretch;
@@ -1935,6 +2128,7 @@
     </div>
 
     <main id="home" class="view active">
+      <div class="habit-filter" id="habitFilterBar" role="tablist" aria-label="Filtrer les habitudes"></div>
       <div class="list" id="cards"></div>
     </main>
 
@@ -1957,41 +2151,6 @@
             <div class="field">
               <label><b>Note</b></label>
               <textarea id="habitDesc" placeholder="Étapes, conseils, instructions spécifiques..."></textarea>
-            </div>
-
-            <div class="field" id="freqField">
-              <label><b>Fréquence</b></label>
-              <div class="grid" style="gap:6px">
-                <select id="freqType" class="select">
-                  <option value="quotidien" selected>Quotidien</option>
-                  <option value="ponctuelle">Ponctuelle</option>
-                  <option value="jours">Jour(s) de la semaine</option>
-                </select>
-                <div id="freqSubPonctuelle" class="rowInline hide"><span>Date</span><input id="freqDate" type="text"
-                    placeholder="JJ/MM/AAAA" /></div>
-                <div id="freqSubJours" class="hide freq-sub-jours">
-                  <label><input type="checkbox" value="1">Lu</label>
-                  <label><input type="checkbox" value="2">Ma</label>
-                  <label><input type="checkbox" value="3">Me</label>
-                  <label><input type="checkbox" value="4">Je</label>
-                  <label><input type="checkbox" value="5">Ve</label>
-                  <label><input type="checkbox" value="6">Sa</label>
-                  <label><input type="checkbox" value="0">Di</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="field hide" id="weekFreqField">
-              <label><b>Fréquence hebdomadaire</b></label>
-              <select id="weekFreqSelect" class="select">
-                <option value="1" selected>1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-              </select>
             </div>
 
             <div style="margin-top:14px;display:flex;justify-content:space-between;gap:8px">
@@ -2035,12 +2194,10 @@
         <div class="spacer"></div>
       </div>
       <div class="tabs">
-        <button class="tab active" data-stab="sprofile">👨‍🌾 Jardiniers</button>
-        <button class="tab" data-stab="shistory">📅 Historique</button>
-        <button class="tab" data-stab="sparams">⚙️ Réglages</button>
+        <button class="tab active" data-stab="sparams">⚙️ Réglages</button>
       </div>
       <div class="section">
-        <div class="view active" id="sprofile">
+        <div class="view" id="sprofile">
           <div class="rankHeader">
             <b>Durée</b>
             <div style="font-size:12px;display:flex;gap:8px;align-items:center">
@@ -2070,7 +2227,7 @@
             <div class="calendar" id="sCal"></div>
           </div>
         </div>
-        <div class="view" id="sparams">
+        <div class="view active" id="sparams">
           <div class="grid">
             <div class="field"><label><b>Mon prénom</b></label><input id="paramName" type="text" value="Moi" /></div>
             <div class="field"><label><b>Nom du jardin</b></label><input id="paramSpaceLabel" type="text" /></div>
@@ -2078,14 +2235,6 @@
               <label><b>Texte d'introduction</b></label>
               <textarea id="spaceDescInfo"
                 placeholder="Présentez le jardin, les règles et l’état d’esprit. Cliquez pour éditer."></textarea>
-            </div>
-            <div class="field hide" id="autoWeekField">
-              <label><b>Affection hebdomadaire automatique</b></label>
-              <select id="autoWeekAffection" class="select">
-                <option value="none" selected>Non (par défaut)</option>
-                <option value="random">Aléatoire</option>
-                <option value="same">Identique</option>
-              </select>
             </div>
             <div class="field">
               <label><b>Droits d'édition</b></label>
@@ -2242,19 +2391,6 @@
               <input id="gardenNameInput" type="text" placeholder="Nom du jardin" />
             </div>
             <div class="field">
-              <label><b>Mode d'organisation</b></label>
-              <div class="org-mode-buttons" id="gardenModeButtons">
-                <button type="button" class="org-mode-btn" data-mode="day">À la journée</button>
-                <button type="button" class="org-mode-btn" data-mode="week">À la semaine</button>
-              </div>
-              <select id="gardenModeSelect" class="select hide">
-                <option value="week">À la semaine</option>
-                <option value="day">À la journée</option>
-              </select>
-              <div class="subtitle" id="gardenModeHint">5-30 routines à organiser librement dans la semaine.
-              </div>
-            </div>
-            <div class="field">
               <label><b>Mode de réalisation</b></label>
               <select id="gardenHabitMode" class="select">
                 <option value="commun" selected>Partagé</option>
@@ -2295,6 +2431,13 @@
                 <option value="dense" selected>Dense</option>
                 <option value="confort">Confort</option>
               </select>
+            </div>
+            <div class="field">
+              <label><b>Badges amis</b></label>
+              <div class="rowInline" style="gap:6px">
+                <input type="checkbox" id="prefsFriendBadges" />
+                <span>Afficher les badges d'amis</span>
+              </div>
             </div>
           </div>
         </div>
@@ -2354,6 +2497,7 @@
       const BASE_MINUTES = {}, HABIT_MODE = {}, LOCKED_COMMUN = {}, LOCKED_BY = {}, DONE_SETS = {};
       const HAS_DESC = {}, DELETED_HABITS = new Set();
       const FREQ_MODE = {}, HABIT_REC = {};
+      const REPEAT_CONFIGS = {};
 
       /* Utils */
       const APP_VERSION = '0.0.17';
@@ -2394,6 +2538,79 @@
         lenteur: '🐢'
       };
       const cardContextMenuEl = document.getElementById('cardContextMenu');
+      const HABIT_FILTERS = [
+        { key: 'todo', label: 'À faire', emptyText: 'Tu as fait le tour de ce filtre pour le moment.' },
+        { key: 'inProgress', label: 'En cours', emptyText: 'Tu n’as pas commencé d’habitude pour l’instant.' },
+        { key: 'done', label: 'Fait', emptyText: 'Aucune habitude terminée pour le moment.' },
+        { key: 'ignored', label: 'Ignoré', emptyText: 'Tu n’as pas ignoré d’habitude aujourd’hui.' },
+        { key: 'hidden', label: 'Caché', emptyText: 'Tu n’as pas caché d’habitude encore.' }
+      ];
+      let activeHabitFilter = 'todo';
+      const habitFilterBarEl = document.getElementById('habitFilterBar');
+      const habitFilterButtons = new Map();
+
+      function getHabitFilterByKey(key) {
+        return HABIT_FILTERS.find(filter => filter.key === key) || HABIT_FILTERS[0];
+      }
+
+      function updateHabitFilterButtons() {
+        HABIT_FILTERS.forEach(filter => {
+          const button = habitFilterButtons.get(filter.key);
+          if (!button) return;
+          button.classList.toggle('active', filter.key === activeHabitFilter);
+        });
+      }
+
+      function renderHabitFilterBar() {
+        if (!habitFilterBarEl) return;
+        habitFilterBarEl.innerHTML = '';
+        habitFilterButtons.clear();
+        HABIT_FILTERS.forEach(filter => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.dataset.filterKey = filter.key;
+          button.textContent = filter.label;
+          button.addEventListener('click', () => setHabitFilter(filter.key));
+          habitFilterBarEl.appendChild(button);
+          habitFilterButtons.set(filter.key, button);
+        });
+        updateHabitFilterButtons();
+      }
+
+      function setHabitFilter(key) {
+        if (!HABIT_FILTERS.some(filter => filter.key === key)) return;
+        if (activeHabitFilter === key) return;
+        activeHabitFilter = key;
+        updateHabitFilterButtons();
+        renderCards();
+      }
+
+      function habitMatchesFilter(filterKey, { state = 0, isIgnored = false, isHidden = false, dueToday = true } = {}) {
+        const normalized = filterKey || HABIT_FILTERS[0].key;
+        if (isHidden) {
+          return normalized === 'hidden';
+        }
+        if (normalized === 'hidden') {
+          return false;
+        }
+        if (normalized === 'ignored') {
+          return isIgnored;
+        }
+        if (!dueToday || isIgnored) {
+          return false;
+        }
+        if (normalized === 'todo') {
+          return state === 0;
+        }
+        if (normalized === 'inProgress') {
+          return state === 1;
+        }
+        if (normalized === 'done') {
+          return state === 2;
+        }
+        return true;
+      }
+      renderHabitFilterBar();
       let shouldSuppressCardClick = false;
       const CARD_CONTEXT_LONG_PRESS_MS = 360;
       function hideCardContextMenu() {
@@ -2415,20 +2632,7 @@
           cardContextMenuEl.appendChild(option);
           hasOption = true;
         };
-        if (shouldShowContextMenuEdit()) {
-          addOption('Éditer', () => {
-            hideCardContextMenu();
-            openDetail(habit.id, btn);
-          });
-        }
         const isPinned = btn.dataset.pinned === '1';
-        const reportKey = getPostponedHabitDate(habit.id);
-        const tomorrowKey = getTomorrowKey();
-        const reportLabel = reportKey === tomorrowKey ? 'Annuler le report' : 'Reporter à demain';
-        addOption(reportLabel, () => {
-          hideCardContextMenu();
-          toggleReportForHabit(habit.id);
-        });
         addOption(isPinned ? 'Détacher' : 'Épingler', () => {
           hideCardContextMenu();
           if (isPinned) {
@@ -2437,6 +2641,44 @@
             pinHabitAction(habit.id);
           }
         });
+        if (shouldShowContextMenuEdit()) {
+          addOption('Éditer', () => {
+            hideCardContextMenu();
+            openDetail(habit.id, btn);
+          });
+        }
+        const isIgnored = isHabitIgnoredToday(habit.id);
+        const isHidden = isHabitHidden(habit.id);
+        const ignoreLabel = isIgnored ? 'Annuler le caché' : 'Caché';
+        addOption(ignoreLabel, () => {
+          hideCardContextMenu();
+          toggleHabitIgnore(habit.id);
+        });
+        if (isHidden) {
+          addOption('Afficher', () => {
+            hideCardContextMenu();
+            showHabit(habit.id);
+          });
+        } else {
+          addOption('Caché', () => {
+            hideCardContextMenu();
+            hideHabit(habit.id);
+          });
+        }
+        const shiftKey = getPostponedHabitDate(habit.id);
+        const tomorrowKey = getTomorrowKey();
+        const isShifted = shiftKey === tomorrowKey;
+        if (isShifted) {
+          addOption('Annuler le décalage', () => {
+            hideCardContextMenu();
+            toggleShiftForHabit(habit.id);
+          });
+        } else {
+          addOption('Décaler', () => {
+            hideCardContextMenu();
+            toggleShiftForHabit(habit.id);
+          });
+        }
         if (!hasOption) return;
         cardContextMenuEl.style.left = '0px';
         cardContextMenuEl.style.top = '0px';
@@ -2703,12 +2945,115 @@
       window.addEventListener('resize', refreshStickyOffsets);
       refreshStickyOffsets();
       function fmtDate(d) { const M = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'][d.getMonth()]; const j = String(d.getDate()).padStart(2, '0'); const J = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'][d.getDay()]; return `${J} ${j}/${M}`; }
-      function weekLabel(d) {
-        const day = d.getDay(); // 0=dim
-        const monday = new Date(d); monday.setDate(d.getDate() - ((day + 6) % 7));
-        const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
-        const f = x => `${String(x.getDate()).padStart(2, '0')}/${String(x.getMonth() + 1).padStart(2, '0')}`;
-        return `Du ${f(monday)} au ${f(sunday)}`;
+      function parseDateInput(value) {
+        if (!value) return null;
+        if (value instanceof Date) {
+          const copy = new Date(value);
+          copy.setHours(0, 0, 0, 0);
+          return copy;
+        }
+        const normalized = String(value || '').trim();
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(normalized)) return null;
+        const parsed = new Date(normalized);
+        if (Number.isNaN(parsed.getTime())) return null;
+        parsed.setHours(0, 0, 0, 0);
+        return parsed;
+      }
+      function toIsoDateString(value) {
+        const date = parseDateInput(value);
+        if (!date) return '';
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      }
+      function getWeekdayOrdinalInfo(date) {
+        if (!date) return { ordinal: 1, isLast: false };
+        const targetWeekday = date.getDay();
+        let ordinal = 0;
+        for (let day = 1; day <= date.getDate(); day++) {
+          const candidate = new Date(date.getFullYear(), date.getMonth(), day);
+          if (candidate.getDay() === targetWeekday) {
+            ordinal += 1;
+          }
+        }
+        const nextWeek = new Date(date);
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        const isLast = nextWeek.getMonth() !== date.getMonth();
+        return { ordinal, isLast };
+      }
+      function buildDefaultMonthMode(startDate) {
+        if (!startDate) return { type: 'day', day: 1 };
+        return { type: 'day', day: startDate.getDate() };
+      }
+      function normalizeRepeatConfig(habit, override = {}) {
+        const fallbackUnit = (habit?.freqType === 'jours') ? 'week' : 'day';
+        const normalizedUnit = (override.unit || habit?.repeatConfig?.unit || fallbackUnit || 'day').toString().toLowerCase();
+        const unit = ['day', 'week', 'month'].includes(normalizedUnit) ? normalizedUnit : 'day';
+        const baselineDate = parseDateInput(override.startDate || habit?.repeatConfig?.startDate || habit?.startDate || habit?.addedAt || curDate()) || curDate();
+        const intervalCandidate = override.interval ?? habit?.frequency ?? HABIT_REC[habit?.id] ?? 1;
+        const interval = Math.max(1, Number.isFinite(Number(intervalCandidate)) ? Number(intervalCandidate) : 1);
+        let weekDays = Array.isArray(override.weekDays) ? override.weekDays.map(normalizeDayIndex).filter(day => day !== null) : null;
+        if (!weekDays || !weekDays.length) {
+          if (Array.isArray(habit?.repeatConfig?.weekDays) && habit.repeatConfig.weekDays.length) {
+            weekDays = habit.repeatConfig.weekDays.map(normalizeDayIndex).filter(day => day !== null);
+          } else {
+            weekDays = [];
+          }
+        }
+        if (!weekDays.length && unit === 'week') {
+          weekDays.push(baselineDate.getDay());
+        }
+        weekDays = Array.from(new Set(weekDays));
+        let monthMode = override.monthMode ?? habit?.repeatConfig?.monthMode ?? null;
+        if (monthMode && typeof monthMode === 'object') {
+          const ordinalValue = (monthMode.ordinal || '').toString();
+          if (monthMode.type === 'ordinal' && ordinalValue) {
+            monthMode = {
+              type: 'ordinal',
+              ordinal: ordinalValue === 'last' ? 'last' : Number(ordinalValue) || 1,
+              weekday: normalizeDayIndex(monthMode.weekday ?? baselineDate.getDay()) ?? baselineDate.getDay()
+            };
+          } else {
+            const candidateDay = Number(monthMode.day || baselineDate.getDate());
+            monthMode = {
+              type: 'day',
+              day: Math.max(1, Math.min(31, Number.isFinite(candidateDay) ? candidateDay : baselineDate.getDate()))
+            };
+          }
+        } else if (unit === 'month') {
+          const info = getWeekdayOrdinalInfo(baselineDate);
+          monthMode = { type: 'ordinal', ordinal: info.isLast ? 'last' : info.ordinal, weekday: baselineDate.getDay() };
+        } else {
+          monthMode = buildDefaultMonthMode(baselineDate);
+        }
+        const startDate = toIsoDateString(baselineDate) || toIsoDateString(curDate());
+        return {
+          interval,
+          unit,
+          startDate,
+          weekDays,
+          monthMode
+        };
+      }
+      function cacheRepeatConfigFromHabit(habit) {
+        if (!habit || !habit.id) return null;
+        const cached = normalizeRepeatConfig(habit, habit.repeatConfig || {});
+        REPEAT_CONFIGS[habit.id] = cached;
+        HABIT_REC[habit.id] = cached.interval;
+        habit.repeatConfig = { ...cached };
+        return cached;
+      }
+      function getHabitRepeatConfig(habit) {
+        if (!habit) return normalizeRepeatConfig(null, {});
+        if (habit.id && REPEAT_CONFIGS[habit.id]) {
+          return REPEAT_CONFIGS[habit.id];
+        }
+        return cacheRepeatConfigFromHabit(habit);
+      }
+      function getHabitRepeatConfigById(habitId) {
+        const habit = findAny(habitId);
+        return getHabitRepeatConfig(habit);
       }
       function genCode() { const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; let s = ''; for (let i = 0; i < 6; i++)s += c[Math.floor(Math.random() * c.length)]; return s; }
       function generateSpaceId() {
@@ -2863,7 +3208,6 @@
         maybeShowInstallPrompt(false);
       });
       const MIN_DAY_OFF = -3650;
-      const DAY_LABELS = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
       const FULL_WEEK_DAYS = [0, 1, 2, 3, 4, 5, 6];
 
       function normalizeDayIndex(value) {
@@ -2871,57 +3215,6 @@
         if (!Number.isFinite(num)) return null;
         const floored = Math.floor(num);
         return ((floored % 7) + 7) % 7;
-      }
-
-      function buildDayModeDays(count, referenceDay = null) {
-        const recurrence = Math.max(1, Math.min(7, Number(count) || 1));
-        const baseDay = normalizeDayIndex(referenceDay);
-        const startDay = baseDay !== null ? baseDay : 1;
-        if (recurrence >= 7) {
-          return FULL_WEEK_DAYS.slice();
-        }
-        if (recurrence === 3) {
-          return [startDay, (startDay + 2) % 7, (startDay + 4) % 7];
-        }
-        const days = [];
-        const seen = new Set();
-        const step = 7 / recurrence;
-        for (let i = 0; i < recurrence; i++) {
-          let offset = Math.round(step * i);
-          let day = (startDay + offset) % 7;
-          while (seen.has(day)) {
-            day = (day + 1) % 7;
-          }
-          seen.add(day);
-          days.push(day);
-        }
-        return days;
-      }
-
-      function getHabitFreqType(habit) {
-        if (!habit) return 'quotidien';
-        const candidate = (habit.freqType || habit.freqDefault || '').toString().toLowerCase();
-        if (['quotidien', 'jours', 'ponctuelle', 'hebdo'].includes(candidate)) {
-          return candidate;
-        }
-        return 'quotidien';
-      }
-
-      function getHabitFreqDays(habit) {
-        const rawDays = Array.isArray(habit?.freqDays) ? habit.freqDays : [];
-        const normalized = Array.from(new Set(rawDays
-          .map(day => normalizeDayIndex(day))
-          .filter(day => day !== null)
-        ));
-        if (normalized.length) return normalized;
-        const freqType = getHabitFreqType(habit);
-        if (freqType === 'quotidien') return FULL_WEEK_DAYS.slice();
-        if (freqType === 'jours') {
-          const fallback = buildDayModeDays(habit?.frequency ?? 1, curDate().getDay());
-          if (fallback.length) return fallback;
-          return [curDate().getDay()];
-        }
-        return [];
       }
 
       function getWeekStart(date = new Date()) {
@@ -2932,28 +3225,17 @@
         return copy;
       }
 
-      function buildHabitFrequencyInfo(space, frequencyValue) {
-        const recurrence = Math.max(1, Math.min(7, Number(frequencyValue) || 1));
-        const isWeek = space?.orgMode === 'week';
-        const freqType = isWeek ? 'hebdo' : (recurrence === 7 ? 'quotidien' : 'jours');
-        const info = {
-          recurrence,
-          freqDefault: freqType,
-          freqType
-        };
-        if (!isWeek) {
-          const referenceDay = curDate().getDay();
-          info.freqDays = buildDayModeDays(recurrence, referenceDay);
-        }
-        return info;
-      }
       function buildHabitPayload(space, source = {}, overrides = {}) {
-        const freqValue = overrides.frequency ?? source.frequency ?? 1;
-        const frequencyInfo = buildHabitFrequencyInfo(space, freqValue);
+        const baseHabit = { ...source, repeatConfig: source.repeatConfig || {} };
+        const repeatConfig = normalizeRepeatConfig(baseHabit, overrides.repeatConfig || {});
+        const freqValue = overrides.frequency ?? repeatConfig.interval ?? source.frequency ?? 1;
         const defaultMode = space?.type === 'private' ? { type: 'libre', n: 2 } : { type: 'commun', n: 2 };
         const durationCandidate = overrides.baseMin ?? source.baseMin ?? source.duration;
         const parsedDuration = Number(durationCandidate);
         const baseMin = Number.isFinite(parsedDuration) ? parsedDuration : 15;
+        const fallbackFreqDays = repeatConfig.unit === 'week'
+          ? repeatConfig.weekDays.slice()
+          : repeatConfig.unit === 'day' ? FULL_WEEK_DAYS.slice() : [];
         return {
           id: overrides.id || source.id,
           titre: overrides.titre || source.titre || source.title || '',
@@ -2966,8 +3248,9 @@
           contexts: overrides.contexts || source.contexts || [],
           needs: overrides.needs || source.needs || [],
           spaces: overrides.spaces || source.spaces || [],
-          ...frequencyInfo,
+          freqDays: overrides.freqDays ?? source.freqDays ?? fallbackFreqDays,
           mode: overrides.mode || source.mode || defaultMode,
+          repeatConfig,
           addedAt: overrides.addedAt || getWeekStart(new Date())
         };
       }
@@ -3005,19 +3288,19 @@
       let spaceId = 'D0PWE3', userName = 'Moi', dayOff = 0;
       let profilePeriod = '30d', activeProfileName = null, activeProfileEmail = null, profileReturnView = 'detail';
 
-      /* Spaces (orgMode: day ou week) */
+      /* Spaces */
       const SPACES = {};
       const SPACE_ACTIVITIES = {};
       const INVITE_CACHE = {};
       const STORAGE_USER_PROFILE = 'habitu-user-profile';
       const STORAGE_GUEST_SPACES = 'habitu-guest-spaces';
       const GARDEN_TYPES = [
-        { emoji: '👤', label: '👤 Individu', type: 'private', orgMode: 'day', desc: 'Jardin solo pour prendre soin de soi.' },
-        { emoji: '🏠', label: '🏠 Colocation', type: 'group', orgMode: 'day', desc: 'Petites routines partagées à la maison.' },
-        { emoji: '🌞', label: '🌞 Famille', type: 'group', orgMode: 'day', desc: 'Rituels doux pour toute la famille.' },
-        { emoji: '🏛️', label: '🏛️ Association', type: 'group', orgMode: 'week', desc: 'Moments d’équipe réguliers.' },
-        { emoji: '🏫', label: 'École / Classe', type: 'group', orgMode: 'week', desc: 'Rituels pédagogiques simples.' },
-        { emoji: '🏢', label: '🏢 Bureau', type: 'group', orgMode: 'week', desc: 'Rituels collaboratifs pro.' }
+        { emoji: '👤', label: '👤 Individu', type: 'private', desc: 'Jardin solo pour prendre soin de soi.' },
+        { emoji: '🏠', label: '🏠 Colocation', type: 'group', desc: 'Petites routines partagées à la maison.' },
+        { emoji: '🌞', label: '🌞 Famille', type: 'group', desc: 'Rituels doux pour toute la famille.' },
+        { emoji: '🏛️', label: '🏛️ Association', type: 'group', desc: 'Moments d’équipe réguliers.' },
+        { emoji: '🏫', label: 'École / Classe', type: 'group', desc: 'Rituels pédagogiques simples.' },
+        { emoji: '🏢', label: '🏢 Bureau', type: 'group', desc: 'Rituels collaboratifs pro.' }
       ];
       let allowedSpaces = [];
       let currentProfile = loadStoredProfile();
@@ -3383,6 +3666,15 @@
         if (profile.postponedHabits !== undefined) {
           payload.postponedHabits = normalizePostponedMap(profile.postponedHabits);
         }
+        if (profile.ignoredHabits !== undefined) {
+          payload.ignoredHabits = normalizeIgnoredMap(profile.ignoredHabits);
+        }
+        if (profile.forgottenHabits !== undefined) {
+          payload.forgottenHabits = normalizeHabitArray(profile.forgottenHabits);
+        }
+        if (profile.showFriendBadges !== undefined) {
+          payload.showFriendBadges = profile.showFriendBadges;
+        }
         return HABITU_FIREBASE_DB.collection('users').doc(profile.uid)
           .set(payload, { merge: true })
           .catch(e => console.warn('persistUserProfile', e));
@@ -3412,7 +3704,8 @@
           tipsDisplayMode: normalized,
           habitListDisplayMode: updated.habitListDisplayMode,
           pinnedHabits: updated.pinnedHabits,
-          postponedHabits: updated.postponedHabits
+          postponedHabits: updated.postponedHabits,
+          showFriendBadges: updated.showFriendBadges
         });
       }
       async function updateUserHabitListDisplayMode(mode) {
@@ -3427,7 +3720,26 @@
           tipsDisplayMode: updated.tipsDisplayMode,
           habitListDisplayMode: normalized,
           pinnedHabits: updated.pinnedHabits,
-          postponedHabits: updated.postponedHabits
+          postponedHabits: updated.postponedHabits,
+          showFriendBadges: updated.showFriendBadges
+        });
+      }
+      async function updateUserFriendBadgesPreference(show) {
+        if (!currentProfile) return;
+        const normalized = !!show;
+        const updated = { ...currentProfile, showFriendBadges: normalized };
+        persistProfile(updated);
+        await persistUserProfile({
+          uid: updated.uid,
+          email: updated.email,
+          name: updated.name,
+          tipsDisplayMode: updated.tipsDisplayMode,
+          habitListDisplayMode: updated.habitListDisplayMode,
+          pinnedHabits: updated.pinnedHabits,
+          postponedHabits: updated.postponedHabits,
+          ignoredHabits: updated.ignoredHabits,
+          forgottenHabits: updated.forgottenHabits,
+          showFriendBadges: normalized
         });
       }
       function persistSpaceDoc(spaceId, data = {}) {
@@ -3488,6 +3800,7 @@
       }
       function persistHabit(spaceId, habitData) {
         if (!HABITU_FIREBASE_DB || !spaceId || !habitData?.id) return Promise.resolve();
+        habitData.repeatConfig = normalizeRepeatConfig(habitData, habitData.repeatConfig || {});
         ensureHabitMetadata(habitData);
         const habitId = String(habitData.id);
         return HABITU_FIREBASE_DB.collection('spaces').doc(spaceId).collection('habits').doc(habitId)
@@ -3556,6 +3869,7 @@
         if (habit.recurrence) HABIT_REC[habit.id] = habit.recurrence;
         const freqTypeValue = habit.freqType || habit.freqDefault;
         if (freqTypeValue) FREQ_MODE[habit.id] = { type: freqTypeValue };
+        cacheRepeatConfigFromHabit(habit);
       }
       async function fetchSpacesForUser(profile) {
         if (!HABITU_FIREBASE_DB || !profile) return [];
@@ -3825,7 +4139,7 @@
       }
       const HABIT_TITLE_IS_CUSTOM = {};
 
-      /* Fréquence : tout = quotidien par défaut (UI conservée) */
+      /* Fréquence : tout = quotidien par défaut (même les habitudes décalées restent visibles quand elles le doivent) */
       function isVisibleToday(habitId, date = curDate()) {
         if (!habitId) return true;
         const targetDate = new Date(date || curDate());
@@ -3840,14 +4154,7 @@
           delete next[habitId];
           persistHabitProfileFields({ postponedHabits: next }).catch(() => { });
         }
-        if (isWeekMode()) return true;
-        const targetDay = targetDate.getDay();
-        const habit = findAny(habitId);
-        const freqType = getHabitFreqType(habit);
-        if (freqType === 'ponctuelle') return true;
-        const days = getHabitFreqDays(habit);
-        if (!days.length) return true;
-        return days.includes(targetDay);
+        return true;
       }
 
       /* ===== Helpers visuels encadrés ===== */
@@ -3891,6 +4198,7 @@
       }
       function ensureOwnerBadges(badges, owners, it, btn) {
         badges.querySelectorAll('.owner-badge').forEach(el => el.remove());
+        if (!shouldShowFriendBadges()) return;
         const text = formatOwnerBadgeText(Array.isArray(owners) ? owners : []);
         if (!text) return;
         const b = document.createElement('button');
@@ -3930,7 +4238,9 @@
       function isHabitListDense() {
         return getHabitListDisplayMode() === 'dense';
       }
-      const MAX_PINNED_HABITS = 2;
+      function shouldShowFriendBadges() {
+        return currentProfile?.showFriendBadges !== false;
+      }
       function addDays(date, offset = 0) {
         const result = new Date(date || curDate());
         result.setHours(0, 0, 0, 0);
@@ -3957,8 +4267,30 @@
         });
         return trimmed;
       }
+      function normalizeIgnoredMap(map) {
+        if (!map || typeof map !== 'object') return {};
+        const trimmed = {};
+        Object.entries(map).forEach(([key, value]) => {
+          if (!key) return;
+          if (typeof value !== 'string') return;
+          trimmed[key] = value;
+        });
+        return trimmed;
+      }
       function getProfileHabitArray(field) {
         return normalizeHabitArray(currentProfile?.[field]);
+      }
+      function getIgnoredHabitsMap() {
+        return normalizeIgnoredMap(currentProfile?.ignoredHabits);
+      }
+      function getIgnoredHabitDate(habitId) {
+        if (!habitId) return '';
+        return getIgnoredHabitsMap()[String(habitId)] || '';
+      }
+      function isHabitIgnoredToday(habitId, targetKey) {
+        if (!habitId) return false;
+        const key = targetKey || dayKeyFromDate(curDate());
+        return getIgnoredHabitDate(habitId) === key;
       }
       function getPinnedHabitIds() {
         return getProfileHabitArray('pinnedHabits');
@@ -3966,6 +4298,13 @@
       function isHabitPinned(habitId) {
         if (!habitId) return false;
         return getPinnedHabitIds().includes(String(habitId));
+      }
+      function getHiddenHabits() {
+        return normalizeHabitArray(currentProfile?.forgottenHabits);
+      }
+      function isHabitHidden(habitId) {
+        if (!habitId) return false;
+        return getHiddenHabits().includes(String(habitId));
       }
       function getPostponedHabitsMap() {
         return normalizePostponedMap(currentProfile?.postponedHabits);
@@ -3985,6 +4324,14 @@
           payloadFields.postponedHabits = normalizePostponedMap(fields.postponedHabits);
           hasField = true;
         }
+        if (fields.ignoredHabits !== undefined) {
+          payloadFields.ignoredHabits = normalizeIgnoredMap(fields.ignoredHabits);
+          hasField = true;
+        }
+        if (fields.forgottenHabits !== undefined) {
+          payloadFields.forgottenHabits = normalizeHabitArray(fields.forgottenHabits);
+          hasField = true;
+        }
         if (!hasField) return;
         const updated = { ...(currentProfile || {}), ...payloadFields };
         persistProfile(updated);
@@ -3995,15 +4342,17 @@
           tipsDisplayMode: updated.tipsDisplayMode,
           habitListDisplayMode: updated.habitListDisplayMode,
           pinnedHabits: updated.pinnedHabits,
-          postponedHabits: updated.postponedHabits
+          postponedHabits: updated.postponedHabits,
+          ignoredHabits: updated.ignoredHabits,
+          forgottenHabits: updated.forgottenHabits,
+          showFriendBadges: updated.showFriendBadges
         });
       }
       function getDescTipSeed(baseDate = curDate()) {
-        const anchor = isWeekMode() ? getWeekStart(baseDate) : new Date(baseDate);
+        const anchor = new Date(baseDate);
         anchor.setHours(0, 0, 0, 0);
-        const modeKey = isWeekMode() ? 'week' : 'day';
         const dateKey = `${anchor.getFullYear()}-${anchor.getMonth()}-${anchor.getDate()}`;
-        return `${spaceId || 'global'}:${modeKey}:${dateKey}`;
+        return `${spaceId || 'global'}:day:${dateKey}`;
       }
       function getLibraryHabitById(hid) {
         const normalized = String(hid);
@@ -4077,7 +4426,6 @@
         if (configured === 'libre' || configured === 'commun') return configured;
         return sp.type === 'private' ? 'libre' : 'commun';
       }
-      function isWeekMode() { return getSpace()?.orgMode === 'week'; }
       function shouldShowContextMenuEdit() {
         return hasEditPermission();
       }
@@ -4085,19 +4433,53 @@
         const tomorrow = addDays(curDate(), 1);
         return dayKeyFromDate(tomorrow);
       }
-      function toggleReportForHabit(habitId) {
+      function toggleShiftForHabit(habitId) {
         if (!habitId) return;
         const targetKey = getTomorrowKey();
         const map = getPostponedHabitsMap();
         const next = { ...map };
         if (next[habitId] === targetKey) {
           delete next[habitId];
-          showToast('Report annulé.');
+          showToast('Décalage annulé.');
         } else {
           next[habitId] = targetKey;
-          showToast('Habitude reportée à demain.');
+          showToast('Habitude décalée à demain.');
         }
         persistHabitProfileFields({ postponedHabits: next }).catch(() => { });
+        renderCards();
+      }
+      function toggleHabitIgnore(habitId) {
+        if (!habitId) return;
+        const todayKey = dayKeyFromDate(curDate());
+        const normalizedId = String(habitId);
+        const map = getIgnoredHabitsMap();
+        const next = { ...map };
+        if (next[normalizedId] === todayKey) {
+          delete next[normalizedId];
+          showToast('Caché annulé pour aujourd’hui.');
+        } else {
+          next[normalizedId] = todayKey;
+          showToast('Habitude ignorée pour aujourd’hui.');
+        }
+        persistHabitProfileFields({ ignoredHabits: next }).catch(() => { });
+        renderCards();
+      }
+      function hideHabit(habitId) {
+        if (!habitId) return;
+        const normalizedId = String(habitId);
+        const hidden = getHiddenHabits();
+        if (hidden.includes(normalizedId)) return;
+        const next = [...hidden, normalizedId];
+        persistHabitProfileFields({ forgottenHabits: next }).catch(() => { });
+        showToast('Habitude cachée.');
+        renderCards();
+      }
+      function showHabit(habitId) {
+        if (!habitId) return;
+        const normalizedId = String(habitId);
+        const next = getHiddenHabits().filter(id => id !== normalizedId);
+        persistHabitProfileFields({ forgottenHabits: next }).catch(() => { });
+        showToast('Habitude affichée.');
         renderCards();
       }
       function pinHabitAction(habitId) {
@@ -4105,10 +4487,6 @@
         const normalizedId = String(habitId);
         const pinned = getPinnedHabitIds();
         if (pinned.includes(normalizedId)) return;
-        if (pinned.length >= MAX_PINNED_HABITS) {
-          showToast('Tu peux épingler au maximum 2 habitudes.');
-          return;
-        }
         const nextPinned = [...pinned, normalizedId];
         persistHabitProfileFields({ pinnedHabits: nextPinned }).catch(() => { });
         showToast('Habitude épinglée en haut.');
@@ -4128,7 +4506,7 @@
         const created = timestampToDate(sp.createdAt);
         if (!created) return null;
         created.setHours(0, 0, 0, 0);
-        return sp.orgMode === 'week' ? getWeekStart(created) : created;
+        return created;
       }
       function getEarliestDayOff() {
         const earliest = getSpaceEarliestDate();
@@ -4165,11 +4543,7 @@
 
       function renderDateBar() {
         const d = curDate();
-        if (isWeekMode()) {
-          $("#dateLabel").textContent = weekLabel(d);
-        } else {
-          $("#dateLabel").textContent = fmtDate(d);
-        }
+        $("#dateLabel").textContent = fmtDate(d);
       }
 
       function getOwnerNameFromEvent(event) {
@@ -4232,10 +4606,8 @@
         HABIT_MODE[hid] = { type: fallbackType, n: 2 };
         if (!DONE_SETS[hid]) DONE_SETS[hid] = new Set();
         if (LOCKED_COMMUN[hid] === undefined) { LOCKED_COMMUN[hid] = false; LOCKED_BY[hid] = null; }
-        if (!HABIT_REC[hid]) {
-          const recurrence = def.recurrence || 1;
-          HABIT_REC[hid] = Math.max(1, Math.min(7, recurrence));
-        }
+        const target = def || { id: hid };
+        cacheRepeatConfigFromHabit(target);
       }
 
       /* Sélection quotidienne 4–9 habitudes par espace (déterministe par jour) */
@@ -4253,7 +4625,6 @@
         if (!root) return;
         const isDenseList = isHabitListDense();
         root.classList.toggle('dense-view', isDenseList);
-        root.classList.toggle('week-mode', isWeekMode());
         root.innerHTML = '';
         if (!spaceId) return;
         const today = curDate();
@@ -4282,11 +4653,19 @@
           maybePromptAddHabitsForEmptySpace();
         } else {
           autoOpenedHabitModalForEmptySpace = false;
+          let cardsAppended = 0;
+          const pinnedCards = [];
+          const shiftedCards = [];
+          const normalCards = [];
           items.forEach(it => {
             if (DELETED_HABITS.has(it.id)) return;
             const pinned = isHabitPinned(it.id);
-            if (!isVisibleToday(it.id, today)) return;
+            const shiftKey = getPostponedHabitDate(it.id);
+            const isShiftedToday = shiftKey === todayKey;
             ensureHabit(it.id);
+            const visibleToday = isVisibleToday(it.id, today);
+            const isIgnored = isHabitIgnoredToday(it.id, todayKey);
+            const isHiddenHabit = isHabitHidden(it.id);
 
             const card = document.createElement('article');
             card.className = 'card';
@@ -4294,9 +4673,6 @@
             card.dataset.pinned = pinned ? '1' : '0';
             const cont = document.createElement('div');
             cont.className = 'content';
-            const scheduleRow = document.createElement('div');
-            scheduleRow.className = 'schedule-days';
-            scheduleRow.style.display = 'none';
             const title = document.createElement('div');
             title.className = 'title';
             const left = document.createElement('div');
@@ -4315,12 +4691,7 @@
             const friendsBadges = document.createElement('div');
             friendsBadges.className = 'friends-badges';
             friends.appendChild(friendsBadges);
-            const progressRow = document.createElement('div');
-            progressRow.className = 'weekly-progress';
-            const scheduleMiniRow = document.createElement('div');
-            scheduleMiniRow.className = 'schedule-days-mini';
-            scheduleMiniRow.style.display = 'none';
-            cont.append(scheduleRow, progressRow, scheduleMiniRow, title, desc, friends);
+            cont.append(title, desc, friends);
 
             const col = document.createElement('div');
             col.className = 'levelCol';
@@ -4329,11 +4700,10 @@
             btn.dataset.cid = it.id;
             btn.dataset.habitEmoji = it.emoji || '🌱';
 
-            const isWeekSpace = isWeekMode();
-            const windowStart = isWeekSpace ? getWeekStart(today) : today;
+            const windowStart = today;
             const records = getHabitRecords(spaceId, it.id, windowStart);
             const freqWeekly = HABIT_REC[it.id] || 1;
-            const viewRecordedAt = isWeekSpace ? null : new Date(today);
+            const viewRecordedAt = new Date(today);
             let userRecord = records.find(r => isCurrentUserLabel(r.owner)) || null;
             const doneRecord = records.find(r => (r.state || 0) >= 1) || null;
             let ownerRecord = null;
@@ -4344,7 +4714,7 @@
             }
             const ownerFreq = Math.max(1, Number(ownerRecord?.frequency ?? freqWeekly));
             const ownerModeType = ownerRecord?.modeType || mode.type;
-            const resetProgress = (isWeekMode() && ownerRecord && ownerFreq !== freqWeekly) || (ownerRecord && ownerModeType !== mode.type);
+            const resetProgress = ownerRecord && ownerModeType !== mode.type;
             if (resetProgress) {
               ownerRecord = null;
               userRecord = null;
@@ -4361,14 +4731,22 @@
             const userState = userRecord?.state ?? 0;
             const storedCount = Number(userRecord?.count ?? 0) || 0;
             const computedCount = storedCount || (userState === 2 ? freqWeekly + 1 : 0);
-            const countValue = isWeekMode() ? Math.min(Math.max(computedCount, 0), freqWeekly + 1) : 0;
             const state = userState;
+            const contextForCounts = {
+              state,
+              isIgnored,
+              isHidden: isHiddenHabit,
+              dueToday: visibleToday
+            };
+            if (!visibleToday && !pinned) return;
+            if (!habitMatchesFilter(activeHabitFilter, contextForCounts)) {
+              return;
+            }
             btn.dataset.state = String(state);
             btn.dataset.owner = owner;
-            btn.dataset.count = state === 0 ? '0' : String(countValue);
+            btn.dataset.count = '0';
             btn.dataset.baseMin = String(baseMin);
             btn.dataset.recur = String(freqWeekly);
-            btn.dataset.week = isWeekMode() ? '1' : '0';
             btn.dataset.basePlants = String(state >= 1 ? baseMin : 0);
             btn.dataset.plants = btn.dataset.basePlants;
             btn.dataset.pinned = pinned ? '1' : '0';
@@ -4408,141 +4786,6 @@
               ensureOwnerBadges(friendsBadges, ownersNow, it, btn);
             };
 
-            const renderWeeklyRow = () => {
-              const recur = Math.max(1, +btn.dataset.recur || 1);
-              const totalBlocks = isDenseList ? Math.max(1, recur) : recur;
-              if (!isDenseList && totalBlocks <= 1) {
-                progressRow.style.display = 'none';
-                progressRow.innerHTML = '';
-                return;
-              }
-              progressRow.style.display = 'flex';
-              progressRow.innerHTML = '';
-              const stateNow = +btn.dataset.state || 0;
-              const rawCount = Math.max(0, Math.min(totalBlocks, +btn.dataset.count || 0));
-              let doneCount = rawCount;
-              let activeIndex = -1;
-              if (stateNow === 1) {
-                activeIndex = rawCount;
-                doneCount = Math.max(0, rawCount - 1);
-              } else if (stateNow === 2) {
-                doneCount = totalBlocks;
-                activeIndex = -1;
-              } else {
-                doneCount = 0;
-                activeIndex = -1;
-              }
-              for (let idx = 0; idx < totalBlocks; idx++) {
-                const block = document.createElement('span');
-                block.className = 'weekly-progress__block';
-                const position = idx + 1;
-                if (position <= doneCount) {
-                  block.classList.add('weekly-progress__block--done');
-                } else if (position === activeIndex) {
-                  block.classList.add('weekly-progress__block--active');
-                } else {
-                  block.classList.add('weekly-progress__block--pending');
-                }
-                progressRow.appendChild(block);
-              }
-            };
-
-            const renderDailyMiniRow = () => {
-              const weekStart = getWeekStart(today);
-              const weekRecords = getHabitRecords(spaceId, it.id, weekStart);
-              const dayStates = new Array(7).fill(0);
-              weekRecords.forEach(rec => {
-                const recDay = rec.recordedAt?.getDay();
-                if (!Number.isFinite(recDay)) return;
-                const index = (recDay + 6) % 7;
-                const stateNow = Math.max(0, Math.min(2, Number(rec.state) || 0));
-                dayStates[index] = Math.max(dayStates[index], stateNow);
-              });
-              const todayIndex = (today.getDay() + 6) % 7;
-              const currentState = Math.max(0, Math.min(2, Number(btn.dataset.state) || 0));
-              dayStates[todayIndex] = Math.max(dayStates[todayIndex], currentState);
-              scheduleMiniRow.innerHTML = '';
-              dayStates.forEach((state, idx) => {
-                const block = document.createElement('span');
-                block.className = 'weekly-progress__block';
-                const isAvailableDay = scheduledDaySet.size === 0 || scheduledDaySet.has(idx);
-                if (!isAvailableDay) {
-                  block.classList.add('weekly-progress__block--disabled');
-                } else {
-                  if (state >= 2) {
-                    block.classList.add('weekly-progress__block--done');
-                  } else if (state === 1) {
-                    block.classList.add('weekly-progress__block--active');
-                  } else {
-                    block.classList.add('weekly-progress__block--pending');
-                  }
-                }
-                if (idx === todayIndex) {
-                  block.classList.add('weekly-progress__block--today');
-                  block.classList.add('schedule-days-mini__today');
-                }
-                scheduleMiniRow.appendChild(block);
-              });
-            };
-
-            const renderProgressDots = () => {
-              const isWeekModeView = btn.dataset.week === '1';
-              if (!isWeekModeView) {
-                progressRow.style.display = 'none';
-                progressRow.innerHTML = '';
-                scheduleMiniRow.style.display = 'flex';
-                renderDailyMiniRow();
-                return;
-              }
-              scheduleMiniRow.style.display = 'none';
-              scheduleMiniRow.innerHTML = '';
-              renderWeeklyRow();
-            };
-
-            const freqType = getHabitFreqType(it);
-            const scheduledDays = getHabitFreqDays(it);
-            const scheduledDaySet = new Set(scheduledDays
-              .map(day => ((Number(day) || 0) % 7 + 7) % 7)
-              .map(day => (day + 6) % 7)
-            );
-            const showSchedule = !isWeekSpace && freqType === 'jours' && scheduledDays.length > 0;
-            const populateScheduleRow = () => {
-              if (!showSchedule) {
-                scheduleRow.style.display = 'none';
-                scheduleRow.innerHTML = '';
-                return;
-              }
-              const weekStart = getWeekStart(today);
-              const weekRecords = getHabitRecords(spaceId, it.id, weekStart);
-              const dayState = new Map();
-              weekRecords.forEach(rec => {
-                const recDay = rec.recordedAt?.getDay();
-                if (!Number.isFinite(recDay)) return;
-                const stateNow = Math.max(0, Math.min(2, Number(rec.state) || 0));
-                const existing = dayState.get(recDay);
-                if (existing === undefined || stateNow > existing) {
-                  dayState.set(recDay, stateNow);
-                }
-              });
-              scheduleRow.innerHTML = '';
-              scheduledDays.forEach(day => {
-                const pill = document.createElement('span');
-                pill.className = 'schedule-days__pill';
-                const recordedState = dayState.get(day) ?? 0;
-                if (recordedState >= 2) {
-                  pill.classList.add('schedule-days__pill--done');
-                } else if (recordedState === 1) {
-                  pill.classList.add('schedule-days__pill--active');
-                } else {
-                  pill.classList.add('schedule-days__pill--pending');
-                }
-                pill.textContent = DAY_LABELS[day] || '';
-                scheduleRow.appendChild(pill);
-              });
-              scheduleRow.style.display = 'flex';
-            };
-            populateScheduleRow();
-
             const applyState = (nst, { keepOwner = false } = {}) => {
               btn.dataset.state = String(nst);
               const previousOwner = (btn.dataset.owner || '').trim();
@@ -4557,7 +4800,6 @@
               drawBtn(btn);
               setVisualFromState(nst);
               renderBadges();
-              renderProgressDots();
               applyNoteDisplayMode(desc, { state: nst });
               scheduleHabitActivity(it.id, {
                 type: 'realization',
@@ -4568,38 +4810,10 @@
                 modeType: mode.type,
                 recordedAt: viewRecordedAt
               });
-              populateScheduleRow();
               renderDateBar();
             };
 
-            const clickWeekly = () => {
-              let st = +btn.dataset.state || 0;
-              let count = +btn.dataset.count || 0;
-              const R = Math.max(1, +btn.dataset.recur || 1);
-              if (st === 0) {
-                st = 1;
-                count = 1;
-                btn.dataset.owner = getCurrentOwnerLabel();
-              } else if (st === 1) {
-                if (count < R) {
-                  count++;
-                } else if (count === R) {
-                  st = 2;
-                }
-              } else if (st === 2) {
-                st = 0;
-                count = 0;
-                btn.dataset.owner = '';
-              }
-              if (st === 2) {
-                count = R;
-              }
-              btn.dataset.count = String(count);
-              applyState(st, { keepOwner: st !== 0 });
-            };
-
             const clickLibre = () => {
-              if (isWeekMode()) { clickWeekly(); return; }
               const st = +btn.dataset.state || 0;
               if (st === 0) {
                 btn.dataset.owner = getCurrentOwnerLabel();
@@ -4635,29 +4849,46 @@
             drawBtn(btn);
             setVisualFromState(state);
             renderBadges();
-            renderProgressDots();
             applyNoteDisplayMode(desc, { state });
             col.addEventListener('click', handleClick);
             cont.addEventListener('click', (e) => { if (e.target.closest('.badge')) return; handleClick(); });
             col.append(btn);
             card.append(col, cont);
-            if (pinned) {
+            if (isShiftedToday) {
+              const shiftedBadge = document.createElement('span');
+              shiftedBadge.className = 'card-shifted';
+              shiftedBadge.textContent = '⏳';
+              card.appendChild(shiftedBadge);
+            }
+            if (pinned && !isShiftedToday) {
               const pinBadge = document.createElement('span');
               pinBadge.className = 'card-pin';
               pinBadge.textContent = '📌';
               card.appendChild(pinBadge);
             }
             attachCardContextHandlers(card, btn, it);
-            root.appendChild(card);
-          });
-          const pinnedList = getPinnedHabitIds();
-          for (let i = pinnedList.length - 1; i >= 0; i--) {
-            const card = root.querySelector(`article[data-habit-id="${pinnedList[i]}"]`);
-            if (card) {
-              root.prepend(card);
+            if (isShiftedToday) {
+              shiftedCards.push(card);
+            } else if (pinned) {
+              pinnedCards.push(card);
+            } else {
+              normalCards.push(card);
             }
+          });
+          const orderedCards = [...pinnedCards, ...shiftedCards, ...normalCards];
+          orderedCards.forEach(card => root.appendChild(card));
+          cardsAppended = orderedCards.length;
+          const filterInfo = getHabitFilterByKey(activeHabitFilter);
+          if (cardsAppended === 0) {
+            const label = (filterInfo?.label || '').toLowerCase() || 'disponible';
+            const helper = filterInfo?.emptyText || 'Change de filtre pour voir autre chose.';
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.innerHTML = `<strong>Aucune habitude ${label}.</strong><p>${helper}</p>`;
+            root.appendChild(emptyState);
           }
         }
+        updateHabitFilterButtons();
         renderDateBar();
         updateAddModalOptions();
       }
@@ -4687,22 +4918,22 @@
 
       /* ===== Classement (texte simple ❤️🤝) ===== */
       const PROFILE_PERIOD_BUTTONS = [
-        { selector: '#profilePeriod7', day: { key: '7d', label: '7 jours' }, week: { key: '1w', label: '1 sem' } },
-        { selector: '#profilePeriod30', day: { key: '30d', label: '30 jours' }, week: { key: '4w', label: '4 sem' } },
-        { selector: '#profilePeriodAll', day: { key: 'all', label: 'Total' }, week: { key: 'all', label: 'Total' } }
+        { selector: '#profilePeriod7', key: '7d', label: '7 jours' },
+        { selector: '#profilePeriod30', key: '30d', label: '30 jours' },
+        { selector: '#profilePeriodAll', key: 'all', label: 'Total' }
       ];
       const SPACE_PERIOD_BUTTONS = [
-        { selector: '#sBtnP7', day: { key: '7d', label: '7 jours' }, week: { key: '1w', label: '1 sem' } },
-        { selector: '#sBtnP30', day: { key: '30d', label: '30 jours' }, week: { key: '4w', label: '4 sem' } },
-        { selector: '#sBtnPAll', day: { key: 'all', label: 'Total' }, week: { key: 'all', label: 'Total' } }
+        { selector: '#sBtnP7', key: '7d', label: '7 jours' },
+        { selector: '#sBtnP30', key: '30d', label: '30 jours' },
+        { selector: '#sBtnPAll', key: 'all', label: 'Total' }
       ];
-      function applyPeriodButtonLayout(buttons, mode) {
+      function applyPeriodButtonLayout(buttons) {
         const allowed = [];
         let defaultKey = null;
         buttons.forEach(item => {
           const btn = $(item.selector);
           if (!btn) return;
-          const info = item[mode];
+          const info = item;
           if (!info) return;
           btn.dataset.period = info.key;
           btn.textContent = info.label;
@@ -4712,8 +4943,7 @@
         return { allowed, defaultKey };
       }
       function updateProfilePeriodButtons() {
-        const mode = isWeekMode() ? 'week' : 'day';
-        const { allowed, defaultKey } = applyPeriodButtonLayout(PROFILE_PERIOD_BUTTONS, mode);
+        const { allowed, defaultKey } = applyPeriodButtonLayout(PROFILE_PERIOD_BUTTONS);
         if (!allowed.includes(profilePeriod)) {
           profilePeriod = defaultKey || 'all';
         }
@@ -4724,8 +4954,7 @@
         });
       }
       function updateSpacePeriodButtons() {
-        const mode = isWeekMode() ? 'week' : 'day';
-        const { allowed, defaultKey } = applyPeriodButtonLayout(SPACE_PERIOD_BUTTONS, mode);
+        const { allowed, defaultKey } = applyPeriodButtonLayout(SPACE_PERIOD_BUTTONS);
         if (!allowed.includes(sPeriod)) {
           sPeriod = defaultKey || 'all';
         }
@@ -5000,71 +5229,6 @@
         }
 
 
-        const freqWrapper = $("#freqField");
-        const weekFreqWrapper = $("#weekFreqField");
-        const weekFreqSelect = $("#weekFreqSelect");
-        const weekMode = isWeekMode();
-        if (freqWrapper) freqWrapper.classList.toggle('hide', weekMode);
-        if (weekFreqWrapper) weekFreqWrapper.classList.toggle('hide', !weekMode);
-        if (weekFreqSelect) {
-          const currentRecurrence = HABIT_REC[activeId] || 1;
-          weekFreqSelect.value = String(currentRecurrence);
-          weekFreqSelect.disabled = !isAdmin;
-          if (!weekFreqSelect.dataset.bound) {
-            weekFreqSelect.dataset.bound = '1';
-          }
-          if (!weekFreqSelect.dataset.handlerBound) {
-            weekFreqSelect.addEventListener('change', () => {
-              const next = Math.max(1, Math.min(7, Number(weekFreqSelect.value) || 1));
-              weekFreqSelect.value = String(next);
-              HABIT_REC[activeId] = next;
-              if (spaceId) {
-                persistHabit(spaceId, { id: activeId, recurrence: next, frequency: String(next) });
-              }
-              renderCards();
-            });
-            weekFreqSelect.dataset.handlerBound = '1';
-          }
-        }
-
-        const ft = $("#freqType"), fJ = $("#freqSubJours"), fPon = $("#freqSubPonctuelle");
-        const adjustFreqSubs = () => {
-          if (!ft) return;
-          const val = ft.value;
-          fJ?.classList.toggle('hide', val !== 'jours');
-          fPon?.classList.toggle('hide', val !== 'ponctuelle');
-        };
-        const populateFreqSubJours = () => {
-          if (!fJ) return;
-          const days = getHabitFreqDays(it);
-          fJ.querySelectorAll('input[type=checkbox]').forEach(input => {
-            const dayValue = normalizeDayIndex(input.value);
-            input.checked = dayValue !== null && days.includes(dayValue);
-          });
-        };
-        const readFreqSubJours = () => {
-          if (!fJ) return [];
-          const values = [];
-          fJ.querySelectorAll('input[type=checkbox]').forEach(input => {
-            if (!input.checked) return;
-            const dayValue = normalizeDayIndex(input.value);
-            if (dayValue !== null) values.push(dayValue);
-          });
-          const unique = Array.from(new Set(values));
-          unique.sort((a, b) => a - b);
-          return unique;
-        };
-        if (ft) {
-          ft.addEventListener('change', () => {
-            adjustFreqSubs();
-            populateFreqSubJours();
-          });
-          const habitFreqType = getHabitFreqType(it);
-          ft.value = habitFreqType;
-          adjustFreqSubs();
-        }
-        populateFreqSubJours();
-
         const del = $("#deleteHabitBtn");
         if (del && !del.dataset.bound) {
           del.onclick = () => {
@@ -5091,14 +5255,16 @@
         if (save && !save.dataset.bound) {
           save.onclick = async () => {
             if (!requireAdmin('modifier une habitude')) return;
-            const freqTypeValue = ft?.value || getHabitFreqType(it);
-            const selectedDays = readFreqSubJours();
-            let freqDaysPayload = [];
-            if (freqTypeValue === 'jours') {
-              freqDaysPayload = selectedDays.length ? selectedDays : [curDate().getDay()];
-            } else if (freqTypeValue === 'quotidien') {
-              freqDaysPayload = FULL_WEEK_DAYS.slice();
-            }
+            const repeatConfig = getHabitRepeatConfig(it);
+            const freqTypeValue = repeatConfig.unit === 'week' ? 'jours' : 'quotidien';
+            const freqDaysPayload = repeatConfig.unit === 'week'
+              ? (Array.isArray(repeatConfig.weekDays) ? repeatConfig.weekDays.slice() : [])
+              : FULL_WEEK_DAYS.slice();
+            const repeatConfigPayload = {
+              ...repeatConfig,
+              weekDays: Array.isArray(repeatConfig.weekDays) ? repeatConfig.weekDays.slice() : [],
+              monthMode: repeatConfig.monthMode ? { ...repeatConfig.monthMode } : null
+            };
             const payload = {
               id: activeId,
               customTitle: HABIT_TITLE_CUSTOM[activeId] || '',
@@ -5107,12 +5273,16 @@
               mode: HABIT_MODE[activeId] || null,
               freqType: freqTypeValue,
               freqDefault: freqTypeValue,
-              freqDays: freqDaysPayload
+              freqDays: freqDaysPayload,
+              frequency: repeatConfig.interval,
+              repeatConfig: repeatConfigPayload
             };
             if (it) {
               it.freqType = payload.freqType;
               it.freqDefault = payload.freqDefault;
               it.freqDays = payload.freqDays.slice();
+              it.repeatConfig = { ...repeatConfigPayload };
+              cacheRepeatConfigFromHabit(it);
             }
             await persistHabit(spaceId, payload);
             activeId = null;
@@ -5135,20 +5305,12 @@
         const currentMemberKey = getCurrentSpaceMemberKey(sp);
         const currentMemberName = getSpaceMemberLabel(sp, currentMemberKey);
         $("#paramName").value = currentMemberName || getLastMemberName() || '';
-        const orgMode = sp.orgMode || 'day';
-        const autoWeekField = $("#autoWeekField");
-        if (autoWeekField) autoWeekField.classList.toggle('hide', orgMode !== 'week');
       }
       function setupSpaceInfo() {
         const sp = getSpace(); const t = $("#spaceDescInfo");
         const nameInput = $("#paramName");
         t.value = SPACE_DESC_TXT[spaceId] ?? (sp.desc || ''); t.classList.add('editing');
         t.oninput = () => { SPACE_DESC_TXT[spaceId] = t.value; sp.desc = t.value; persistSpaceDoc(spaceId, { desc: t.value }) }
-        const autoWeekSelect = $("#autoWeekAffection");
-        if (autoWeekSelect && !autoWeekSelect.dataset.bound) {
-          autoWeekSelect.value = 'none';
-          autoWeekSelect.dataset.bound = '1';
-        }
         const rightsSelect = $("#spaceEditorRights");
         if (rightsSelect) {
           rightsSelect.value = getEditorRights(sp);
@@ -5433,8 +5595,6 @@
         wrap.innerHTML = '';
         if (!spaceId) return;
         const space = getSpace();
-        const isWeekSpace = space?.orgMode === 'week';
-        wrap.classList.toggle('week-mode', isWeekSpace);
         const { y, m, fd, days } = minfo(sCalOff);
         const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
         const cellHeight = 55;
@@ -5444,7 +5604,6 @@
         wrap.style.position = 'relative';
         wrap.style.minHeight = `${rows * (cellHeight + gap) - gap}px`;
         const ownerFilter = $("#sCalWho")?.value || '__all__';
-        const weekTotals = Array(rows).fill(0);
         const records = getSpaceRecords(spaceId);
         const monthMap = new Map();
         records.forEach(rec => {
@@ -5453,10 +5612,6 @@
           const day = rec.recordedAt.getDate();
           const minutes = BASE_MINUTES[rec.habitId] || 15;
           monthMap.set(day, (monthMap.get(day) || 0) + minutes);
-          const dayIndex = Math.floor((fd + day - 1) / 7);
-          if (dayIndex >= 0 && dayIndex < rows) {
-            weekTotals[dayIndex] += minutes;
-          }
         });
         const today = new Date();
         const sameMonth = sCalOff === 0;
@@ -5505,23 +5660,11 @@
           };
           wrap.appendChild(c);
         }
-        if (isWeekSpace) {
-          const summaryHeight = 24;
-          for (let row = 0; row < rows; row++) {
-            const summaryMinutes = weekTotals[row];
-            const summary = document.createElement('div');
-            summary.className = 'weekSummary';
-            summary.textContent = `🧑‍🌾 ${m2txt(summaryMinutes)}`;
-            const rowTop = row * (cellHeight + gap);
-            const top = rowTop + cellHeight - summaryHeight - 2;
-            summary.style.top = `${top}px`;
-            wrap.appendChild(summary);
-          }
-        }
         $("#sMonthLabel").textContent = `${months[m]} ${y}  🧑‍🌾${m2txt(round15(monthMinutes))}`;
       }
-      $("#sPrevMonth").onclick = () => { sCalOff--; renderSpaceCalendar() }; $("#sNextMonth").onclick = () => { sCalOff++; renderSpaceCalendar() }; $("#sCalWho").addEventListener('change', renderSpaceCalendar);
-
+      $("#sPrevMonth").onclick = () => { sCalOff--; renderSpaceCalendar(); };
+      $("#sNextMonth").onclick = () => { sCalOff++; renderSpaceCalendar(); };
+      $("#sCalWho").addEventListener('change', renderSpaceCalendar);
       function getVisibleSpaces() {
         const base = allowedSpaces.length ? allowedSpaces : Object.keys(SPACES);
         const order = ['E8D3FS', 'AS50CI', 'D0PWE3', 'WS32D7', 'SR3S0D', 'PD03XZ'];
@@ -5579,6 +5722,7 @@
       const mPrefs = $("#modalPrefs");
       const prefsTipsSelect = $("#prefsTipsDisplayMode");
       const prefsDisplayModeSelect = $("#prefsDisplayMode");
+      const prefsFriendBadgesCheckbox = $("#prefsFriendBadges");
       const closePrefsBtn = $("#closePrefs");
       function updateHabitModalControls() {
         const hasHabits = (getSpace()?.ch?.length || 0) > 0;
@@ -5694,6 +5838,9 @@
         if (prefsDisplayModeSelect) {
           prefsDisplayModeSelect.value = getHabitListDisplayMode();
         }
+        if (prefsFriendBadgesCheckbox) {
+          prefsFriendBadgesCheckbox.checked = shouldShowFriendBadges();
+        }
         open(mPrefs);
       }
       prefsTipsSelect?.addEventListener('change', async () => {
@@ -5704,6 +5851,11 @@
       prefsDisplayModeSelect?.addEventListener('change', async () => {
         const mode = prefsDisplayModeSelect.value || 'dense';
         await updateUserHabitListDisplayMode(mode);
+        renderCards();
+      });
+      prefsFriendBadgesCheckbox?.addEventListener('change', async () => {
+        const show = prefsFriendBadgesCheckbox.checked;
+        await updateUserFriendBadgesPreference(show);
         renderCards();
       });
       closePrefsBtn?.addEventListener('click', () => close(mPrefs));
@@ -5791,9 +5943,7 @@
         }
       });
       const gardenNameInput = $("#gardenNameInput");
-      const gardenModeSelect = $("#gardenModeSelect");
       const gardenHabitModeSelect = $("#gardenHabitMode");
-      const gardenModeHint = $("#gardenModeHint");
       const createGardenBtn = $("#createGardenBtn");
       const gardenStatus = $("#gardenStatus");
       const authMessage = $("#authMessage");
@@ -5880,37 +6030,6 @@
       });
       updateInstallOptionVisibility();
 
-      function updateGardenModeHint() {
-        if (!gardenModeHint || !gardenModeSelect) return;
-        if (gardenModeSelect.value === 'day') {
-          gardenModeHint.textContent = "Des routines différentes chaque jour";
-        } else {
-          gardenModeHint.textContent = "5 à 30 routines à organiser librement sur la semaine.";
-        }
-      }
-      gardenModeSelect?.addEventListener('change', () => {
-        updateGardenModeHint();
-        syncGardenModeButtons();
-      });
-
-      function syncGardenModeButtons() {
-        const container = $("#gardenModeButtons");
-        if (!container || !gardenModeSelect) return;
-        const buttons = Array.from(container.querySelectorAll('.org-mode-btn'));
-        buttons.forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.mode === gardenModeSelect.value);
-          if (!btn.dataset.bound) {
-            btn.dataset.bound = '1';
-            btn.addEventListener('click', () => {
-              const mode = btn.dataset.mode || 'week';
-              gardenModeSelect.value = mode;
-              buttons.forEach(b => b.classList.toggle('active', b === btn));
-              updateGardenModeHint();
-            });
-          }
-        });
-      }
-
       function updateAuthMessage() {
         if (pendingInviteInfo) {
           const spaceName = pendingInviteInfo.gardenLabel || pendingInviteInfo.label || 'ton jardin';
@@ -5930,14 +6049,11 @@
       refreshPendingInviteInfo().then(updateAuthMessage);
 
       function openGardenFlow() {
-        gardenModeSelect.value = 'week';
         if (gardenHabitModeSelect) {
           gardenHabitModeSelect.value = 'commun';
         }
         gardenNameInput.value = '';
         gardenStatus.textContent = '';
-        updateGardenModeHint();
-        syncGardenModeButtons();
         open(mGarden);
       }
 
@@ -5950,7 +6066,6 @@
         }
         const profile = GARDEN_TYPES[0];
         const title = (gardenNameInput.value || profile.label).trim() || profile.label;
-        const mode = gardenModeSelect.value || profile.orgMode;
         const habitMode = gardenHabitModeSelect?.value || 'commun';
         const accessCode = generateSpaceAccessCode();
         const id = generateSpaceId();
@@ -5972,7 +6087,6 @@
           emoji: profile.emoji,
           label: title,
           type: profile.type,
-          orgMode: mode,
           habitMode,
           code: accessCode,
           ch: [],
@@ -6366,8 +6480,8 @@
       $("#closeInvite").onclick = () => close(mInvite);
 
       /* Jour +/- */
-      $("#prevDay").onclick = () => { dayOff = clampDayOff(dayOff + (isWeekMode() ? -7 : -1)); renderCards(); renderDateBar(); };
-      $("#nextDay").onclick = () => { dayOff = clampDayOff(dayOff + (isWeekMode() ? 7 : 1)); renderCards(); renderDateBar(); };
+      $("#prevDay").onclick = () => { dayOff = clampDayOff(dayOff - 1); renderCards(); renderDateBar(); };
+      $("#nextDay").onclick = () => { dayOff = clampDayOff(dayOff + 1); renderCards(); renderDateBar(); };
 
       /* Lancement */
       let dayInit = false; function renderDateOnce() { if (!dayInit) { dayOff = 0; renderDateBar(); dayInit = true } }
@@ -6550,7 +6664,10 @@
             tipsDisplayMode: updated.tipsDisplayMode,
             habitListDisplayMode: updated.habitListDisplayMode,
             pinnedHabits: updated.pinnedHabits,
-            postponedHabits: updated.postponedHabits
+            postponedHabits: updated.postponedHabits,
+            ignoredHabits: updated.ignoredHabits,
+            forgottenHabits: updated.forgottenHabits,
+            showFriendBadges: updated.showFriendBadges
           });
         }
         return finalName;
@@ -6589,6 +6706,9 @@
         const habitListDisplayMode = remoteProfile?.habitListDisplayMode || fallbackHabitMode || 'dense';
         const pinnedHabits = Array.isArray(remoteProfile?.pinnedHabits) ? remoteProfile.pinnedHabits : [];
         const postponedHabits = normalizePostponedMap(remoteProfile?.postponedHabits);
+        const ignoredHabits = normalizeIgnoredMap(remoteProfile?.ignoredHabits);
+        const forgottenHabits = Array.isArray(remoteProfile?.forgottenHabits) ? remoteProfile?.forgottenHabits : [];
+        const showFriendBadges = remoteProfile?.showFriendBadges !== false;
         const profile = {
           uid: user.uid,
           email,
@@ -6597,7 +6717,10 @@
           tipsDisplayMode,
           habitListDisplayMode,
           pinnedHabits,
-          postponedHabits
+          postponedHabits,
+          ignoredHabits,
+          forgottenHabits,
+          showFriendBadges
         };
         persistProfile(profile);
         await persistUserProfile(profile);
