@@ -2808,8 +2808,8 @@
     const cardContextMenuEl = document.getElementById('cardContextMenu');
     const HABIT_FILTERS = [
       { key: 'todo', label: 'À faire', emptyText: 'Tu as fait le tour de ce filtre pour le moment.' },
-      { key: 'done', label: 'Fait', emptyText: 'Aucune habitude terminée pour le moment.' },
-      { key: 'hidden', label: 'Caché', emptyText: 'Tu n’as pas caché d’habitude encore.' }
+      { key: 'done', label: 'Tous', emptyText: 'Aucune habitude prévue pour aujourd’hui.' },
+      { key: 'hidden', label: 'En pause', emptyText: 'Tu n’as pas suspendu d’habitude encore.' }
     ];
     let activeHabitFilter = 'todo';
     const habitFilterBarEl = document.getElementById('habitFilterBar');
@@ -2883,7 +2883,7 @@
         return state < 2;
       }
       if (normalized === 'done') {
-        return state === 2;
+        return true;
       }
       return true;
     }
@@ -2926,7 +2926,7 @@
       });
       const isHidden = isHabitHidden(habit.id);
       if (isHidden) {
-        addOption('Rendre visible', () => {
+        addOption('Reprendre', () => {
           hideCardContextMenu();
           showHabit(habit.id);
         });
@@ -2950,7 +2950,7 @@
         }
       }
       if (!isHidden && !isShifted) {
-        addOption('Cacher', () => {
+        addOption('Suspendre', () => {
           hideCardContextMenu();
           hideHabit(habit.id);
         });
