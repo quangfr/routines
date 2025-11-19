@@ -2897,12 +2897,12 @@
     renderHabitFilterBar();
     let shouldSuppressCardClick = false;
     const CARD_CONTEXT_LONG_PRESS_MS = 360;
-    const CARD_CONTEXT_SCROLL_SAFETY_MS = 480;
-    let ignoreContextMenuScrollUntil = 0;
+    const CARD_CONTEXT_INTERACTION_SAFETY_MS = 480;
+    let ignoreContextMenuInteractionUntil = 0;
     function hideCardContextMenu() {
       if (!cardContextMenuEl) return;
       cardContextMenuEl.classList.remove('open');
-      ignoreContextMenuScrollUntil = 0;
+      ignoreContextMenuInteractionUntil = 0;
     }
     function showCardContextMenu(habit, btn, clientX, clientY) {
       if (!cardContextMenuEl || !habit || !btn) return;
@@ -2969,7 +2969,7 @@
       cardContextMenuEl.style.left = '0px';
       cardContextMenuEl.style.top = '0px';
       cardContextMenuEl.classList.add('open');
-      ignoreContextMenuScrollUntil = Date.now() + CARD_CONTEXT_SCROLL_SAFETY_MS;
+      ignoreContextMenuInteractionUntil = Date.now() + CARD_CONTEXT_INTERACTION_SAFETY_MS;
       const rect = cardContextMenuEl.getBoundingClientRect();
       const safeLeft = Math.min(Math.max(8, clientX), Math.max(8, window.innerWidth - rect.width - 8));
       const safeTop = Math.min(Math.max(8, clientY), Math.max(8, window.innerHeight - rect.height - 8));
@@ -3024,15 +3024,16 @@
       btn.addEventListener('contextmenu', contextMenuHandler);
     }
     document.addEventListener('pointerdown', (event) => {
+      if (Date.now() < ignoreContextMenuInteractionUntil) return;
       if (!cardContextMenuEl?.classList.contains('open')) return;
       if (!cardContextMenuEl.contains(event.target)) hideCardContextMenu();
     });
     window.addEventListener('scroll', () => {
-      if (Date.now() < ignoreContextMenuScrollUntil) return;
+      if (Date.now() < ignoreContextMenuInteractionUntil) return;
       hideCardContextMenu();
     });
     window.addEventListener('resize', () => {
-      if (Date.now() < ignoreContextMenuScrollUntil) return;
+      if (Date.now() < ignoreContextMenuInteractionUntil) return;
       hideCardContextMenu();
     });
     function slugifyTag(text) {
