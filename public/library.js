@@ -2,7 +2,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 1,
     "emoji": "🌱",
-    "title": "Inspirer en ouvrant Habitube",
+    "titles": ["Inspirer en ouvrant Habitube"],
     "needs": [
       "organization",
       "joy"
@@ -16,7 +16,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 2,
     "emoji": "🥣",
-    "title": "Préparer un petit-déjeuner commun",
+    "titles": ["Préparer un petit-déjeuner commun"],
     "needs": [
       "nutrition",
       "joy"
@@ -31,7 +31,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 3,
     "emoji": "🥪",
-    "title": "Préparer une collation saine",
+    "titles": ["Préparer une collation saine"],
     "needs": [
       "nutrition",
       "joy"
@@ -46,7 +46,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 4,
     "emoji": "🍵",
-    "title": "Préparer une boisson chaude",
+    "titles": ["Préparer une boisson chaude"],
     "needs": [
       "comfort",
       "slowness"
@@ -61,7 +61,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 5,
     "emoji": "🛒",
-    "title": "Préparer sa liste de course",
+    "titles": ["Préparer sa liste de course"],
     "needs": [
       "organization",
       "nutrition"
@@ -76,7 +76,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 6,
     "emoji": "🍎",
-    "title": "Manger plus de fruits",
+    "titles": ["Manger plus de fruits"],
     "needs": [
       "nutrition",
       "comfort"
@@ -90,7 +90,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 7,
     "emoji": "💧",
-    "title": "Remplir sa gourde d’eau",
+    "titles": ["Remplir sa gourde d’eau"],
     "needs": [
       "nutrition",
       "safety"
@@ -104,7 +104,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 8,
     "emoji": "💊",
-    "title": "Prendre son traitement",
+    "titles": ["Prendre son traitement"],
     "needs": [
       "comfort",
       "safety"
@@ -118,14 +118,13 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 9,
     "emoji": "🚭",
-    "title": "Ne pas fumer aujourd’hui",
+    "titles": ["Ne pas fumer aujourd’hui"],
     "needs": [
       "safety",
       "calm"
     ],
     "contexts": [
-      "home",
-      "office"
+      "home"
     ],
     "frequency": 7,
     "target": "individual"
@@ -133,7 +132,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 10,
     "emoji": "🛁",
-    "title": "Nettoyer la salle de bains",
+    "titles": ["Nettoyer la salle de bains"],
     "needs": [
       "cleanliness",
       "hygiene"
@@ -147,7 +146,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 11,
     "emoji": "🧴",
-    "title": "Faire son soin du jour",
+    "titles": ["Faire son soin du jour"],
     "needs": [
       "hygiene",
       "comfort"
@@ -161,7 +160,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 12,
     "emoji": "🛀",
-    "title": "Prendre un bain chaud",
+    "titles": ["Prendre un bain chaud"],
     "needs": [
       "comfort",
       "hygiene"
@@ -175,14 +174,13 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 13,
     "emoji": "🦷",
-    "title": "Bien brosser ses dents",
+    "titles": ["Bien brosser ses dents"],
     "needs": [
       "hygiene",
       "safety"
     ],
     "contexts": [
-      "home",
-      "family"
+      "home"
     ],
     "frequency": 7,
     "target": "individual"
@@ -190,7 +188,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 14,
     "emoji": "🛌",
-    "title": "Changer son linge de lit",
+    "titles": ["Changer son linge de lit"],
     "needs": [
       "cleanliness",
       "comfort"
@@ -204,7 +202,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 15,
     "emoji": "🧹",
-    "title": "Nettoyer couloir et entrée",
+    "titles": ["Nettoyer couloir et entrée"],
     "needs": [
       "cleanliness",
       "safety"
@@ -218,7 +216,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 16,
     "emoji": "🍽️",
-    "title": "Remettre la cuisine en ordre",
+    "titles": ["Remettre la cuisine en ordre"],
     "needs": [
       "cleanliness",
       "cooperation"
@@ -232,7 +230,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 17,
     "emoji": "🛋️",
-    "title": "Ranger le salon",
+    "titles": ["Ranger le salon"],
     "needs": [
       "cleanliness",
       "comfort"
@@ -246,7 +244,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 18,
     "emoji": "🚽",
-    "title": "Nettoyer les toilettes",
+    "titles": ["Nettoyer les toilettes"],
     "needs": [
       "cleanliness",
       "hygiene"
@@ -260,7 +258,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 19,
     "emoji": "🧻",
-    "title": "Vérifier les produits ménages",
+    "titles": ["Vérifier les produits ménages"],
     "needs": [
       "equipment",
       "cleanliness"
@@ -274,7 +272,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 20,
     "emoji": "🛏️",
-    "title": "Aérer et ranger la chambre",
+    "titles": ["Aérer et ranger la chambre"],
     "needs": [
       "cleanliness",
       "equipment"
@@ -288,14 +286,13 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 21,
     "emoji": "🪥",
-    "title": "Ranger ses affaires de toilette",
+    "titles": ["Ranger ses affaires de toilette"],
     "needs": [
       "privacy",
       "hygiene"
     ],
     "contexts": [
-      "home",
-      "family"
+      "home"
     ],
     "frequency": 1,
     "target": "individual"
@@ -303,7 +300,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 22,
     "emoji": "🗄️",
-    "title": "Ranger son bureau",
+    "titles": ["Ranger son bureau"],
     "needs": [
       "organization",
       "equipment"
@@ -318,7 +315,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 23,
     "emoji": "🏢",
-    "title": "Ranger la salle de réunion",
+    "titles": ["Ranger la salle de réunion"],
     "needs": [
       "cleanliness",
       "organization"
@@ -332,7 +329,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 24,
     "emoji": "💻",
-    "title": "Trier ses outils numériques",
+    "titles": ["Trier ses outils numériques"],
     "needs": [
       "organization",
       "calm"
@@ -346,7 +343,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 25,
     "emoji": "🖋️",
-    "title": "Vérifier les fournitures de bureau",
+    "titles": ["Vérifier les fournitures de bureau"],
     "needs": [
       "equipment",
       "organization"
@@ -361,7 +358,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 26,
     "emoji": "🗑️",
-    "title": "Sortir les poubelles",
+    "titles": ["Sortir les poubelles"],
     "needs": [
       "cleanliness",
       "cooperation"
@@ -375,7 +372,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 27,
     "emoji": "♻️",
-    "title": "Ramasser et trier les déchets",
+    "titles": ["Ramasser et trier les déchets"],
     "needs": [
       "cleanliness",
       "equipment"
@@ -390,14 +387,13 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 28,
     "emoji": "🗃️",
-    "title": "Ranger ses étagères",
+    "titles": ["Ranger ses étagères"],
     "needs": [
       "organization",
       "privacy"
     ],
     "contexts": [
       "home",
-      "office",
       "social"
     ],
     "frequency": 3,
@@ -406,7 +402,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 29,
     "emoji": "🚌",
-    "title": "Préparer son départ",
+    "titles": ["Préparer son départ"],
     "needs": [
       "organization",
       "calm"
@@ -414,7 +410,8 @@ const LIBRARY_JSON_DATA = [
     "contexts": [
       "home",
       "office",
-      "school"
+      "school",
+      "outdoor"
     ],
     "frequency": 7,
     "target": "individual"
@@ -422,13 +419,13 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 30,
     "emoji": "🛣️",
-    "title": "Choisir un trajet différent",
+    "titles": ["Choisir un trajet différent"],
     "needs": [
       "meaning",
       "calm"
     ],
     "contexts": [
-      "home"
+      "outdoor"
     ],
     "frequency": 3,
     "target": "individual"
@@ -436,7 +433,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 31,
     "emoji": "🧰",
-    "title": "Réparer un petit souci",
+    "titles": ["Réparer un petit souci"],
     "needs": [
       "equipment",
       "safety"
@@ -450,42 +447,36 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 32,
     "emoji": "🧭",
-    "title": "Revoir l’agenda",
+    "titles": ["Revoir l’agenda"],
     "needs": [
       "organization",
       "privacy"
     ],
-    "contexts": [
-      "home",
-      "family"
-    ],
+    "contexts": [],
     "frequency": 1,
     "target": "individual"
   },
   {
     "id": 33,
     "emoji": "🗂️",
-    "title": "Trier ses documents",
+    "titles": ["Trier ses documents"],
     "needs": [
       "organization",
       "privacy"
     ],
-    "contexts": [
-      "home"
-    ],
+    "contexts": [],
     "frequency": 0.5,
     "target": "individual"
   },
   {
     "id": 34,
     "emoji": "📌",
-    "title": "Noter ses rappels",
+    "titles": ["Noter ses rappels"],
     "needs": [
       "organization",
       "communication"
     ],
     "contexts": [
-      "home",
       "office"
     ],
     "frequency": 7,
@@ -494,15 +485,14 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 35,
     "emoji": "💗",
-    "title": "Partager une envie",
+    "titles": ["Partager une envie"],
     "needs": [
       "expression",
       "joy"
     ],
     "contexts": [
-      "home",
-      "office",
-      "social"
+      "social",
+      "family"
     ],
     "frequency": 7,
     "target": "group"
@@ -510,7 +500,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 36,
     "emoji": "💶",
-    "title": "Vérifier ses dépenses",
+    "titles": ["Vérifier ses dépenses"],
     "needs": [
       "organization",
       "safety"
@@ -524,7 +514,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 37,
     "emoji": "👚",
-    "title": "Trier ses vêtements",
+    "titles": ["Trier ses vêtements"],
     "needs": [
       "comfort",
       "privacy"
@@ -538,7 +528,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 38,
     "emoji": "🧺",
-    "title": "Lancer une machine",
+    "titles": ["Lancer une machine"],
     "needs": [
       "organization",
       "slowness"
@@ -552,13 +542,12 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 39,
     "emoji": "🌦️",
-    "title": "Partager son humeur",
+    "titles": ["Partager son humeur"],
     "needs": [
       "expression",
       "communication"
     ],
     "contexts": [
-      "home",
       "family"
     ],
     "frequency": 3,
@@ -567,13 +556,12 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 40,
     "emoji": "👌",
-    "title": "Avoir un élan bienveillant",
+    "titles": ["Avoir un élan bienveillant"],
     "needs": [
       "cooperation",
       "joy"
     ],
     "contexts": [
-      "home",
       "family",
       "social"
     ],
@@ -583,7 +571,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 41,
     "emoji": "🗣️",
-    "title": "Partager une astuce productive",
+    "titles": ["Partager une astuce productive"],
     "needs": [
       "communication",
       "entertainment"
@@ -599,7 +587,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 42,
     "emoji": "📞",
-    "title": "Contacter un proche",
+    "titles": ["Contacter un proche"],
     "needs": [
       "communication",
       "slowness"
@@ -613,13 +601,12 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 43,
     "emoji": "🤝",
-    "title": "Manger avec sa famille",
+    "titles": ["Manger avec sa famille"],
     "needs": [
       "joy",
       "inclusion"
     ],
     "contexts": [
-      "home",
       "social"
     ],
     "frequency": 1,
@@ -628,14 +615,12 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 44,
     "emoji": "🧡",
-    "title": "Remonter le moral à un ami",
+    "titles": ["Remonter le moral à un ami"],
     "needs": [
       "communication",
       "inclusion"
     ],
     "contexts": [
-      "home",
-      "office",
       "school"
     ],
     "frequency": 3,
@@ -644,27 +629,24 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 45,
     "emoji": "😊",
-    "title": "Sourire à un inconnu",
+    "titles": ["Sourire à un inconnu"],
     "needs": [
       "joy",
       "inclusion"
     ],
-    "contexts": [
-      "home"
-    ],
+    "contexts": [],
     "frequency": 7,
     "target": "individual"
   },
   {
     "id": 46,
     "emoji": "🤗",
-    "title": "Faire un câlin",
+    "titles": ["Faire un câlin"],
     "needs": [
       "comfort",
       "inclusion"
     ],
     "contexts": [
-      "home",
       "family"
     ],
     "frequency": 7,
@@ -673,15 +655,13 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 47,
     "emoji": "💞",
-    "title": "Dire un merci précis",
+    "titles": ["Dire un merci précis"],
     "needs": [
       "expression",
       "participation"
     ],
     "contexts": [
-      "home",
-      "family",
-      "office"
+      "family"
     ],
     "frequency": 3,
     "target": "individual"
@@ -689,13 +669,12 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 48,
     "emoji": "💌",
-    "title": "Laisser un mot doux",
+    "titles": ["Laisser un mot doux"],
     "needs": [
       "expression",
       "privacy"
     ],
     "contexts": [
-      "home",
       "family"
     ],
     "frequency": 1,
@@ -704,13 +683,14 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 49,
     "emoji": "👏",
-    "title": "Encourager quelqu’un",
+    "titles": ["Encourager quelqu’un"],
     "needs": [
       "participation",
       "joy"
     ],
     "contexts": [
       "home",
+      "family",
       "office",
       "school"
     ],
@@ -720,7 +700,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 50,
     "emoji": "🙌",
-    "title": "Valoriser une bonne idée",
+    "titles": ["Valoriser une bonne idée"],
     "needs": [
       "communication",
       "participation"
@@ -736,7 +716,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 51,
     "emoji": "🎁",
-    "title": "Offrir un petit cadeau",
+    "titles": ["Offrir un petit cadeau"],
     "needs": [
       "cooperation",
       "expression"
@@ -752,15 +732,14 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 52,
     "emoji": "🧶",
-    "title": "Inclure une personne isolée",
+    "titles": ["Inclure une personne isolée"],
     "needs": [
       "inclusion",
       "cooperation"
     ],
     "contexts": [
       "school",
-      "social",
-      "office"
+      "social"
     ],
     "frequency": 1,
     "target": "group"
@@ -768,7 +747,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 53,
     "emoji": "💡",
-    "title": "Proposer son aide",
+    "titles": ["Proposer son aide"],
     "needs": [
       "cooperation",
       "participation"
@@ -784,7 +763,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 54,
     "emoji": "💆‍♀️",
-    "title": "Offrir un massage court",
+    "titles": ["Offrir un massage court"],
     "needs": [
       "comfort",
       "expression"
@@ -799,7 +778,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 55,
     "emoji": "🤐",
-    "title": "Éviter un gros mot",
+    "titles": ["Éviter un gros mot"],
     "needs": [
       "communication",
       "calm"
@@ -814,35 +793,31 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 56,
     "emoji": "🌼",
-    "title": "Penser à un bon moment",
+    "titles": ["Penser à un bon moment"],
     "needs": [
       "joy",
       "privacy"
     ],
-    "contexts": [
-      "home"
-    ],
+    "contexts": [],
     "frequency": 7,
     "target": "individual"
   },
   {
     "id": 57,
     "emoji": "🧠",
-    "title": "Se rappeler un souvenir doux",
+    "titles": ["Se rappeler un souvenir doux"],
     "needs": [
       "joy",
       "privacy"
     ],
-    "contexts": [
-      "home"
-    ],
+    "contexts": [],
     "frequency": 7,
     "target": "individual"
   },
   {
     "id": 58,
     "emoji": "🧘",
-    "title": "Créer une soirée détente",
+    "titles": ["Créer une soirée détente"],
     "needs": [
       "calm",
       "slowness"
@@ -857,7 +832,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 59,
     "emoji": "🌙",
-    "title": "Se coucher avant 23h",
+    "titles": ["Se coucher avant 23h"],
     "needs": [
       "rest",
       "calm"
@@ -871,7 +846,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 60,
     "emoji": "📵",
-    "title": "Couper les écrans après 21h",
+    "titles": ["Couper les écrans après 21h"],
     "needs": [
       "slowness",
       "rest"
@@ -885,7 +860,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 61,
     "emoji": "🕯️",
-    "title": "Créer une ambiance douce",
+    "titles": ["Créer une ambiance douce"],
     "needs": [
       "nature",
       "slowness"
@@ -899,7 +874,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 62,
     "emoji": "😴",
-    "title": "Faire une sieste courte",
+    "titles": ["Faire une sieste courte"],
     "needs": [
       "rest",
       "calm"
@@ -913,15 +888,15 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 63,
     "emoji": "🌬️",
-    "title": "Respirer lentement 2 min",
+    "titles": ["Respirer lentement 2 min"],
     "needs": [
       "slowness",
       "rest"
     ],
     "contexts": [
-      "home",
       "office",
-      "school"
+      "school",
+      "outdoor"
     ],
     "frequency": 7,
     "target": "individual"
@@ -929,14 +904,13 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 64,
     "emoji": "🧘",
-    "title": "S’asseoir 2 min en silence",
+    "titles": ["S’asseoir 2 min en silence"],
     "needs": [
       "calm",
       "slowness"
     ],
     "contexts": [
       "home",
-      "office",
       "school"
     ],
     "frequency": 7,
@@ -945,13 +919,13 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 65,
     "emoji": "👀",
-    "title": "Admirer le paysage 30 sec",
+    "titles": ["Admirer le paysage 30 sec"],
     "needs": [
       "nature",
       "rest"
     ],
     "contexts": [
-      "home"
+      "outdoor"
     ],
     "frequency": 7,
     "target": "individual"
@@ -959,14 +933,14 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 66,
     "emoji": "🌿",
-    "title": "Prendre l’air 5 min",
+    "titles": ["Prendre l’air 5 min"],
     "needs": [
       "nature",
       "movement"
     ],
     "contexts": [
-      "home",
-      "office"
+      "office",
+      "outdoor"
     ],
     "frequency": 7,
     "target": "individual"
@@ -974,13 +948,14 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 67,
     "emoji": "🌳",
-    "title": "Se balader dans la nature",
+    "titles": ["Se balader dans la nature"],
     "needs": [
       "nature",
       "rest"
     ],
     "contexts": [
-      "social"
+      "social",
+      "outdoor"
     ],
     "frequency": 1,
     "target": "individual"
@@ -988,7 +963,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 68,
     "emoji": "🕊️",
-    "title": "Apaiser l’ambiance du groupe",
+    "titles": ["Apaiser l’ambiance du groupe"],
     "needs": [
       "calm",
       "participation"
@@ -1004,7 +979,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 69,
     "emoji": "🫂",
-    "title": "Veiller au besoin du groupe",
+    "titles": ["Veiller au besoin du groupe"],
     "needs": [
       "inclusion",
       "cooperation"
@@ -1020,27 +995,25 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 70,
     "emoji": "🤸",
-    "title": "Faire un réveil corporel",
+    "titles": ["Faire un réveil corporel"],
     "needs": [
       "movement",
       "comfort"
     ],
-    "contexts": [
-      "home"
-    ],
+    "contexts": [],
     "frequency": 7,
     "target": "individual"
   },
   {
     "id": 71,
     "emoji": "💪",
-    "title": "Faire 30 min d’exercice",
+    "titles": ["Faire 30 min d’exercice"],
     "needs": [
       "movement",
       "comfort"
     ],
     "contexts": [
-      "home"
+      "outdoor"
     ],
     "frequency": 3,
     "target": "individual"
@@ -1048,14 +1021,13 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 72,
     "emoji": "🤸‍♂️",
-    "title": "Faire des étirements",
+    "titles": ["Faire des étirements"],
     "needs": [
       "movement",
       "comfort"
     ],
     "contexts": [
-      "home",
-      "office"
+      "outdoor"
     ],
     "frequency": 3,
     "target": "individual"
@@ -1063,7 +1035,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 73,
     "emoji": "👏",
-    "title": "Applaudir une réussite",
+    "titles": ["Applaudir une réussite"],
     "needs": [
       "joy",
       "participation"
@@ -1080,13 +1052,14 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 74,
     "emoji": "📸",
-    "title": "Photographier un beau détail",
+    "titles": ["Photographier un beau détail"],
     "needs": [
       "nature",
       "expression"
     ],
     "contexts": [
-      "home"
+      "home",
+      "outdoor"
     ],
     "frequency": 3,
     "target": "individual"
@@ -1094,7 +1067,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 75,
     "emoji": "🎧",
-    "title": "Mettre une musique calme",
+    "titles": ["Mettre une musique calme"],
     "needs": [
       "nature",
       "calm"
@@ -1108,13 +1081,12 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 76,
     "emoji": "🎶",
-    "title": "Fredonner une chanson",
+    "titles": ["Fredonner une chanson"],
     "needs": [
       "expression",
       "entertainment"
     ],
     "contexts": [
-      "home",
       "social"
     ],
     "frequency": 7,
@@ -1123,29 +1095,28 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 77,
     "emoji": "🎮",
-    "title": "Regarder une comédie",
+    "titles": ["Regarder une comédie"],
     "needs": [
       "joy",
       "entertainment"
     ],
-    "contexts": [
-      "home"
-    ],
+    "contexts": [],
     "frequency": 1,
     "target": "individual"
   },
   {
     "id": 78,
     "emoji": "🎲",
-    "title": "Lancer un jeu collectif",
+    "titles": ["Lancer un jeu collectif"],
     "needs": [
       "entertainment",
       "participation"
     ],
     "contexts": [
-      "home",
+      "family",
       "social",
-      "school"
+      "school",
+      "outdoor"
     ],
     "frequency": 1,
     "target": "group"
@@ -1153,28 +1124,26 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 79,
     "emoji": "🧩",
-    "title": "Résoudre une énigme",
+    "titles": ["Résoudre une énigme"],
     "needs": [
       "meaning",
       "entertainment"
     ],
-    "contexts": [
-      "home",
-      "office"
-    ],
+    "contexts": [],
     "frequency": 3,
     "target": "individual"
   },
   {
     "id": 80,
     "emoji": "🖼️",
-    "title": "Faire une sortie culturelle",
+    "titles": ["Faire une sortie culturelle"],
     "needs": [
       "joy",
       "meaning"
     ],
     "contexts": [
-      "social"
+      "social",
+      "outdoor"
     ],
     "frequency": 0.5,
     "target": "individual"
@@ -1182,22 +1151,19 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 81,
     "emoji": "✍️",
-    "title": "Écrire 3 lignes",
+    "titles": ["Écrire 3 lignes"],
     "needs": [
       "privacy",
       "expression"
     ],
-    "contexts": [
-      "home",
-      "office"
-    ],
+    "contexts": [],
     "frequency": 7,
     "target": "individual"
   },
   {
     "id": 82,
     "emoji": "🖼️",
-    "title": "Ajouter une touche déco",
+    "titles": ["Ajouter une touche déco"],
     "needs": [
       "comfort",
       "joy"
@@ -1213,7 +1179,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 83,
     "emoji": "🪜",
-    "title": "Prendre les escaliers",
+    "titles": ["Prendre les escaliers"],
     "needs": [
       "movement",
       "comfort"
@@ -1229,7 +1195,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 84,
     "emoji": "📘",
-    "title": "Lire 10 pages",
+    "titles": ["Lire 10 pages"],
     "needs": [
       "rest",
       "meaning"
@@ -1244,7 +1210,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 85,
     "emoji": "🔧",
-    "title": "Faire du bricolage",
+    "titles": ["Faire du bricolage"],
     "needs": [
       "equipment",
       "joy"
@@ -1259,14 +1225,15 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 86,
     "emoji": "🕺",
-    "title": "Danser 30 secondes",
+    "titles": ["Danser 30 secondes"],
     "needs": [
       "movement",
       "joy"
     ],
     "contexts": [
       "home",
-      "social"
+      "social",
+      "outdoor"
     ],
     "frequency": 7,
     "target": "individual"
@@ -1274,29 +1241,24 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 87,
     "emoji": "📻",
-    "title": "Écouter un podcast",
+    "titles": ["Écouter un podcast"],
     "needs": [
       "rest",
       "meaning"
     ],
-    "contexts": [
-      "home",
-      "office"
-    ],
+    "contexts": [],
     "frequency": 3,
     "target": "individual"
   },
   {
     "id": 88,
     "emoji": "🤣",
-    "title": "Apporter une touche d’humour",
+    "titles": ["Apporter une touche d’humour"],
     "needs": [
       "communication",
       "entertainment"
     ],
     "contexts": [
-      "home",
-      "office",
       "school",
       "social"
     ],
@@ -1306,14 +1268,14 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 89,
     "emoji": "🌸",
-    "title": "Sentir un parfum agréable",
+    "titles": ["Sentir un parfum agréable"],
     "needs": [
       "calm",
       "meaning"
     ],
     "contexts": [
       "home",
-      "office"
+      "outdoor"
     ],
     "frequency": 3,
     "target": "individual"
@@ -1321,7 +1283,7 @@ const LIBRARY_JSON_DATA = [
   {
     "id": 90,
     "emoji": "🍳",
-    "title": "Préparer un repas sain",
+    "titles": ["Préparer un repas sain"],
     "needs": [
       "nutrition",
       "safety"

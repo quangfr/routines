@@ -1004,7 +1004,8 @@
       social: 'Social',
       family: 'Famille',
       home: 'Maison',
-      office: 'Bureau'
+      office: 'Bureau',
+      outdoor: 'Extérieur'
     };
     const MODE_META = {
       libre: { label: 'Individuel', shortLabel: 'Moi 👤', emoji: '👤', target: 'individual' },
@@ -1133,7 +1134,8 @@
       home: '🏡',
       office: '🏢',
       school: '🏫',
-      social: '🧑‍🤝‍🧑'
+      social: '🧑‍🤝‍🧑',
+      outdoor: '🌳'
     };
     function normalizeTagKey(tag) {
       if (!tag) return '';
@@ -2785,17 +2787,7 @@
       }
     }
     async function loadLibraryData() {
-      const staticLibrary = Array.isArray(window.LIBRARY_JSON_DATA) ? window.LIBRARY_JSON_DATA : null;
-      let data = staticLibrary;
-      if (!data && HABITU_FIREBASE_DB) {
-        try {
-          const snapshot = await HABITU_FIREBASE_DB.collection('libraryHabits').get();
-          const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          data = fetched;
-        } catch (err) {
-          console.warn('loadLibraryData firestore', err);
-        }
-      }
+      const data = Array.isArray(window.LIBRARY_JSON_DATA) ? window.LIBRARY_JSON_DATA : null;
       if (!data) {
         console.warn('loadLibraryData: no library data available');
         return;
@@ -5715,6 +5707,18 @@
       if (!contextTags || !contextTags.length) return true;
       return (habit.contexts || []).some(ctx => contextTags.includes(ctx));
     }
+    function matchesHabitNeeds(habit, needTags) {
+      if (!needTags || !needTags.length) return false;
+      return (habit.needs || []).some(need => needTags.includes(need));
+    }
+    function matchesHabitSelection(habit, contextTags, needTags) {
+      const hasContext = !!(contextTags && contextTags.length);
+      const hasNeed = !!(needTags && needTags.length);
+      if (!hasContext && !hasNeed) return true;
+      if (hasContext && matchesHabitContext(habit, contextTags)) return true;
+      if (hasNeed && matchesHabitNeeds(habit, needTags)) return true;
+      return false;
+    }
     function matchesHabitMode(habit, modeKey) {
       if (!modeKey) return true;
       const modeInfo = MODE_META[modeKey];
@@ -5722,15 +5726,10 @@
       const habitTarget = (habit.target || 'group').toString().toLowerCase();
       return habitTarget === (modeInfo.target || 'group').toLowerCase();
     }
-    function countMatchingHabits(contextTags, modeKey) {
-      return LIBRARY_HABITS.filter(habit => matchesHabitContext(habit, contextTags) && matchesHabitMode(habit, modeKey)).length;
-    }
-    function countPreselectedHabits(contextTags, needTags, modeKey) {
-      if (!needTags || !needTags.length) return 0;
+    function countMatchingHabits(contextTags, needTags, modeKey) {
       return LIBRARY_HABITS.filter(habit =>
-        matchesHabitContext(habit, contextTags) &&
-        matchesHabitMode(habit, modeKey) &&
-        (habit.needs || []).some(need => needTags.includes(need))
+        matchesHabitSelection(habit, contextTags, needTags) &&
+        matchesHabitMode(habit, modeKey)
       ).length;
     }
     function step1() {
@@ -5743,9 +5742,6 @@
       root.innerHTML = '';
 
       habitWizardStep = 1;
-      if (typeof renderHabitSuggestions === 'function') {
-        renderHabitSuggestions.disablePreselect = false;
-      }
       if (!LIBRARY_HABITS.length) {
         const empty = document.createElement('div');
         empty.className = 'miniInfo';
@@ -5759,16 +5755,13 @@
       const nextBtn = document.createElement('button');
       nextBtn.type = 'button';
       nextBtn.className = 'btn primary';
-      nextBtn.textContent = 'Voir les 0 sur 0 habitudes';
+      nextBtn.textContent = 'Voir les 0 habitudes';
 
       let contextSection;
       let needSection;
       function updateNextLabel() {
-        const ctxCount = contextSection?.selected.length || 0;
-        const needCount = needSection?.selected.length || 0;
-        const totalMatching = countMatchingHabits(contextSection?.selected || [], null);
-        const preselected = countPreselectedHabits(contextSection?.selected || [], needSection?.selected || [], null);
-        nextBtn.textContent = `Voir les ${preselected} sur ${totalMatching} habitudes`;
+        const totalMatching = countMatchingHabits(contextSection?.selected || [], needSection?.selected || [], null);
+        nextBtn.textContent = `Voir les ${totalMatching} habitudes`;
       }
 
       contextSection = buildTagSection('Où ?', LIBRARY_CONTEXTS, updateNextLabel, 'context');
@@ -5847,27 +5840,13 @@
       habitWizardStep = 2;
       const spaceHabits = new Set((getSpace()?.ch || []).map(habit => String(habit.id)));
       const matchingHabits = LIBRARY_HABITS
-        .filter(habit => matchesHabitContext(habit, contexts))
+        .filter(habit => matchesHabitSelection(habit, contexts, needs))
         .filter(habit => matchesHabitMode(habit, modeFilter))
         .filter(habit => !spaceHabits.has(String(habit.id)))
         .sort((a, b) => (a.title || '').localeCompare(b.title || '', 'fr'));
+      const orderedHabits = matchingHabits;
       const selection = new Set();
-      const preselected = [];
-      const others = [];
-      const shouldAutoPreselectNeeds = !renderHabitSuggestions.disablePreselect;
-      matchingHabits.forEach(habit => {
-        const matchesNeed = (habit.needs || []).some(need => needs.includes(need));
-        if (matchesNeed) {
-          preselected.push(habit);
-          if (shouldAutoPreselectNeeds) {
-            selection.add(habit.id);
-          }
-          return;
-        }
-        others.push(habit);
-      });
-      const orderedHabits = [...preselected, ...others];
-      const suggestionMap = new Map(orderedHabits.map(habit => [habit.id, habit]));
+      const suggestionMap = new Map(matchingHabits.map(habit => [habit.id, habit]));
       const addSelectionBtn = document.createElement('button');
       addSelectionBtn.type = 'button';
       addSelectionBtn.className = 'btn primary habit-actions__add';
@@ -5946,18 +5925,7 @@
             grid.appendChild(btn);
           });
         };
-        if (preselected.length) {
-          renderHabitButtons(preselected);
-        }
-        if (preselected.length && others.length) {
-          const separator = document.createElement('div');
-          separator.className = 'habit-grid-separator';
-          separator.textContent = '';
-          grid.appendChild(separator);
-        }
-        if (others.length) {
-          renderHabitButtons(others);
-        }
+        renderHabitButtons(orderedHabits);
         root.appendChild(grid);
       }
       root.appendChild(controls);
@@ -5991,7 +5959,6 @@
         const addedCount = persistPromises.length;
         await Promise.all(persistPromises);
         renderCards();
-        renderHabitSuggestions.disablePreselect = true;
         renderHabitSuggestions(contexts.slice(), needs.slice(), modeFilter);
         showToast(`${addedCount} habitude${addedCount > 1 ? 's' : ''} ajoutée${addedCount > 1 ? 's' : ''}`);
       });
@@ -6035,7 +6002,6 @@
       return [days[idx]];
     }
 
-    renderHabitSuggestions.disablePreselect = false;
 
     closeHabitBtn?.addEventListener('click', () => {
       close(mHabit);
